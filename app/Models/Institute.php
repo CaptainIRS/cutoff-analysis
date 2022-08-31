@@ -39,4 +39,14 @@ class Institute extends Model
     {
         return $this->hasMany(Rank::class);
     }
+
+    public function programs()
+    {
+        return $this->hasManyThrough(Program::class, Course::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
+    }
 }

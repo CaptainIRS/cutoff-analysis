@@ -1,3 +1,5 @@
-<div>
-    {{-- Close your eyes. Count to one. That is how long forever feels. --}}
+<div class="h-full w-full p-2">
+    {{ $this->form }}
+
+    {{ $this->table }}
 </div>

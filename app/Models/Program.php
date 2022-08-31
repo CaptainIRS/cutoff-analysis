@@ -12,4 +12,14 @@ class Program extends Model
     protected $keyType = 'string';
 
     public $incrementing = false;
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
+    }
 }

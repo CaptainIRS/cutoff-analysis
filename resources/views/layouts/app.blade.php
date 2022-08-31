@@ -27,7 +27,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
         .filament-tables-container> :nth-child(2) {
             display: block;
-            max-height: 45vh;
+            max-height: 80vh;
             overflow-y: auto;
         }
 
@@ -46,6 +46,19 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             top: 0;
             z-index: 1;
         }
+
+        .filament-tables-tags-column {
+            flex-wrap: nowrap !important;
+        }
+
+        .filament-tables-tags-column>span {
+            white-space: nowrap;
+        }
+
+        .filament-tables-cell {
+            padding: 0;
+            margin: 0;
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -58,7 +71,8 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         @keydown.escape="isOpen = false" :class="{ 'shadow-lg': isOpen }">
 
         <div class="flex items-center flex-shrink-0 text-white mr-6">
-            <a class="text-black dark:text-white no-underline hover:text-gray hover:no-underline" href="#">
+            <a class="text-black dark:text-white no-underline hover:text-gray hover:no-underline"
+                href="{{ route('home') }}">
                 <span class="text-xl pl-2"><i class="em em-grinning"></i> JoSAA Analysis</span>
             </a>
         </div>
@@ -78,42 +92,42 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             :class="{ 'block shadow-3xl': isOpen, 'hidden': !isOpen }" {{-- @click.away="isOpen = false" --}} x-show.transition="true">
             <ul class="pt-3 2xl:pt-0 list-reset 2xl:flex justify-end flex-1 items-center">
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Search by course
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                        href="{{ route('search-by-program') }}" @click="isOpen = false">Search by program
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Search by institute
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                        href="{{ route('search-by-institute') }}" @click="isOpen = false">Search by institute
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
                         href="#" @click="isOpen = false">Search institutes
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
                         href="#" @click="isOpen = false">Search courses
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
                         href="#" @click="isOpen = false">Rank trends
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
                         href="#" @click="isOpen = false">Round trends
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
                         href="#" @click="isOpen = false">Program trends
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
                         href="#" @click="isOpen = false">Institute trends
                     </a>
                 </li>
