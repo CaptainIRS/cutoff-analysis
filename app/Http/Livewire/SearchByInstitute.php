@@ -9,7 +9,10 @@ use App\Models\Program;
 use App\Models\Quota;
 use App\Models\Rank;
 use App\Models\SeatType;
+use Cache;
 use Closure;
+use DB;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Select;
@@ -77,23 +80,33 @@ class SearchByInstitute extends Component implements HasTable
             Filter::make('institute_id')
                 ->label('Institute')
                 ->form([
-                    Grid::make(3)->schema([
+                    Grid::make(4)->schema([
+                        CheckboxList::make('institute_type')
+                            ->label('Institute Types')
+                            ->options([
+                                'iit' => 'IITs',
+                                'nit' => 'NITs',
+                                'iiit' => 'IIITs',
+                                'gfti' => 'GFTIs',
+                            ])->columns(2)
+                            ->afterStateUpdated(function (Closure $get, Closure $set) {
+                                $institute_type = $get('institute_type');
+                                $set('institute_id', null);
+                                $set('institute_id', Cache::rememberForever(implode('_', $institute_type).'_institutes', fn () => Institute::whereIn('type', $institute_type)->get()->pluck('id')));
+                            }),
                         MultiSelect::make('institute_id')
-                            ->options(Institute::all()->pluck('id', 'id'))
+                            ->options(Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id')))
                             ->label('Institute')
                             ->afterStateUpdated(function (Closure $set) {
                                 $set('course_id', null);
                                 $set('program_id', null);
-                            })
-                            ->reactive(),
+                            })->reactive(),
                         MultiSelect::make('course_id')
                             ->options(function (Closure $get) {
                                 if ($get('institute_id')) {
-                                    $institutes = Institute::find($get('institute_id'));
-
-                                    return Rank::whereIn('institute_id', $institutes->pluck('id'))->get()->pluck('course_id', 'course_id');
+                                    return DB::table('institute_course_program')->whereIn('institute_id', $get('institute_id'))->get()->pluck('course_id', 'course_id');
                                 } else {
-                                    return Course::all()->pluck('id', 'id');
+                                    return Cache::rememberForever('allCourses', fn () => Course::all()->pluck('id', 'id'));
                                 }
                             })
                             ->label('Course')
@@ -107,15 +120,9 @@ class SearchByInstitute extends Component implements HasTable
                         MultiSelect::make('program_id')
                             ->options(function (Closure $get) {
                                 if ($get('institute_id') && $get('course_id')) {
-                                    $institutes = Institute::find($get('institute_id'));
-                                    $courses = Course::find($get('course_id'));
-
-                                    return Rank::whereIn('institute_id', $institutes->pluck('id'))
-                                        ->whereIn('course_id', $courses->pluck('id'))
-                                        ->get()
-                                        ->pluck('program_id', 'program_id');
+                                    return DB::table('institute_course_program')->whereIn('institute_id', $get('institute_id'))->whereIn('course_id', $get('course_id'))->get()->pluck('program_id', 'program_id');
                                 } else {
-                                    return Program::all()->pluck('id', 'id');
+                                    return Cache::rememberForever('allPrograms', fn () => Program::all()->pluck('id', 'id'));
                                 }
                             })->hidden(function (Closure $get) {
                                 return ! $get('institute_id') || ! $get('course_id');
@@ -133,18 +140,17 @@ class SearchByInstitute extends Component implements HasTable
                     })->whereIn('institute_id', $institute_id);
                 });
             }),
-            Filter::make('quota_id')
-                ->label('Quota')
+            Filter::make('quota_filters')
                 ->form([
                     Grid::make(3)->schema([
                         MultiSelect::make('quota_id')
-                            ->options(Quota::all()->pluck('id', 'id'))
+                            ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
                             ->label('Quota'),
                         Select::make('seat_type_id')
-                            ->options(SeatType::all()->pluck('id', 'id'))
+                            ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
                             ->label('Seat Type'),
                         MultiSelect::make('gender_id')
-                            ->options(Gender::all()->pluck('id', 'id'))
+                            ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
                             ->label('Gender'),
                     ]),
                 ])
@@ -173,12 +179,10 @@ class SearchByInstitute extends Component implements HasTable
                     ])->schema([
                         TextInput::make('minimum_rank')
                             ->label('Minimum Rank')
-                            ->placeholder('Minimum Rank')
-                            ->required(),
+                            ->placeholder('Minimum Rank'),
                         TextInput::make('maximum_rank')
                             ->label('Maximum Rank')
-                            ->placeholder('Maximum Rank')
-                            ->required(),
+                            ->placeholder('Maximum Rank'),
                     ]),
                 ])
                 ->query(function (Builder $query, array $data): Builder {
