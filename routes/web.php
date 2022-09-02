@@ -24,3 +24,7 @@ Route::get('/search-by-program', function () {
 Route::get('/search-by-institute', function () {
     return view('search-by-institute');
 })->name('search-by-institute');
+
+Route::get('/program-trends', function () {
+    return view('program-trends');
+})->name('program-trends');

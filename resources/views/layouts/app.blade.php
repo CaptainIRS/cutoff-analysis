@@ -123,7 +123,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                 </li>
                 <li class="mr-3">
                     <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Program trends
+                        href={{ route('program-trends') }} @click="isOpen = false">Program trends
                     </a>
                 </li>
                 <li class="mr-3">
