@@ -48,7 +48,7 @@ class SearchByProgram extends Component implements HasTable
                 ->sortable(),
             TagsColumn::make('program.tags')
                 ->separator(',')
-                ->label('Tags')
+                ->label('Fields')
                 ->sortable(),
             TextColumn::make('quota.id')
                 ->label('Quota')
@@ -80,50 +80,16 @@ class SearchByProgram extends Component implements HasTable
 
     protected function getTableFilters(): array
     {
-        $tags = [
-            'Aerospace',
-            'Agriculture',
-            'Architecture',
-            'Biotechnology',
-            'Ceramic',
-            'Chemical',
-            'Chemistry',
-            'Circuital',
-            'Civil',
-            'Computer Science and IT',
-            'Design',
-            'Economics',
-            'Electrical',
-            'Electronics',
-            'Energy',
-            'Environmental',
-            'Food',
-            'Geology',
-            'Industrial',
-            'Instrumentation',
-            'Life Science',
-            'Material Science',
-            'Mathematics',
-            'Mechanical',
-            'Minerals and Mining',
-            'Miscellaneous',
-            'Non-Circuital',
-            'Ocean',
-            'Petroleum',
-            'Pharmaceutical',
-            'Physics',
-            'Textile',
-        ];
-
         return [
             Filter::make('institute_id')
                 ->label('Institute')
                 ->form([
                     Grid::make(3)->schema([
                         MultiSelect::make('program_id')
-                            ->label('Tags')
-                            ->placeholder('Select Tags')
-                            ->options(array_combine($tags, $tags))->afterStateUpdated(function (Closure $set) {
+                            ->label('Fields')
+                            ->placeholder('Select Fields')
+                            ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
+                            ->afterStateUpdated(function (Closure $set) {
                                 $set('course_id', null);
                                 $set('institute_id', null);
                             })->reactive(),

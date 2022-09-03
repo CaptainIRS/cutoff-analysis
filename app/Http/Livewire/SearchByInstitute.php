@@ -90,12 +90,16 @@ class SearchByInstitute extends Component implements HasTable
                                 'gfti' => 'GFTIs',
                             ])->columns(2)
                             ->afterStateUpdated(function (Closure $get, Closure $set) {
-                                $institute_type = $get('institute_type');
                                 $set('institute_id', null);
-                                $set('institute_id', Cache::rememberForever(implode('_', $institute_type).'_institutes', fn () => Institute::whereIn('type', $institute_type)->get()->pluck('id')));
                             }),
                         MultiSelect::make('institute_id')
-                            ->options(Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id')))
+                            ->options(function (Closure $get) {
+                                if ($get('institute_type')) {
+                                    return Cache::rememberForever(implode('_', $get('institute_type')).'_institutes', fn () => Institute::whereIn('type', $get('institute_type'))->get()->pluck('id', 'id'));
+                                } else {
+                                    return Cache::rememberForever('institutes', fn () => Institute::all()->pluck('id', 'id'));
+                                }
+                            })
                             ->label('Institute')
                             ->afterStateUpdated(function (Closure $set) {
                                 $set('course_id', null);
@@ -132,6 +136,10 @@ class SearchByInstitute extends Component implements HasTable
                     ]),
                 ])
             ->query(function (Builder $query, array $data): Builder {
+                $query = $query->when($data['institute_type'], function (Builder $query, $institute_type) {
+                    return $query->whereIn('institute_id', Cache::rememberForever(implode('_', $institute_type).'_institutes', fn () => Institute::whereIn('type', $institute_type)->get()->pluck('id', 'id')));
+                });
+
                 return $query->when($data['institute_id'], function (Builder $query, $institute_id) use ($data) {
                     return $query->when($data['course_id'], function (Builder $query, $course_id) use ($data) {
                         return $query->when($data['program_id'], function (Builder $query, $program_id) {
