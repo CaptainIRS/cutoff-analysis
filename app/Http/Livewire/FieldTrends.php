@@ -125,18 +125,18 @@ class FieldTrends extends Component implements HasForms
         return [
             Grid::make(4)->schema([
                 MultiSelect::make('program_id')
-                            ->label('Fields')
-                            ->placeholder('Select Fields')
-                            ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
-                            ->afterStateUpdated(function (Closure $set) {
-                                $set('course_id', null);
-                                $set('institute_id', null);
-                            })
-                            ->searchable()
-                            ->afterStateUpdated(function (Closure $set) {
-                                $set('institute_id', null);
-                                $this->emit('updateChartData');
-                            })->reactive(),
+                    ->label('Fields')
+                    ->placeholder('Select Fields')
+                    ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('course_id', null);
+                        $set('institute_id', null);
+                    })
+                    ->searchable()
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('institute_id', null);
+                        $this->emit('updateChartData');
+                    })->reactive(),
                 MultiSelect::make('course_id')
                     ->options(function (Closure $get) {
                         if ($get('program_id')) {
@@ -173,10 +173,13 @@ class FieldTrends extends Component implements HasForms
                     })->reactive(),
                 MultiSelect::make('institute_id')
                     ->options(function (Closure $get) {
-                        if ($get('program_id') && $get('course_id')) {
+                        if ($get('program_id')) {
                             $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
 
-                            $query = DB::table('institute_course_program')->whereIn('program_id', $programs)->whereIn('course_id', $get('course_id'));
+                            $query = DB::table('institute_course_program')->whereIn('program_id', $programs);
+                            if ($get('course_id')) {
+                                $query->whereIn('course_id', $get('course_id'));
+                            }
                             if ($get('institute_type')) {
                                 $institutes = Institute::whereIn('type', $get('institute_type'))->pluck('id');
                                 $query = $query->whereIn('institute_id', $institutes);
