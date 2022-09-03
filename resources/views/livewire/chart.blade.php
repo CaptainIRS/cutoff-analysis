@@ -142,7 +142,10 @@
                             color: 'rgb(140, 140, 140, 0.2)'
                         },
                         ticks: {
-                            color: 'rgb(140, 140, 140)'
+                            color: 'rgb(140, 140, 140)',
+                            callback: (yValue) => {
+                                return Math.floor(yValue);
+                            },
                         }
                     },
                 },
