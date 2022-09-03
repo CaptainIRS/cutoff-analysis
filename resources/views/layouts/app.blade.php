@@ -121,6 +121,11 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     </a>
                 </li>
                 <li class="mr-3">
+                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                        href={{ route('field-trends') }} @click="isOpen = false">Field trends
+                    </a>
+                </li>
+                <li class="mr-3">
                     <div class="flex justify-start align-baseline space-x-2 py-4 px-4">
                         <span class="text-sm text-gray-800 dark:text-gray-500">Light</span>
                         <label for="toggle"

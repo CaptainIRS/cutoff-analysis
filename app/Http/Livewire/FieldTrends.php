@@ -20,7 +20,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Livewire\Component;
 
-class ProgramTrends extends Component implements HasForms
+class FieldTrends extends Component implements HasForms
 {
     use InteractsWithForms;
 
@@ -57,7 +57,7 @@ class ProgramTrends extends Component implements HasForms
     public function updateChartData(): void
     {
         $data = [];
-        if ($this->course_id !== null && $this->program_id !== null && $this->quota_id !== null && $this->seat_type_id !== null && $this->gender_id !== null) {
+        if ($this->program_id !== null && $this->quota_id !== null && $this->seat_type_id !== null && $this->gender_id !== null) {
             if ($this->institute_id === $this->old_institute_id
                 && $this->institute_type === $this->old_institute_type
                 && $this->quota_id === $this->old_quota_id
@@ -67,11 +67,14 @@ class ProgramTrends extends Component implements HasForms
                 && $this->gender_id === $this->old_gender_id) {
                 return;
             }
-            $query = Rank::where('program_id', $this->program_id)
-                ->where('course_id', $this->course_id)
-                ->whereIn('quota_id', $this->quota_id)
+            $programs = DB::table('program_tag')->whereIn('tag_id', $this->program_id)->pluck('program_id');
+            $query = Rank::whereIn('program_id', $programs)
+                ->where('quota_id', $this->quota_id)
                 ->where('seat_type_id', $this->seat_type_id)
                 ->where('gender_id', $this->gender_id);
+            if ($this->course_id !== null && $this->course_id !== []) {
+                $query->whereIn('course_id', $this->course_id);
+            }
             if ($this->institute_id !== null && $this->institute_id !== []) {
                 $query->whereIn('institute_id', $this->institute_id);
             } elseif ($this->institute_type !== null && $this->institute_type !== []) {
@@ -84,18 +87,18 @@ class ProgramTrends extends Component implements HasForms
                 if (! isset($institute_data[$data->institute_id])) {
                     $institute_data[$data->institute_id] = [];
                 }
-                if (! isset($institute_data[$data->institute_id][$data->quota_id])) {
-                    $institute_data[$data->institute_id][$data->quota_id] = $initial_institute_data;
+                if (! isset($institute_data[$data->institute_id][$data->course_id.', '.$data->program_id])) {
+                    $institute_data[$data->institute_id][$data->course_id.', '.$data->program_id] = $initial_institute_data;
                 }
-                $institute_data[$data->institute_id][$data->quota_id][$data->year.'_'.$data->round] = $data->closing_rank;
+                $institute_data[$data->institute_id][$data->course_id.', '.$data->program_id][$data->year.'_'.$data->round] = $data->closing_rank;
             }
 
             $datasets = [];
-            foreach ($institute_data as $institute => $quota_data) {
-                foreach ($quota_data as $quota => $data) {
-                    $random_hue = crc32($institute.$quota) % 360;
+            foreach ($institute_data as $institute => $program_data) {
+                foreach ($program_data as $program => $data) {
+                    $random_hue = crc32($institute.$program) % 360;
                     $datasets[] = [
-                        'label' => $institute.' ('.$quota.')',
+                        'label' => $institute.' ('.$program.')',
                         'data' => array_values($data),
                         'backgroundColor' => 'hsl('.$random_hue.', 100%, 80%)',
                         'borderColor' => 'hsl('.$random_hue.', 100%, 50%)',
@@ -121,34 +124,38 @@ class ProgramTrends extends Component implements HasForms
     {
         return [
             Grid::make(4)->schema([
-                Select::make('course_id')
-                    ->options(Cache::rememberForever('allCourses', fn () => Course::all()->pluck('id', 'id')))
+                MultiSelect::make('program_id')
+                            ->label('Fields')
+                            ->placeholder('Select Fields')
+                            ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
+                            ->afterStateUpdated(function (Closure $set) {
+                                $set('course_id', null);
+                                $set('institute_id', null);
+                            })
+                            ->searchable()
+                            ->afterStateUpdated(function (Closure $set) {
+                                $set('institute_id', null);
+                                $this->emit('updateChartData');
+                            })->reactive(),
+                MultiSelect::make('course_id')
+                    ->options(function (Closure $get) {
+                        if ($get('program_id')) {
+                            $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
+
+                            return Program::whereIn('id', $programs)->get()->pluck('courses')->flatten()->pluck('id', 'id');
+                        } else {
+                            return Cache::rememberForever('allCourses', fn () => Course::all()->pluck('id', 'id'));
+                        }
+                    })
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function (Closure $set) {
-                        $set('program_id', null);
                         $set('institute_id', null);
-                        $this->emit('updateChartData');
-                    })->required()
-                    ->reactive(),
-                Select::make('program_id')
-                    ->options(function (Closure $get) {
-                        if ($get('course_id')) {
-                            return DB::table('institute_course_program')->where('course_id', $get('course_id'))->pluck('program_id', 'program_id');
-                        } else {
-                            return Cache::rememberForever('allPrograms', fn () => Program::all()->pluck('id', 'id'));
-                        }
-                    })
-                    ->label('Program')
-                    ->searchable()
-                    ->afterStateUpdated(function (Closure $set) {
-                        $set('institute_type', null);
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
-                        return ! $get('course_id');
-                    })->required()
-                    ->reactive(),
+                        return ! $get('program_id');
+                    })->reactive(),
                 CheckboxList::make('institute_type')
                     ->label('Institute Types')
                     ->options([
@@ -162,28 +169,33 @@ class ProgramTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
-                        return ! $get('program_id') || ! $get('course_id');
+                        return ! $get('program_id') && ! $get('course_id');
                     })->reactive(),
                 MultiSelect::make('institute_id')
                     ->options(function (Closure $get) {
-                        $institutes = DB::table('institute_course_program')->where('course_id', $get('course_id'))->where('program_id', $get('program_id'));
-                        if ($get('institute_type')) {
-                            $institute_ids = $institutes->pluck('institute_id');
+                        if ($get('program_id') && $get('course_id')) {
+                            $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
 
-                            return Institute::whereIn('id', $institute_ids)->whereIn('type', $get('institute_type'))->pluck('id', 'id');
+                            $query = DB::table('institute_course_program')->whereIn('program_id', $programs)->whereIn('course_id', $get('course_id'));
+                            if ($get('institute_type')) {
+                                $institutes = Institute::whereIn('type', $get('institute_type'))->pluck('id');
+                                $query = $query->whereIn('institute_id', $institutes);
+                            }
+
+                            return $query->get()->pluck('institute_id', 'institute_id');
                         } else {
-                            return $institutes->pluck('institute_id', 'institute_id');
+                            return Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id'));
                         }
                     })
                     ->label('Institute')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {
-                        return ! $get('program_id') || ! $get('course_id');
+                        return ! $get('program_id') && ! $get('course_id');
                     })
                     ->reactive(),
             ]),
             Grid::make(3)->schema([
-                MultiSelect::make('quota_id')
+                Select::make('quota_id')
                     ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
                     ->label('Quota')
                     ->required()

@@ -36,3 +36,7 @@ Route::get('/institute-trends', function () {
 Route::get('/round-trends', function () {
     return view('round-trends');
 })->name('round-trends');
+
+Route::get('/field-trends', function () {
+    return view('field-trends');
+})->name('field-trends');
