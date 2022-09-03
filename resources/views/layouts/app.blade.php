@@ -59,6 +59,10 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             padding: 0;
             margin: 0;
         }
+
+        canvas {
+            max-height: 80vh !important;
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -103,22 +107,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                 </li>
                 <li class="mr-3">
                     <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Search institutes
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Search courses
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Rank trends
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Round trends
+                        href={{ route('round-trends') }} @click="isOpen = false">Round trends
                     </a>
                 </li>
                 <li class="mr-3">
@@ -128,7 +117,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                 </li>
                 <li class="mr-3">
                     <a class="inline-block text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
-                        href="#" @click="isOpen = false">Institute trends
+                        href={{ route('institute-trends') }} @click="isOpen = false">Institute trends
                     </a>
                 </li>
                 <li class="mr-3">

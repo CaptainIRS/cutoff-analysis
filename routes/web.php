@@ -28,3 +28,11 @@ Route::get('/search-by-institute', function () {
 Route::get('/program-trends', function () {
     return view('program-trends');
 })->name('program-trends');
+
+Route::get('/institute-trends', function () {
+    return view('institute-trends');
+})->name('institute-trends');
+
+Route::get('/round-trends', function () {
+    return view('round-trends');
+})->name('round-trends');
