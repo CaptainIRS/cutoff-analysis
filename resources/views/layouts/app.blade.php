@@ -10,6 +10,17 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <meta name="description"
+        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling.">
+    <meta name="keywords"
+        content="josaa, josaa analysis, josaa counselling, josaa counselling analysis, josaa counselling tool, josaa counselling tool 2021, josaa counselling tool 2020, josaa counselling tool 2019">
+    <meta name="author" content="CaptainIRS">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="JoSAA Analysis">
+    <meta property="og:description"
+        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling.">
+
     <title>{{ config('app.name') }}</title>
 
     <style>
@@ -146,6 +157,16 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         <div class="container flex-1">
             @yield('content')
         </div>
+    </div>
+
+    <div class="footer text-center p-1">
+        Made with <svg class="inline h-5 w-5 pb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+            </path>
+        </svg> by &nbsp;<a href="https://captainirs.dev"
+            class="text-blue-500 hover:text-blue-600 underline">@CaptainIRS</a>
     </div>
 
     @livewire('notifications')

@@ -14,7 +14,8 @@
     <div wire:ignore id="legend"></div>
     <canvas wire:ignore id="myChart" width="40" height="40"></canvas>
     <script wire:ignore>
-        const ctx = document.getElementById('myChart').getContext('2d');
+        const canvas = document.getElementById('myChart');
+        const ctx = canvas.getContext('2d');
         Chart.register({
             id: 'emptyChart',
             afterDraw(chart, args, options) {
@@ -31,26 +32,12 @@
                 }
 
                 if (!hasData) {
-                    const {
-                        chartArea: {
-                            left,
-                            top,
-                            right,
-                            bottom
-                        },
-                        ctx
-                    } = chart;
-                    const centerX = (left + right) / 2;
-                    const centerY = (top + bottom) / 2;
-
                     chart.clear();
                     ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
                     ctx.fillStyle = '#8c8c8c';
                     ctx.textBaseline = 'middle';
                     ctx.textAlign = 'center';
-                    ctx.fillText('No data to display', centerX, centerY);
+                    ctx.fillText('No data to display', canvas.clientWidth / 2, canvas.clientHeight / 2);
                     ctx.restore();
                 }
             }
