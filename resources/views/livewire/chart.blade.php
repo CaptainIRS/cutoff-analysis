@@ -73,7 +73,7 @@
 
                 items.forEach(item => {
                     const li = document.createElement('li');
-                    li.style.alignItems = 'center';
+                    li.style.alignItems = 'baseline';
                     li.style.cursor = 'pointer';
                     li.style.display = 'flex';
                     li.style.flexDirection = 'row';
