@@ -163,7 +163,14 @@ class FieldTrends extends Component implements HasForms
                         'nit' => 'NITs',
                         'iiit' => 'IIITs',
                         'gfti' => 'GFTIs',
-                    ])->columns(2)
+                    ])->columns([
+                        'default' => 2,
+                        'sm' => 2,
+                        'md' => 2,
+                        'lg' => 2,
+                        'xl' => 2,
+                        '2xl' => 2,
+                    ])
                     ->afterStateUpdated(function (Closure $set) {
                         $set('institute_id', null);
                         $this->emit('updateChartData');
