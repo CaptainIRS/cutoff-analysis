@@ -48,6 +48,8 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = '#8c8c8c';
+                    ctx.textBaseline = 'middle';
+                    ctx.textAlign = 'center';
                     ctx.fillText('No data to display', centerX, centerY);
                     ctx.restore();
                 }
