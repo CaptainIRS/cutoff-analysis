@@ -223,6 +223,7 @@ class FieldTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->label('Seat Type')
+                    ->searchable()
                     ->required()
                     ->reactive(),
                 Select::make('gender_id')
@@ -234,6 +235,7 @@ class FieldTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->label('Gender')
+                    ->searchable()
                     ->required()
                     ->reactive(),
             ]),
