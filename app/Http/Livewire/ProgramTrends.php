@@ -221,7 +221,7 @@ class ProgramTrends extends Component implements HasForms
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
                     ->afterStateUpdated(function (Closure $get) {
                         if ($get('gender_id') !== null && $get('gender_id') !== []) {
-                            session()->put('gender_id', $get('gender_id')[0]);
+                            session()->put('gender_id', $get('gender_id'));
                         }
                         $this->emit('updateChartData');
                     })
