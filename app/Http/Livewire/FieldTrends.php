@@ -54,6 +54,15 @@ class FieldTrends extends Component implements HasForms
 
     protected $listeners = ['updateChartData'];
 
+    public function mount(): void
+    {
+        $this->form->fill([
+            'quota_id' => session()->exists('quota_id') ? session()->get('quota_id')[0] : null,
+            'seat_type_id' => session('seat_type_id'),
+            'gender_id' => session('gender_id'),
+        ]);
+    }
+
     public function updateChartData(): void
     {
         $data = [];
@@ -207,18 +216,33 @@ class FieldTrends extends Component implements HasForms
             Grid::make(3)->schema([
                 Select::make('quota_id')
                     ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
+                    ->afterStateUpdated(function (Closure $get) {
+                        if ($get('quota_id') !== null) {
+                            session()->put('quota_id', [$get('quota_id')]);
+                        }
+                        $this->emit('updateChartData');
+                    })
                     ->label('Quota')
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
                 Select::make('seat_type_id')
                     ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
+                    ->afterStateUpdated(function (Closure $get) {
+                        if ($get('seat_type_id') !== null) {
+                            session()->put('seat_type_id', $get('seat_type_id'));
+                        }
+                    })
                     ->label('Seat Type')
                     ->required()
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
                 Select::make('gender_id')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
+                    ->afterStateUpdated(function (Closure $get) {
+                        if ($get('gender_id') !== null && $get('gender_id') !== []) {
+                            session()->put('gender_id', $get('gender_id')[0]);
+                        }
+                    })
                     ->label('Gender')
                     ->required()
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))

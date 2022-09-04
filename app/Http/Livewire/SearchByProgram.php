@@ -144,12 +144,31 @@ class SearchByProgram extends Component implements HasTable
                     Grid::make(3)->schema([
                         MultiSelect::make('quota_id')
                             ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
+                            ->afterStateUpdated(function (Closure $get) {
+                                if ($get('quota_id') !== null && $get('quota_id') != []) {
+                                    session()->put('quota_id', $get('quota_id'));
+                                }
+                            })
+                            ->default(session()->get('quota_id'))
                             ->label('Quota'),
                         Select::make('seat_type_id')
                             ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
+                            ->afterStateUpdated(function (Closure $get) {
+                                if ($get('seat_type_id') !== null) {
+                                    session()->put('seat_type_id', $get('seat_type_id'));
+                                }
+                            })
+                            ->searchable()
+                            ->default(session()->get('seat_type_id'))
                             ->label('Seat Type'),
                         MultiSelect::make('gender_id')
                             ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
+                            ->afterStateUpdated(function (Closure $get) {
+                                if ($get('gender_id') !== null && $get('gender_id') !== []) {
+                                    session()->put('gender_id', $get('gender_id')[0]);
+                                }
+                            })
+                            ->default(session()->exists('gender_id') ? [session()->get('gender_id')] : null)
                             ->label('Gender'),
                     ]),
                 ])

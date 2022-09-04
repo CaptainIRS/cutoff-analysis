@@ -54,6 +54,15 @@ class ProgramTrends extends Component implements HasForms
 
     protected $listeners = ['updateChartData'];
 
+    public function mount(): void
+    {
+        $this->form->fill([
+            'quota_id' => session('quota_id'),
+            'seat_type_id' => session('seat_type_id'),
+            'gender_id' => session('gender_id'),
+        ]);
+    }
+
     public function updateChartData(): void
     {
         $data = [];
@@ -132,15 +141,10 @@ class ProgramTrends extends Component implements HasForms
                     })->required()
                     ->reactive(),
                 Select::make('program_id')
-                    ->options(function (Closure $get) {
-                        if ($get('course_id')) {
-                            return DB::table('institute_course_program')->where('course_id', $get('course_id'))->pluck('program_id', 'program_id');
-                        } else {
-                            return Cache::rememberForever('allPrograms', fn () => Program::all()->pluck('id', 'id'));
-                        }
-                    })
+                    ->options(DB::table('institute_course_program')->where('course_id', $this->course_id)->pluck('program_id', 'program_id'))
                     ->label('Program')
                     ->searchable()
+                    ->getSearchResultsUsing(fn (string $search) => DB::table('institute_course_program')->where('course_id', $this->course_id)->whereIn('program_id', Program::search($search)->get()->pluck('id'))->pluck('program_id', 'program_id'))
                     ->afterStateUpdated(function (Closure $set) {
                         $set('institute_type', null);
                         $this->emit('updateChartData');
@@ -192,18 +196,33 @@ class ProgramTrends extends Component implements HasForms
             Grid::make(3)->schema([
                 MultiSelect::make('quota_id')
                     ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
+                    ->afterStateUpdated(function (Closure $get) {
+                        if ($get('quota_id') !== null && $get('quota_id') != []) {
+                            session()->put('quota_id', $get('quota_id'));
+                        }
+                        $this->emit('updateChartData');
+                    })
                     ->label('Quota')
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
                 Select::make('seat_type_id')
                     ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
+                    ->afterStateUpdated(function (Closure $get) {
+                        if ($get('seat_type_id') !== null) {
+                            session()->put('seat_type_id', $get('seat_type_id'));
+                        }
+                    })
                     ->label('Seat Type')
                     ->required()
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
                 Select::make('gender_id')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
+                    ->afterStateUpdated(function (Closure $get) {
+                        if ($get('gender_id') !== null && $get('gender_id') !== []) {
+                            session()->put('gender_id', $get('gender_id')[0]);
+                        }
+                    })
                     ->label('Gender')
                     ->required()
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
