@@ -144,7 +144,11 @@ class FieldTrends extends Component implements HasForms
                     ->searchable()
                     ->reactive(),
                 MultiSelect::make('course_id')
-                    ->options(Program::whereIn('id', $this->program_id)->get()->pluck('courses')->flatten()->pluck('id', 'id'))
+                    ->options(function (Closure $get) {
+                        $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
+
+                        return Program::whereIn('id', $programs)->get()->pluck('courses')->flatten()->pluck('id', 'id');
+                    })
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function (Closure $set) {
