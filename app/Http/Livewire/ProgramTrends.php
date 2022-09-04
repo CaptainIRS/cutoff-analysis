@@ -111,8 +111,12 @@ class ProgramTrends extends Component implements HasForms
                     ];
                 }
             }
+            $labels = array_keys($initial_institute_data);
+            foreach ($labels as $key => $label) {
+                $labels[$key] = str_replace('_', ' - ', $label);
+            }
             $data = [
-                'labels' => array_keys($initial_institute_data),
+                'labels' => $labels,
                 'datasets' => $datasets,
             ];
             $this->old_course_id = $this->course_id;

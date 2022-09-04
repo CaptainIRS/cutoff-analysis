@@ -93,8 +93,12 @@ class RoundTrends extends Component implements HasForms
                     'borderColor' => 'hsl('.$random_hue.', 100%, 50%)',
                 ];
             }
+            $labels = array_keys($initial_round_data);
+            foreach ($labels as $key => $label) {
+                $labels[$key] = str_replace('_', ' - ', $label);
+            }
             $data = [
-                'labels' => array_keys($initial_round_data),
+                'labels' => $labels,
                 'datasets' => $datasets,
             ];
             $this->old_course_id = $this->course_id;

@@ -74,6 +74,171 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         canvas {
             max-height: 80vh !important;
         }
+
+        .lds-spinner {
+            display: inline-block;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .lds-spinner div {
+            transform-origin: 40px 40px;
+            animation: lds-spinner 1.2s linear infinite;
+        }
+
+        .lds-spinner div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 10px;
+            left: 37px;
+            width: 6px;
+            height: 16px;
+            border-radius: 20%;
+            background: rgb(140, 140, 140);
+        }
+
+        .lds-spinner div:nth-child(1) {
+            transform: rotate(0deg);
+            animation-delay: -1.1s;
+        }
+
+        .lds-spinner div:nth-child(2) {
+            transform: rotate(30deg);
+            animation-delay: -1s;
+        }
+
+        .lds-spinner div:nth-child(3) {
+            transform: rotate(60deg);
+            animation-delay: -0.9s;
+        }
+
+        .lds-spinner div:nth-child(4) {
+            transform: rotate(90deg);
+            animation-delay: -0.8s;
+        }
+
+        .lds-spinner div:nth-child(5) {
+            transform: rotate(120deg);
+            animation-delay: -0.7s;
+        }
+
+        .lds-spinner div:nth-child(6) {
+            transform: rotate(150deg);
+            animation-delay: -0.6s;
+        }
+
+        .lds-spinner div:nth-child(7) {
+            transform: rotate(180deg);
+            animation-delay: -0.5s;
+        }
+
+        .lds-spinner div:nth-child(8) {
+            transform: rotate(210deg);
+            animation-delay: -0.4s;
+        }
+
+        .lds-spinner div:nth-child(9) {
+            transform: rotate(240deg);
+            animation-delay: -0.3s;
+        }
+
+        .lds-spinner div:nth-child(10) {
+            transform: rotate(270deg);
+            animation-delay: -0.2s;
+        }
+
+        .lds-spinner div:nth-child(11) {
+            transform: rotate(300deg);
+            animation-delay: -0.1s;
+        }
+
+        .lds-spinner div:nth-child(12) {
+            transform: rotate(330deg);
+            animation-delay: 0s;
+        }
+
+        @keyframes lds-spinner {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .lds-ellipsis {
+            display: inline-block;
+            position: fixed;
+            bottom: 40px;
+            right: 60px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .lds-ellipsis div {
+            position: absolute;
+            top: 33px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: rgb(140, 140, 140);
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+
+        .lds-ellipsis div:nth-child(1) {
+            left: 8px;
+            animation: lds-ellipsis1 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(2) {
+            left: 8px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(3) {
+            left: 32px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(4) {
+            left: 56px;
+            animation: lds-ellipsis3 0.6s infinite;
+        }
+
+        @keyframes lds-ellipsis1 {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes lds-ellipsis3 {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes lds-ellipsis2 {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(24px, 0);
+            }
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -103,11 +268,11 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </svg>
         </button>
 
-        <div class="w-full flex-grow 2xl:flex 2xl:items-center 2xl:w-auto"
-            :class="{ 'block shadow-3xl': isOpen, 'hidden': !isOpen }" {{-- @click.away="isOpen = false" --}} x-show.transition="true">
+        <div transition.opacity class="w-full flex-grow 2xl:flex 2xl:items-center 2xl:w-auto shadow-xs"
+            :class="{ 'block': isOpen, 'hidden': !isOpen }" {{-- @click.away="isOpen = false" --}} x-show.transition="true">
             <ul class="pt-3 2xl:pt-0 list-reset 2xl:flex justify-end flex-1 items-center">
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
                         href="{{ route('search-by-program') }}" @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
@@ -118,7 +283,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
                         href="{{ route('search-by-institute') }}" @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
@@ -129,7 +294,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
                         href={{ route('round-trends') }} @click="isOpen = false"><svg xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -139,7 +304,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
                         href={{ route('program-trends') }} @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
@@ -150,7 +315,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
                         href={{ route('institute-trends') }} @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
@@ -161,7 +326,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-4"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
                         href={{ route('field-trends') }} @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
@@ -172,7 +337,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     </a>
                 </li>
                 <li class="mr-3">
-                    <div class="flex justify-start align-baseline space-x-2 py-4 px-4">
+                    <div class="flex justify-start align-baseline space-x-2 py-4 px-2">
                         <span class="text-sm text-gray-800 dark:text-gray-500">Light</span>
                         <label for="toggle"
                             class="flex items-center h-5 p-1 duration-300 ease-in-out bg-gray-300 rounded-full cursor-pointer w-9 dark:bg-gray-600">
