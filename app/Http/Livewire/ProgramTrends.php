@@ -211,10 +211,11 @@ class ProgramTrends extends Component implements HasForms
                         if ($get('seat_type_id') !== null) {
                             session()->put('seat_type_id', $get('seat_type_id'));
                         }
+                        $this->emit('updateChartData');
                     })
                     ->label('Seat Type')
+                    ->searchable()
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
                 Select::make('gender_id')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
@@ -222,10 +223,11 @@ class ProgramTrends extends Component implements HasForms
                         if ($get('gender_id') !== null && $get('gender_id') !== []) {
                             session()->put('gender_id', $get('gender_id')[0]);
                         }
+                        $this->emit('updateChartData');
                     })
                     ->label('Gender')
+                    ->searchable()
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
             ]),
         ];

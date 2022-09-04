@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Course;
 use App\Models\Gender;
 use App\Models\Institute;
 use App\Models\Program;
@@ -140,22 +139,12 @@ class FieldTrends extends Component implements HasForms
                     ->afterStateUpdated(function (Closure $set) {
                         $set('course_id', null);
                         $set('institute_id', null);
+                        $this->emit('updateChartData');
                     })
                     ->searchable()
-                    ->afterStateUpdated(function (Closure $set) {
-                        $set('institute_id', null);
-                        $this->emit('updateChartData');
-                    })->reactive(),
+                    ->reactive(),
                 MultiSelect::make('course_id')
-                    ->options(function (Closure $get) {
-                        if ($get('program_id')) {
-                            $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
-
-                            return Program::whereIn('id', $programs)->get()->pluck('courses')->flatten()->pluck('id', 'id');
-                        } else {
-                            return Cache::rememberForever('allCourses', fn () => Course::all()->pluck('id', 'id'));
-                        }
-                    })
+                    ->options(Program::whereIn('id', $this->programs)->get()->pluck('courses')->flatten()->pluck('id', 'id'))
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function (Closure $set) {
@@ -185,7 +174,7 @@ class FieldTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
-                        return ! $get('program_id') && ! $get('course_id');
+                        return ! $get('program_id') || ! $get('course_id');
                     })->reactive(),
                 MultiSelect::make('institute_id')
                     ->options(function (Closure $get) {
@@ -209,7 +198,7 @@ class FieldTrends extends Component implements HasForms
                     ->label('Institute')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {
-                        return ! $get('program_id') && ! $get('course_id');
+                        return ! $get('program_id') || ! $get('course_id');
                     })
                     ->reactive(),
             ]),
@@ -231,21 +220,21 @@ class FieldTrends extends Component implements HasForms
                         if ($get('seat_type_id') !== null) {
                             session()->put('seat_type_id', $get('seat_type_id'));
                         }
+                        $this->emit('updateChartData');
                     })
                     ->label('Seat Type')
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
                 Select::make('gender_id')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
                     ->afterStateUpdated(function (Closure $get) {
                         if ($get('gender_id') !== null && $get('gender_id') !== []) {
-                            session()->put('gender_id', $get('gender_id')[0]);
+                            session()->put('gender_id', $get('gender_id'));
                         }
+                        $this->emit('updateChartData');
                     })
                     ->label('Gender')
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
             ]),
         ];

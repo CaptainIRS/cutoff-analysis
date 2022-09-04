@@ -123,9 +123,7 @@ class InstituteTrends extends Component implements HasForms
                     ->required()
                     ->reactive(),
                 MultiSelect::make('course_id')
-                    ->options(function (Closure $get) {
-                        return DB::table('institute_course_program')->where('institute_id', $get('institute_id'))->pluck('course_id', 'course_id');
-                    })
+                    ->options(DB::table('institute_course_program')->where('institute_id', $this->institute_id)->pluck('course_id', 'course_id'))
                     ->label('Course')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {
@@ -153,10 +151,10 @@ class InstituteTrends extends Component implements HasForms
                         if ($get('seat_type_id') !== null) {
                             session()->put('seat_type_id', $get('seat_type_id'));
                         }
+                        $this->emit('updateChartData');
                     })
                     ->label('Seat Type')
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
                 Select::make('gender_id')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
@@ -164,10 +162,10 @@ class InstituteTrends extends Component implements HasForms
                         if ($get('gender_id') !== null && $get('gender_id') !== []) {
                             session()->put('gender_id', $get('gender_id')[0]);
                         }
+                        $this->emit('updateChartData');
                     })
                     ->label('Gender')
                     ->required()
-                    ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->reactive(),
             ]),
         ];
