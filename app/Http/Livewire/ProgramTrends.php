@@ -145,10 +145,10 @@ class ProgramTrends extends Component implements HasForms
                     })->required()
                     ->reactive(),
                 Select::make('program_id')
-                    ->options(DB::table('institute_course_program')->where('course_id', $this->course_id)->pluck('program_id', 'program_id'))
+                    ->options(fn (Closure $get) => DB::table('institute_course_program')->where('course_id', $get('course_id'))->pluck('program_id', 'program_id'))
                     ->label('Program')
                     ->searchable()
-                    ->getSearchResultsUsing(fn (string $search) => DB::table('institute_course_program')->where('course_id', $this->course_id)->whereIn('program_id', Program::search($search)->get()->pluck('id'))->pluck('program_id', 'program_id'))
+                    ->getSearchResultsUsing(fn (string $search, Closure $get) => DB::table('institute_course_program')->where('course_id', $get('course_id'))->whereIn('program_id', Program::search($search)->get()->pluck('id'))->pluck('program_id', 'program_id'))
                     ->afterStateUpdated(function (Closure $set) {
                         $set('institute_type', null);
                         $this->emit('updateChartData');

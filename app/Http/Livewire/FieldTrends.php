@@ -146,6 +146,7 @@ class FieldTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->searchable()
+                    ->required()
                     ->reactive(),
                 MultiSelect::make('course_id')
                     ->options(function (Closure $get) {
@@ -182,7 +183,7 @@ class FieldTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
-                        return ! $get('program_id') || ! $get('course_id');
+                        return ! $get('program_id');
                     })->reactive(),
                 MultiSelect::make('institute_id')
                     ->options(function (Closure $get) {
@@ -206,7 +207,7 @@ class FieldTrends extends Component implements HasForms
                     ->label('Institute')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {
-                        return ! $get('program_id') || ! $get('course_id');
+                        return ! $get('program_id');
                     })
                     ->reactive(),
             ]),

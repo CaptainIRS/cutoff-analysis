@@ -11,9 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.1/chartjs-plugin-zoom.min.js"
         integrity="sha512-klQv6lz2YR+MecyFYMFRuU2eAl8IPRo6zHnsc9n142TJuJHS8CG0ix4Oq9na9ceeg1u5EkBfZsFcV3U7J51iew=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <br>
-    <hr class="border-gray-200 dark:border-gray-600">
-    <br>
+    <hr class="border-gray-200 dark:border-gray-600 my-2">
     <div class="lds-spinner opacity-0 transition-opacity duration-500" wire:loading.class="opacity-100">
         <div></div>
         <div></div>
@@ -31,8 +29,7 @@
 </div>
 <div wire:ignore id="legend"></div>
 <canvas wire:ignore id="myChart" width="40" height="40"></canvas>
-<br>
-<hr class="border-gray-200 dark:border-gray-600">
+<hr class="border-gray-200 dark:border-gray-600 my-2">
 <script wire:ignore>
     const canvas = document.getElementById('myChart');
     const ctx = canvas.getContext('2d');

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 'darkMode': false, 'isOpen': false }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
-$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" class="h-full"
     :style="{ colorScheme: darkMode && 'dark' }">
 
 <head>
@@ -26,10 +26,9 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     <style>
         html {
             font-size: 0.85em;
-        }
-
-        [x-cloak] {
-            display: none !important;
+            --overlay-bg: white;
+            --color-scheme: light;
+            color-scheme: var(--color-scheme);
         }
 
         .filament-tables-container {
@@ -82,6 +81,12 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             right: 40px;
             width: 40px;
             height: 40px;
+        }
+
+        .lds-spinner.overlay-centered {
+            top: 50%;
+            left: 50%;
+            transform: translate(-40px, -40px);
         }
 
         .lds-spinner div {
@@ -170,14 +175,62 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                 opacity: 0;
             }
         }
+
+        [x-cloak] {
+            opacity: 100 !important;
+        }
+
+        .overlay {
+            z-index: 2000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            background-color: var(--overlay-bg);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .footer {
+            width: 100%;
+        }
     </style>
+    <script>
+        if (localStorage.getItem('darkMode') === 'true') {
+            console.log('Dark mode enabled');
+            document.documentElement.style.setProperty('--overlay-bg', 'black');
+            document.documentElement.style.setProperty('--color-scheme', 'dark');
+        } else {
+            console.log('Dark mode disabled');
+            document.documentElement.style.setProperty('--overlay-bg', 'white');
+            document.documentElement.style.setProperty('--color-scheme', 'light');
+        }
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     @livewireScripts
     @stack('scripts')
 </head>
 
-<body class="antialiased" :class="{ 'dark': darkMode === true }">
+<body class="antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
+    <div x-cloak class="overlay">
+        <div class="lds-spinner overlay-centered">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
     <nav class="flex items-center justify-between flex-wrap p-2 mb-1 w-full z-10 top-0 bg-gray-200 dark:bg-gray-800"
         @keydown.escape="isOpen = false" :class="{ 'shadow-lg': isOpen }">
 
@@ -203,68 +256,70 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             :class="{ 'block': isOpen, 'hidden': !isOpen }" {{-- @click.away="isOpen = false" --}} x-show.transition="true">
             <ul class="pt-3 2xl:pt-0 list-reset 2xl:flex justify-end flex-1 items-center">
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
-                        href="{{ route('search-by-program') }}" @click="isOpen = false"><svg
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2 w-full"
+                        href="{{ route('search-by-program') }}" @click="isOpen = false">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
                         </svg>
-                        Search by program
+
+                        Filter by Program
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
-                        href="{{ route('search-by-institute') }}" @click="isOpen = false"><svg
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2 w-full"
+                        href="{{ route('search-by-institute') }}" @click="isOpen = false">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
                         </svg>
-                        Search by institute
+
+                        Filter by Institute
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2 w-full"
                         href={{ route('round-trends') }} @click="isOpen = false"><svg xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
                         </svg>
-                        Round trends
+                        Round Trends
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2 w-full"
                         href={{ route('program-trends') }} @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
                         </svg>
-                        Program trends
+                        Program Trends
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2 w-full"
                         href={{ route('institute-trends') }} @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
                         </svg>
-                        Institute trends
+                        Institute Trends
                     </a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2"
+                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-2 px-2 w-full"
                         href={{ route('field-trends') }} @click="isOpen = false"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
                         </svg>
-                        Field trends
+                        Field Trends
                     </a>
                 </li>
                 <li class="mr-3">
@@ -284,19 +339,19 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </ul>
         </div>
     </nav>
-    <div x-cloak class="container m-auto">
+    <div class="container m-auto flex-grow">
         <div class="container flex-1">
             @yield('content')
         </div>
     </div>
 
-    <div x-cloak class="footer text-center p-2">
+    <div class="footer text-center p-2">
         Made with <svg class="inline h-5 w-5 pb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
             </path>
-        </svg> by &nbsp;<a href="https://captainirs.dev"
+        </svg> by <a href="https://captainirs.dev"
             class="text-blue-500 hover:text-blue-600 underline">@@CaptainIRS</a>
     </div>
 

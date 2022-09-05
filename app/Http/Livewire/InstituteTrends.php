@@ -127,7 +127,7 @@ class InstituteTrends extends Component implements HasForms
                     ->required()
                     ->reactive(),
                 MultiSelect::make('course_id')
-                    ->options(DB::table('institute_course_program')->where('institute_id', $this->institute_id)->pluck('course_id', 'course_id'))
+                    ->options(fn (Closure $get) => DB::table('institute_course_program')->where('institute_id', $get('institute_id'))->pluck('course_id', 'course_id'))
                     ->label('Course')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {
