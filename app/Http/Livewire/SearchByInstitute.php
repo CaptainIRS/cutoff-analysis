@@ -212,9 +212,13 @@ class SearchByInstitute extends Component implements HasTable
                         '2xl' => 2,
                     ])->schema([
                         TextInput::make('minimum_rank')
+                            ->numeric()
+                            ->step(500)
                             ->label('Minimum Rank')
                             ->placeholder('Minimum Rank'),
                         TextInput::make('maximum_rank')
+                            ->numeric()
+                            ->step(500)
                             ->label('Maximum Rank')
                             ->placeholder('Maximum Rank'),
                     ]),

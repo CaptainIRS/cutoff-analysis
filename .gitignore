@@ -16,3 +16,4 @@ yarn-error.log
 /.vscode
 /storage/*.index
 _ide_helper.php
+/public/sitemap.xml

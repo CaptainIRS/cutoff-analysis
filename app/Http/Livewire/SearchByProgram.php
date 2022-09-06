@@ -116,7 +116,7 @@ class SearchByProgram extends Component implements HasTable
                                 if ($get('program_id') && $get('course_id')) {
                                     $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
 
-                                    return DB::table('institute_course_program')->whereIn('program_id', $programs)->whereIn('course_id', $get('course_id'))->get()->pluck('institute_id', 'institute_id');
+                                    return DB::table('institute_course_program')->whereIn('program_id', $programs)->whereIn('course_id', $get('course_id'))->orderBy('institute_id')->get()->pluck('institute_id', 'institute_id');
                                 } else {
                                     return Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id'));
                                 }
@@ -196,9 +196,13 @@ class SearchByProgram extends Component implements HasTable
                         '2xl' => 2,
                     ])->schema([
                         TextInput::make('minimum_rank')
+                            ->numeric()
+                            ->step(500)
                             ->label('Minimum Rank')
                             ->placeholder('Minimum Rank'),
                         TextInput::make('maximum_rank')
+                            ->numeric()
+                            ->step(500)
                             ->label('Maximum Rank')
                             ->placeholder('Maximum Rank'),
                     ]),
