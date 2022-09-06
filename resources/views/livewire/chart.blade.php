@@ -48,6 +48,7 @@
                 }
 
                 if (!hasData) {
+                    document.getElementById('myChart').style.pointerEvents = 'none';
                     chart.clear();
                     ctx.save();
                     ctx.fillStyle = '#8c8c8c';
@@ -55,6 +56,8 @@
                     ctx.textAlign = 'center';
                     ctx.fillText('No data to display', canvas.clientWidth / 2, canvas.clientHeight / 2);
                     ctx.restore();
+                } else {
+                    document.getElementById('myChart').style.pointerEvents = 'auto';
                 }
             }
         });

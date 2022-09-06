@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use DB;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $statement = 'PRAGMA cache_size=-100000';
+        DB::connection('sqlite')->statement($statement);
+        $statement = 'PRAGMA synchronous=OFF';
+        DB::connection('sqlite')->statement($statement);
+        $statement = 'PRAGMA journal_mode=OFF';
+        DB::connection('sqlite')->statement($statement);
     }
 }

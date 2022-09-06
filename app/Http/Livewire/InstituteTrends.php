@@ -109,6 +109,13 @@ class InstituteTrends extends Component implements HasForms
             $this->old_seat_type_id = $this->seat_type_id;
             $this->old_gender_id = $this->gender_id;
             $this->emit('chartDataUpdated', $data);
+        } else {
+            $this->old_course_id = $this->course_id;
+            $this->old_institute_id = $this->institute_id;
+            $this->old_quota_id = $this->quota_id;
+            $this->old_seat_type_id = $this->seat_type_id;
+            $this->old_gender_id = $this->gender_id;
+            $this->emit('chartDataUpdated', []);
         }
     }
 
