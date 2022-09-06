@@ -76,7 +76,12 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         </div>
     </div>
     <nav class="fixed flex items-center justify-between flex-wrap mb-1 w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md p-2 xl:p-0"
-        @click.away="isOpen = false" @keydown.escape="isOpen = false">
+        @click.away="
+        if (window.innerWidth < 1280) {
+            isOpen = false;
+        }
+        "
+        @keydown.escape="isOpen = false">
 
         <div class="flex items-center flex-shrink-0 text-white mr-6">
             <a class="text-black dark:text-white no-underline hover:text-gray hover:no-underline"
@@ -215,8 +220,6 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         </svg> by <a href="https://captainirs.dev"
             class="text-blue-500 hover:text-blue-600 underline">@@CaptainIRS</a>
     </div>
-
-    @livewire('notifications')
 </body>
 
 </html>
