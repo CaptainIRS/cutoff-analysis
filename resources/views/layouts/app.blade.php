@@ -86,7 +86,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         <div class="flex items-center flex-shrink-0 text-white mr-6">
             <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full"
                 href="{{ route('home') }}">
-                <span class="text-xl pl-2 inline-flex items-center"><img src="{{ asset('favicon.svg') }}"
+                <span class="text-xl pl-2 inline-flex items-start"><img src="{{ asset('favicon.svg') }}"
                         class="h-6 w-6 mr-2" alt="Logo"> {{ config('app.name') }}</span>
             </a>
         </div>
