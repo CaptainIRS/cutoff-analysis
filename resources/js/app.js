@@ -1,11 +1,13 @@
 import Alpine from 'alpinejs'
 import Focus from '@alpinejs/focus'
-import FormsAlpinePlugin from '../../vendor/filament/forms/dist/module.esm'
-import NotificationsAlpinePlugin from '../../vendor/filament/notifications/dist/module.esm'
+
+import SelectFormComponentAlpinePlugin from '../../vendor/filament/forms/resources/js/components/select'
+import TextInputFormComponentAlpinePlugin from '../../vendor/filament/forms/resources/js/components/text-input'
+
+Alpine.plugin(SelectFormComponentAlpinePlugin)
+Alpine.plugin(TextInputFormComponentAlpinePlugin)
 
 Alpine.plugin(Focus)
-Alpine.plugin(FormsAlpinePlugin)
-Alpine.plugin(NotificationsAlpinePlugin)
 
 window.Alpine = Alpine
 

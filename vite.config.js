@@ -15,4 +15,13 @@ export default defineConfig({
             ],
         }),
     ],
+    build: {
+        minify: 'terser',
+        rollupOptions: {
+            manualChunks: {
+                'alpinejs': ['alpinejs'],
+                'alpinejs-focus': ['@alpinejs/focus'],
+            }
+        }
+    }
 })
