@@ -5,7 +5,7 @@
     <meta name="keywords"
         content="josaa, josaa analysis, josaa counselling, josaa counselling analysis, josaa counselling tool, engineering, engineering aspirants, iits, nits, iiits">
 
-    <meta property="og:title" content="Filter by Institute - JoSAA Analysis">
+    <meta property="og:title" content="JoSAA Analysis">
     <meta property="og:description"
         content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling.">
     <meta property="og:url" content="{{ route('home') }}">
