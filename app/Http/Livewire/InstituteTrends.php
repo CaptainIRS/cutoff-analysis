@@ -97,7 +97,7 @@ class InstituteTrends extends Component implements HasForms
             }
             $labels = array_keys($initial_program_data);
             foreach ($labels as $key => $label) {
-                $labels[$key] = str_replace('_', ' - ', $label);
+                $labels[$key] = str_replace('_', ' - R', $label);
             }
             $data = [
                 'labels' => $labels,
