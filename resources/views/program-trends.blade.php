@@ -18,9 +18,11 @@
     <h1 class="text-3xl font-bold m-4">Program Trends</h1>
 
     <h2 class="text-lg m-4">
-        Program trends highlight the trends of various institutes offering a particular program over the years. This helps
-        understand the popularity and perception of institutes offering the program, and thus helps understand the
-        demand for a particular institute offering the program during the counselling process.
+        Compare the cut-offs of various institues offering a particular course over 10 years in the JoSAA seat allocation
+        process.
+        <br>
+        This helps understand the popularity and perception of institutes offering the program, and thus helps understand
+        the demand for a particular institute offering the program during the counselling process.
     </h2>
     <livewire:program-trends />
 @endsection

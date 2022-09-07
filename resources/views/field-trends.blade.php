@@ -18,9 +18,11 @@
     <h1 class="text-3xl font-bold m-4">Field Trends</h1>
 
     <h2 class="text-lg m-4">
-        Field trends highlight the trends of courses in a particular field over the years. This helps understand the
-        popularity and perception of a field among engineering aspirants, and thus helps understand the demand for a
-        particular field during the counselling process.
+        Compare the cut-offs for courses in a particular field of engineering over 10 years in the JoSAA seat allocation
+        process.
+        <br>
+        This helps understand the popularity and perception of a field among engineering aspirants, and thus helps
+        understand the demand for a particular field during the counselling process.
     </h2>
     <livewire:field-trends />
 @endsection

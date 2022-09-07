@@ -18,8 +18,8 @@
     <h1 class="text-3xl font-bold m-4">Round Trends</h1>
 
     <h2 class="text-lg m-4">
-        Round trends highlight the general trend of closing ranks throughout the rounds of the counselling process. This
-        helps understand the likely range of changes to the closing ranks throught the counselling process.
+        Compare the cut-offs of a course in various rounds over 10 years in the JoSAA seat allocation process.
+        This helps understand the likely range of changes to the closing ranks throught the counselling process.
     </h2>
     <livewire:round-trends />
 @endsection
