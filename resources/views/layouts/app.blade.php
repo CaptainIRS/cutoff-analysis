@@ -75,7 +75,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             <div></div>
         </div>
     </div>
-    <nav class="fixed flex items-center justify-between flex-wrap mb-1 w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md p-2 xl:p-0"
+    <nav class="fixed flex items-center justify-between flex-wrap w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md"
         @click.away="
         if (window.innerWidth < 1280) {
             isOpen = false;
@@ -102,7 +102,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </svg>
         </button>
 
-        <div class="w-full flex-grow xl:flex xl:items-center xl:w-auto shadow-xs"
+        <div class="p-2 w-full flex-grow xl:flex xl:items-center xl:w-auto shadow-xs"
             @resize.window="
                 if (window.innerWidth >= 1280) {
                     isOpen = true;
@@ -111,7 +111,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                 }
             "
             x-show="isOpen" x-transition>
-            <ul class="pt-3 xl:pt-0 list-reset xl:flex justify-end flex-1 items-center">
+            <ul class="list-reset xl:flex justify-end flex-1 items-center">
                 <li class="mr-3">
                     <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
                         href="{{ route('search-by-program') }}">

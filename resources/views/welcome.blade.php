@@ -25,9 +25,9 @@
                 A tool that helps you find your optimal choices for JoSAA counselling.</p>
         </div>
 
-        <div class="mt-10">
+        <div class="mt-10 mb-10">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg flex flex-col">
+                <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                             Filter by Program
@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg flex flex-col">
+                <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                             Filter by Institute
@@ -63,7 +63,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg flex flex-col">
+                <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                             Field Trends
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg flex flex-col">
+                <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                             Program Trends
@@ -102,7 +102,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg flex flex-col">
+                <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                             Institute Trends
@@ -123,7 +123,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg flex flex-col">
+                <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                             Round Trends
