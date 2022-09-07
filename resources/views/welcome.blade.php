@@ -143,5 +143,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="sm:text-center lg:text-left my-10">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
+                <span class="block xl:inline">About</span>
+            </h2>
+            <p
+                class="mt-3 text-base text-gray-500 dark:text-gray-300 sm:mx-auto sm:mt-5 sm:max-w-3xl sm:text-lg md:mt-5 md:text-xl lg:mx-0">
+                The site is written in PHP using the <a href="https://laravel.com/"
+                    class="text-indigo-600 hover:text-indigo-900">Laravel</a> framework, and utilizes the <a
+                    href="https://filamentphp.com" class="text-indigo-600 hover:text-indigo-900">FilamentPHP</a> library.
+                The data is obtained from the JoSAA archives. The site is open source and can be found on <a
+                    href="https://github.com/CaptainIRS/josaa-analysis"
+                    class="text-indigo-600 hover:text-indigo-900">GitHub</a>.
+            </p>
+        </div>
     </main>
 @endsection
