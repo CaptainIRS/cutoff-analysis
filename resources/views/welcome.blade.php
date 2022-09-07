@@ -1,13 +1,14 @@
 @extends('layouts.app')
 
 @section('meta')
-    <meta name="description" content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling.">
+    <meta name="description"
+        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta name="keywords"
-        content="josaa, josaa analysis, josaa counselling, josaa counselling analysis, josaa counselling tool, engineering, engineering aspirants, iits, nits, iiits">
+        content="josaa, josaa analysis, josaa cut-offs, josaa closing rank, josaa counselling, josaa counselling analysis, josaa counselling tool, engineering, engineering aspirants, iits, nits, iiits">
 
     <meta property="og:title" content="JoSAA Analysis">
     <meta property="og:description"
-        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling.">
+        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="og:url" content="{{ route('home') }}">
 
     <title>{{ config('app.name') }}</title>
@@ -24,7 +25,6 @@
                 A tool that helps you find your optimal choices for JoSAA counselling.</p>
         </div>
 
-        <!-- cards explaining features -->
         <div class="mt-10">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg flex flex-col">
