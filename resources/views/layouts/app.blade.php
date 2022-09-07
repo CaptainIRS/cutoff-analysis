@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 'darkMode': false, 'isOpen': window.innerWidth >= 1280 }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
-$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" class="h-full"
-    :style="{ colorScheme: darkMode && 'dark' }">
+$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    class="overflow-y-hidden" :style="{ colorScheme: darkMode && 'dark' }">
 
 <head>
     <meta charset="utf-8">
@@ -58,7 +58,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     gtag('config', "{{ env('GA4_TAG') }}");
 </script>
 
-<body class="antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
+<body class="antialiased flex flex-col h-screen overflow-y-scroll" :class="{ 'dark': darkMode === true }">
     <div x-cloak class="overlay">
         <div class="lds-spinner overlay-centered">
             <div></div>
@@ -75,7 +75,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             <div></div>
         </div>
     </div>
-    <nav class="fixed flex items-center justify-between flex-wrap w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md"
+    <nav class="fixed flex items-center justify-between flex-wrap w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md xl:h-12 h-auto"
         @click.away="
         if (window.innerWidth < 1280) {
             isOpen = false;
@@ -110,7 +110,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                     isOpen = false;
                 }
             "
-            x-show="isOpen" x-transition>
+            x-show="isOpen" x-transition x-transition.scale.origin.top>
             <ul class="list-reset xl:flex justify-end flex-1 items-center">
                 <li class="mr-3">
                     <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
@@ -204,7 +204,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </ul>
         </div>
     </nav>
-    <div class="container m-auto flex-grow mt-16">
+    <div class="container m-auto flex-grow">
         <div class="container flex-1">
             @yield('content')
         </div>
@@ -217,7 +217,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
             </path>
-        </svg> by <a href="https://captainirs.dev"
+        </svg> by <a href="https://github.com/CaptainIRS"
             class="text-blue-500 hover:text-blue-600 underline">@@CaptainIRS</a>
     </div>
 </body>
