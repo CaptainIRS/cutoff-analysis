@@ -102,7 +102,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </svg>
         </button>
 
-        <div class="p-2 w-full flex-grow xl:flex xl:items-center xl:w-auto shadow-xs"
+        <div class="w-full flex-grow xl:flex xl:items-center xl:w-auto shadow-xs"
             @resize.window="
                 if (window.innerWidth >= 1280) {
                     isOpen = true;
