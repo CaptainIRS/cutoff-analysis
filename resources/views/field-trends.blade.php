@@ -10,6 +10,15 @@
     <meta property="og:description"
         content="Compare the cut-offs for courses in a particular field of engineering over 10 years in the JoSAA seat allocation process.">
     <meta property="og:url" content="{{ route('field-trends') }}">
+    <meta property="og:type" content="website" />
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:title" content="Field Trends - JoSAA Analysis">
+    <meta property="twitter:url" content="{{ route('field-trends') }}">
+    <meta property="twitter:site" content="@@JoSAA_Analysis">
+    <meta property="twitter:creator" content="@@CaptainIRS">
+    <meta property="twitter:description"
+        content="Compare the cut-offs for courses in a particular field of engineering over 10 years in the JoSAA seat allocation process.">
+    <meta property="twitter:image" content="{{ asset('favicon.png') }}">
 
     <title>Field Trends | {{ config('app.name') }}</title>
 @endsection

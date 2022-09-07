@@ -10,6 +10,14 @@
     <meta property="og:description"
         content="Compare the cut-offs of various courses offered by an institute over 10 years in the JoSAA seat allocation process.">
     <meta property="og:url" content="{{ route('institute-trends') }}">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:title" content="Institute Trends - JoSAA Analysis">
+    <meta property="twitter:url" content="{{ route('institute-trends') }}">
+    <meta property="twitter:site" content="@@JoSAA_Analysis">
+    <meta property="twitter:creator" content="@@CaptainIRS">
+    <meta property="twitter:description"
+        content="Compare the cut-offs of various courses offered by an institute over 10 years in the JoSAA seat allocation process.">
+    <meta property="twitter:image" content="{{ asset('favicon.png') }}">
 
     <title>Institute Trends | {{ config('app.name') }}</title>
 @endsection

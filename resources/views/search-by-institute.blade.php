@@ -10,6 +10,14 @@
     <meta property="og:description"
         content="Find cut-offs in a range over 10 years, filtered by institute in the JoSAA seat allocation process.">
     <meta property="og:url" content="{{ route('search-by-institute') }}">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:title" content="Filter by Institute - JoSAA Analysis">
+    <meta property="twitter:url" content="{{ route('search-by-institute') }}">
+    <meta property="twitter:site" content="@@JoSAA_Analysis">
+    <meta property="twitter:creator" content="@@CaptainIRS">
+    <meta property="twitter:description"
+        content="Find cut-offs in a range over 10 years, filtered by institute in the JoSAA seat allocation process.">
+    <meta property="twitter:image" content="{{ asset('favicon.png') }}">
 
     <title>Filter by Institute | {{ config('app.name') }}</title>
 @endsection
