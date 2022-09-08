@@ -10,8 +10,17 @@
     <meta property="og:description"
         content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="og:url" content="{{ route('home') }}">
+    <meta property="og:type" content="website">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:title" content="Home - JoSAA Analysis">
+    <meta property="twitter:url" content="{{ route('home') }}">
+    <meta property="twitter:site" content="@@JoSAA_Analysis">
+    <meta property="twitter:creator" content="@@CaptainIRS">
+    <meta property="twitter:description"
+        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
+    <meta property="twitter:image" content="{{ asset('favicon.png') }}">
 
-    <title>{{ config('app.name') }}</title>
+    <title>Home | {{ config('app.name') }}</title>
 @endsection
 
 @section('content')

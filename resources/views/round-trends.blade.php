@@ -10,6 +10,7 @@
     <meta property="og:description"
         content="Compare the cut-offs of a course in various rounds over 10 years in the JoSAA seat allocation process.">
     <meta property="og:url" content="{{ route('round-trends') }}">
+    <meta property="og:type" content="website">
     <meta property="twitter:card" content="summary">
     <meta property="twitter:title" content="Round Trends - JoSAA Analysis">
     <meta property="twitter:url" content="{{ route('round-trends') }}">

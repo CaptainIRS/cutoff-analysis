@@ -10,6 +10,7 @@
     <meta property="og:description"
         content="Find cut-offs in a range over 10 years, filtered by course in the JoSAA seat allocation process.">
     <meta property="og:url" content="{{ route('search-by-program') }}">
+    <meta property="og:type" content="website">
     <meta property="twitter:card" content="summary">
     <meta property="twitter:title" content="Filter by Program - JoSAA Analysis">
     <meta property="twitter:url" content="{{ route('search-by-program') }}">
