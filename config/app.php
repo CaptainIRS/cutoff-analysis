@@ -215,4 +215,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'ga4_tag' => env('GA4_TAG', ''),
+
 ];

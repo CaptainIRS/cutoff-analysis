@@ -46,7 +46,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     @stack('scripts')
 </head>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA4_TAG') }}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ config('ga4_tag') }}"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -55,7 +55,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     }
     gtag('js', new Date());
 
-    gtag('config', "{{ env('GA4_TAG') }}");
+    gtag('config', "{{ config('ga4_tag') }}");
 </script>
 
 <body class="antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
