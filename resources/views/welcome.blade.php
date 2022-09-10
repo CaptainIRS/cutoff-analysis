@@ -75,16 +75,16 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Field Trends
+                            Branch Trends
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                            Field trends highlight the trends of courses in a particular field over the years. This helps
-                            understand the popularity and perception of a field among engineering aspirants, and thus helps
-                            understand the demand for a particular field during the counselling process.</p>
+                            Branch trends highlight the trends of courses in a particular branch over the years. This helps
+                            understand the popularity and perception of a branch among engineering aspirants, and thus helps
+                            understand the demand for a particular branch during the counselling process.</p>
                     </div>
                     <div class="border-t border-gray-200 dark:border-gray-700">
                         <div class="px-4 py-4 sm:px-6">
-                            <a href="{{ route('field-trends') }}" class="text-indigo-600 hover:text-indigo-900">Get Started
+                            <a href="{{ route('branch-trends') }}" class="text-indigo-600 hover:text-indigo-900">Get Started
                                 &rarr;</a>
                         </div>
                     </div>
