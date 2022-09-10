@@ -28,7 +28,7 @@
     </div>
 
     <div wire:ignore id="legend"></div>
-    <canvas wire:ignore id="myChart" width="40" height="40"></canvas>
+    <canvas wire:ignore id="myChart"></canvas>
     <script wire:ignore>
         const canvas = document.getElementById('myChart');
         const ctx = canvas.getContext('2d');
@@ -142,6 +142,7 @@
                     line: {
                         pointRadius: 2,
                         pointBorderWidth: 1,
+                        pointHitRadius: 20,
                         borderWidth: 2,
                         tension: 0.3,
                     }
