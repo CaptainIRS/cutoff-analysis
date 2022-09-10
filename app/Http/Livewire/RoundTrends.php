@@ -125,6 +125,7 @@ class RoundTrends extends Component implements HasForms
             Grid::make(3)->schema([
                 Select::make('institute_id')
                     ->options(Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id')))
+                    ->optionsLimit(150)
                     ->searchable()
                     ->label('Institute')
                     ->afterStateUpdated(function (Closure $set) {
@@ -138,6 +139,7 @@ class RoundTrends extends Component implements HasForms
                     ->options(function (Closure $get) {
                         return DB::table('institute_course_program')->where('institute_id', $get('institute_id'))->pluck('course_id', 'course_id');
                     })
+                    ->optionsLimit(150)
                     ->label('Course')
                     ->afterStateUpdated(function (Closure $set) {
                         $set('program_id', null);
@@ -153,6 +155,7 @@ class RoundTrends extends Component implements HasForms
                     ->options(function (Closure $get) {
                         return DB::table('institute_course_program')->where('institute_id', $get('institute_id'))->where('course_id', $get('course_id'))->pluck('program_id', 'program_id');
                     })
+                    ->optionsLimit(150)
                     ->label('Program')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {

@@ -149,6 +149,7 @@ class FieldTrends extends Component implements HasForms
                     ->label('Fields')
                     ->placeholder('Select Fields')
                     ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
+                    ->optionsLimit(150)
                     ->afterStateUpdated(function (Closure $set) {
                         $set('course_id', null);
                         $set('institute_id', null);
@@ -213,6 +214,7 @@ class FieldTrends extends Component implements HasForms
                             return Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id'));
                         }
                     })
+                    ->optionsLimit(150)
                     ->label('Institute')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {

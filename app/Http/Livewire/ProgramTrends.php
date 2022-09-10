@@ -155,6 +155,7 @@ class ProgramTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('program_id')
                     ->options(fn (Closure $get) => DB::table('institute_course_program')->where('course_id', $get('course_id'))->pluck('program_id', 'program_id'))
+                    ->optionsLimit(150)
                     ->label('Program')
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $search, Closure $get) => DB::table('institute_course_program')->where('course_id', $get('course_id'))->whereIn('program_id', Program::search($search)->get()->pluck('id'))->pluck('program_id', 'program_id'))
@@ -199,6 +200,7 @@ class ProgramTrends extends Component implements HasForms
                             return $institutes->pluck('institute_id', 'institute_id');
                         }
                     })
+                    ->optionsLimit(150)
                     ->label('Institute')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {

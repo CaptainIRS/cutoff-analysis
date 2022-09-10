@@ -125,6 +125,7 @@ class InstituteTrends extends Component implements HasForms
             Grid::make(2)->schema([
                 Select::make('institute_id')
                     ->options(Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id')))
+                    ->optionsLimit(150)
                     ->searchable()
                     ->label('Institute')
                     ->afterStateUpdated(function (Closure $set) {

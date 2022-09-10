@@ -107,6 +107,7 @@ class SearchByInstitute extends Component implements HasTable
                                     return Cache::rememberForever('institutes', fn () => Institute::all()->pluck('id', 'id'));
                                 }
                             })
+                            ->optionsLimit(150)
                             ->label('Institute')
                             ->afterStateUpdated(function (Closure $set) {
                                 $set('course_id', null);
@@ -135,7 +136,9 @@ class SearchByInstitute extends Component implements HasTable
                                 } else {
                                     return Cache::rememberForever('allPrograms', fn () => Program::all()->pluck('id', 'id'));
                                 }
-                            })->hidden(function (Closure $get) {
+                            })
+                            ->optionsLimit(150)
+                            ->hidden(function (Closure $get) {
                                 return ! $get('institute_id') || ! $get('course_id');
                             })
                             ->label('Program')
