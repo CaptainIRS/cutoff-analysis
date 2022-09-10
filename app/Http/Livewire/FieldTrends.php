@@ -146,8 +146,8 @@ class FieldTrends extends Component implements HasForms
         return [
             Grid::make(4)->schema([
                 MultiSelect::make('program_id')
-                    ->label('Fields')
-                    ->placeholder('Select Fields')
+                    ->label('Branches')
+                    ->placeholder('Select Branches')
                     ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
                     ->optionsLimit(150)
                     ->afterStateUpdated(function (Closure $set) {

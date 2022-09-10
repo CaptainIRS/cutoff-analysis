@@ -48,7 +48,7 @@ class SearchByProgram extends Component implements HasTable
                 ->sortable(),
             TagsColumn::make('program.tags')
                 ->separator(',')
-                ->label('Fields')
+                ->label('Branches')
                 ->sortable(),
             TextColumn::make('quota.id')
                 ->label('Quota')
@@ -86,8 +86,8 @@ class SearchByProgram extends Component implements HasTable
                 ->form([
                     Grid::make(3)->schema([
                         MultiSelect::make('program_id')
-                            ->label('Fields')
-                            ->placeholder('Select Fields')
+                            ->label('Branches')
+                            ->placeholder('Select Branches')
                             ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
                             ->afterStateUpdated(function (Closure $set) {
                                 $set('course_id', null);
