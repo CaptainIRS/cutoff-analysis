@@ -132,8 +132,24 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             }
         }
 
-        [x-cloak] {
+        [x-cloak].overlay {
             opacity: 100 !important;
+        }
+
+        .nav,
+        .content {
+            visibility: visible;
+            transition: visibility 0s;
+            transition-delay: 1s;
+        }
+
+        [x-cloak].nav,
+        [x-cloak].content {
+            visibility: hidden;
+        }
+
+        .body {
+            overflow: hidden;
         }
 
         .overlay {
@@ -147,6 +163,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             background-color: var(--overlay-bg);
             pointer-events: none;
             transition: opacity 0.5s ease;
+            transition-delay: 1s;
         }
     </style>
     <script>
@@ -176,7 +193,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     gtag('config', "{{ config('app.ga4_tag') }}");
 </script>
 
-<body class="antialiased flex flex-col h-full overflow-hidden" :class="{ 'dark': darkMode === true }">
+<body class="body antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
     <div x-cloak class="overlay">
         <div class="lds-spinner overlay-centered">
             <div></div>
@@ -193,14 +210,14 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             <div></div>
         </div>
     </div>
-    <nav class="fixed flex items-center justify-between flex-wrap w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md h-14"
+    <nav x-cloak
+        class="nav fixed flex items-center justify-between flex-wrap w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md h-14"
         @click.away="
         if (window.innerWidth < 1280) {
             isOpen = false;
         }
         "
-        :class="{ 'xl:h-14 h-auto': isOpen }"
-        @keydown.escape="isOpen = false">
+        :class="{ 'xl:h-14 h-auto': isOpen }" @keydown.escape="isOpen = false">
 
         <div class="flex items-center flex-shrink-0 text-white mr-6">
             <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full"
@@ -324,7 +341,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         </div>
     </nav>
     <div style="min-height: 3.5rem"></div>
-    <div class="overflow-y-auto">
+    <div x-cloak class="content overflow-y-auto">
         <div class="container m-auto flex-grow">
             <div class="container flex-1">
                 @yield('content')
