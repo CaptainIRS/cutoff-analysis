@@ -150,15 +150,16 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     </style>
     <script>
         if (localStorage.getItem('darkMode') === 'true') {
-            console.log('Dark mode enabled');
             document.documentElement.style.setProperty('--overlay-bg', 'black');
             document.documentElement.style.setProperty('--color-scheme', 'dark');
         } else {
-            console.log('Dark mode disabled');
             document.documentElement.style.setProperty('--overlay-bg', 'white');
             document.documentElement.style.setProperty('--color-scheme', 'light');
         }
     </script>
+
+    @livewireStyles
+    @livewireScripts
 
 </head>
 
@@ -360,8 +361,6 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 </body>
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
-@livewireStyles
-@livewireScripts
 @stack('scripts')
 
 </html>
