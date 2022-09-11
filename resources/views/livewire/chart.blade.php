@@ -207,4 +207,16 @@
         });
     </script>
 
+    <div x-data="{ scrollBackTop: false }" x-cloak>
+        <button x-show="scrollBackTop"
+            x-on:scroll.window="scrollBackTop = (window.pageYOffset > window.outerHeight * 0.1) ? true : false"
+            @click="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to top"
+            class="fixed bottom-0 left-1/2 -translate-x-1/2 p-2 mb-20 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+            </svg>
+        </button>
+    </div>
+
 </div>
