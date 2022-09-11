@@ -175,10 +175,6 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             document.documentElement.style.setProperty('--color-scheme', 'light');
         }
     </script>
-
-    @livewireStyles
-    @livewireScripts
-
 </head>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('app.ga4_tag') }}"></script>
@@ -340,6 +336,10 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </ul>
         </div>
     </nav>
+
+    @livewireStyles
+    @livewireScripts
+
     <div style="min-height: 3.5rem"></div>
     <div x-cloak class="content overflow-y-auto">
         <div class="container m-auto flex-grow">
