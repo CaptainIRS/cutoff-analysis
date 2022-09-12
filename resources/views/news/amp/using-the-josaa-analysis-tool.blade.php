@@ -12,7 +12,7 @@
     <script type="application/ld+json">
     {
       "@context": "http://schema.org",
-      "@type": "Article",
+      "@type": "NewsArticle",
       "headline": "Using the JoSAA Analysis tool",
       "image": [
         "{{ asset('images/dark/josaa-analysis-institute-trends.png') }}"
