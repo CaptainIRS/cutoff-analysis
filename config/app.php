@@ -216,5 +216,6 @@ return [
     ])->toArray(),
 
     'ga4_tag' => env('GA4_TAG', ''),
+    'ga_ua' => env('GA_UA', ''),
 
 ];

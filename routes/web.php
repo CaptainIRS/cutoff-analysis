@@ -40,3 +40,19 @@ Route::get('/round-trends', function () {
 Route::get('/branch-trends', function () {
     return view('field-trends');
 })->name('branch-trends');
+
+Route::prefix('/news')->group(function () {
+    Route::get('/', function () {
+        return view('news');
+    })->name('news');
+
+    Route::get('/using-the-josaa-analysis-tool', function () {
+        return view('news.using-the-josaa-analysis-tool');
+    })->name('news.using-the-josaa-analysis-tool');
+
+    Route::prefix('/amp')->group(function () {
+        Route::get('/using-the-josaa-analysis-tool', function () {
+            return view('news.amp.using-the-josaa-analysis-tool');
+        })->name('news.amp.using-the-josaa-analysis-tool');
+    });
+});
