@@ -6,7 +6,7 @@
     <link rel="preload" media="(prefers-color-scheme: dark)"
         href="{{ asset('images/dark/josaa-analysis-institute-trends.png') }}" as="image">
     <link rel="preload" media="(prefers-color-scheme: light)"
-        href="{{ asset('images/light/josaa-analysis-program-trends.png') }}" as="image">
+        href="{{ asset('images/light/josaa-analysis-institute-trends.png') }}" as="image">
     <link rel="canonical" href="{{ route('news.using-the-josaa-analysis-tool') }}">
     <title>Using the JoSAA Analysis tool | News &amp; Updates | {{ config('app.name') }}</title>
     <script type="application/ld+json">
