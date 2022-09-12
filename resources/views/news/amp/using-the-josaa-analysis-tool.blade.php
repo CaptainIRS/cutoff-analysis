@@ -13,10 +13,6 @@
     {
       "@context": "http://schema.org",
       "@type": "Article",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "{{ route('news.using-the-josaa-analysis-tool') }}"
-      },
       "headline": "Using the JoSAA Analysis tool",
       "image": [
         "{{ asset('images/dark/josaa-analysis-institute-trends.png') }}"
