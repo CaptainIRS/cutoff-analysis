@@ -203,4 +203,5 @@
                 href="{{ route('round-trends') }}" target="_blank">link</a>.
         </p>
     </article>
+    <a class="hidden" href="{{ route('news.amp.using-the-josaa-analysis-tool') }}">View the AMP version of this page</a>
 @endsection
