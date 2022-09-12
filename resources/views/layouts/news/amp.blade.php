@@ -241,9 +241,9 @@
         <script type="application/json">
             {
               "vars" : {
-                "gtag_id": "{{ env('GA_UA') }}",
+                "gtag_id": "{{ config('app.ga_ua') }}",
                 "config" : {
-                  "{{ env('GA_UA') }}": {
+                  "{{ config('app.ga_ua') }}": {
                     "groups": "default"
                   }
                 }
