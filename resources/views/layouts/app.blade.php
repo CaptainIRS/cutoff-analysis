@@ -189,7 +189,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     gtag('config', "{{ config('app.ga4_tag') }}");
 </script>
 
-<body class="body antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
+<body x-data="{ scrollBackTop: false }" class="body antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
     <div x-cloak class="overlay">
         <div class="lds-spinner overlay-centered">
             <div></div>
@@ -353,7 +353,8 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     @livewireScripts
 
     <div style="min-height: 3.5rem"></div>
-    <div x-cloak class="content flex flex-col h-full overflow-y-auto">
+    <div @scroll="scrollBackTop = ($el.scrollTop > window.outerHeight * 0.1) ? true : false" x-cloak id="content"
+        class="content flex flex-col h-full overflow-y-auto">
         <div class="container m-auto flex-grow">
             <div class="container flex-1">
                 @yield('content')
@@ -392,6 +393,17 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                         '');
             </script>
         </div>
+    </div>
+
+    <div x-cloak x-show="scrollBackTop">
+        <button @click="document.getElementById('content').scrollTo({top: 0, behavior: 'smooth'})"
+            aria-label="Back to top"
+            class="fixed bottom-0 left-1/2 -translate-x-1/2 p-2 mb-20 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+            </svg>
+        </button>
     </div>
 </body>
 
