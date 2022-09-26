@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9b1f1d1448d5c78b58fdfa99e2b7699",
+    "content-hash": "9f9bc394ddf413a27c319d56f2924d43",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -6704,16 +6704,16 @@
         },
         {
             "name": "teamtnt/laravel-scout-tntsearch-driver",
-            "version": "v11.6.0",
+            "version": "v12.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/laravel-scout-tntsearch-driver.git",
-                "reference": "b98729b0c7179218c9a5e1445922a9313d45c487"
+                "reference": "3684244ddb830258f4d5df01ee48f0dc88cbf4e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/laravel-scout-tntsearch-driver/zipball/b98729b0c7179218c9a5e1445922a9313d45c487",
-                "reference": "b98729b0c7179218c9a5e1445922a9313d45c487",
+                "url": "https://api.github.com/repos/teamtnt/laravel-scout-tntsearch-driver/zipball/3684244ddb830258f4d5df01ee48f0dc88cbf4e7",
+                "reference": "3684244ddb830258f4d5df01ee48f0dc88cbf4e7",
                 "shasum": ""
             },
             "require": {
@@ -6724,7 +6724,7 @@
                 "illuminate/support": "~5.4|^6.0|^7.0|^8.0|^9.0",
                 "laravel/scout": "7.*|^8.0|^8.3|^9.0",
                 "php": ">=7.1|^8",
-                "teamtnt/tntsearch": "2.7.0|^2.8"
+                "teamtnt/tntsearch": "2.7.0|^2.8|^3.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.0",
@@ -6768,22 +6768,22 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/laravel-scout-tntsearch-driver/issues",
-                "source": "https://github.com/teamtnt/laravel-scout-tntsearch-driver/tree/v11.6.0"
+                "source": "https://github.com/teamtnt/laravel-scout-tntsearch-driver/tree/v12.1.0"
             },
-            "time": "2022-02-25T10:32:29+00:00"
+            "time": "2022-09-15T13:17:47+00:00"
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v2.9.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "ccedae0cfe21f7831f2dd1f973cf8904dad42d8d"
+                "reference": "645f20cadf499d7a51db9f99df173afefecc8080"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/ccedae0cfe21f7831f2dd1f973cf8904dad42d8d",
-                "reference": "ccedae0cfe21f7831f2dd1f973cf8904dad42d8d",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/645f20cadf499d7a51db9f99df173afefecc8080",
+                "reference": "645f20cadf499d7a51db9f99df173afefecc8080",
                 "shasum": ""
             },
             "require": {
@@ -6832,7 +6832,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v2.9.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v3.0.0"
             },
             "funding": [
                 {
@@ -6848,7 +6848,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2022-02-22T10:35:34+00:00"
+            "time": "2022-08-02T14:00:54+00:00"
         },
         {
             "name": "tgalopin/html-sanitizer",
