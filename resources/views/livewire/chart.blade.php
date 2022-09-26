@@ -138,6 +138,7 @@
             type: 'line',
             data: {},
             options: {
+                maintainAspectRatio: false,
                 datasets: {
                     line: {
                         pointRadius: 2,
