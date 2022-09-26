@@ -30,7 +30,7 @@
         "*.blade.php": [
             "blade-formatter --write"
         ],
-        "*.{js,css,md}": [
+        "*.{js,css,md,yml}": [
             "prettier --write"
         ]
     }

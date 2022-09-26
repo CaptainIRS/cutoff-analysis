@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Run lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: xdebug
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: npm-cache-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            npm-cache-
+      - name: Install node dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install php dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run php lint
+        run: ./vendor/bin/pint --test
+      - name: Run blade formatter check
+        run: npx blade-formatter --check-formatted --diff "resources/**/*.blade.php"
+        shell: bash
+      - name: Run prettier
+        run: npx prettier --check resources/**/*.js resources/**/*.css *.js *.md .github/**/*.yml
+        shell: bash
