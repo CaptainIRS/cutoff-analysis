@@ -16,9 +16,18 @@
         "husky": "^8.0.1",
         "imask": "^6.4.2",
         "laravel-vite-plugin": "^0.5.0",
+        "lint-staged": "^13.0.3",
         "postcss": "^8.1.14",
         "tailwindcss": "^3.1",
         "terser": "^5.15.0",
         "vite": "^3.0.0"
+    },
+    "lint-staged": {
+        "*.php": [
+            "./vendor/bin/pint"
+        ],
+        "*.blade.php": [
+            "blade-formatter --write"
+        ]
     }
 }

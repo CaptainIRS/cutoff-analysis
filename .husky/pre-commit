@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-./vendor/bin/pint
-npx blade-formatter --write "resources/**/*.blade.php"
+npx lint-staged
