@@ -187,6 +187,10 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     gtag('js', new Date());
 
     gtag('config', "{{ config('app.ga4_tag') }}");
+    gtag('set', {
+        'cookie_domain': "{{ config('session.domain') }}",
+        "cookie_flags": "Path={{ config('session.path') }}"
+    })
 </script>
 
 <body x-data="{ scrollBackTop: false }" class="body antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
