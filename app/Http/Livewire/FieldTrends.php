@@ -51,6 +51,10 @@ class FieldTrends extends Component implements HasForms
 
     public $old_gender_id;
 
+    public $round_display;
+
+    public $old_round_display;
+
     protected $listeners = ['updateChartData'];
 
     public function mount(): void
@@ -59,20 +63,22 @@ class FieldTrends extends Component implements HasForms
             'quota_id' => session()->exists('quota_id') ? session()->get('quota_id')[0] : null,
             'seat_type_id' => session('seat_type_id'),
             'gender_id' => session('gender_id'),
+            'round_display' => session('round_display'),
         ]);
     }
 
     public function updateChartData(): void
     {
         $data = [];
-        if ($this->program_id !== null && $this->quota_id !== null && $this->seat_type_id !== null && $this->gender_id !== null) {
+        if ($this->program_id !== null && $this->quota_id !== null && $this->seat_type_id !== null && $this->gender_id !== null && $this->round_display !== null) {
             if ($this->institute_id === $this->old_institute_id
                 && $this->institute_type === $this->old_institute_type
                 && $this->quota_id === $this->old_quota_id
                 && $this->seat_type_id === $this->old_seat_type_id
                 && $this->course_id === $this->old_course_id
                 && $this->program_id === $this->old_program_id
-                && $this->gender_id === $this->old_gender_id) {
+                && $this->gender_id === $this->old_gender_id
+                && $this->round_display === $this->old_round_display) {
                 return;
             }
             $programs = DB::table('program_tag')->whereIn('tag_id', $this->program_id)->pluck('program_id');
@@ -90,6 +96,16 @@ class FieldTrends extends Component implements HasForms
             }
             $program_data = $query->get();
             $year_round = Cache::rememberForever('year_round_distinct', fn () => Rank::select('year', 'round')->distinct()->orderBy('year')->orderBy('round')->get());
+            switch($this->round_display) {
+                case 'all':
+                    break;
+                case 'last':
+                    $year_round = Cache::rememberForever('year_round_last', fn () => Rank::select('year', DB::raw('MAX(round) as round'))->groupBy('year')->orderBy('year')->get());
+                    break;
+                default:
+                    $year_round = Cache::rememberForever('year_round_'.$this->round_display, fn () => Rank::select('year', 'round')->where('round', $this->round_display)->distinct()->orderBy('year')->get());
+                    break;
+            }
             $columns = $year_round->map(fn ($year_round) => $year_round->year.'_'.$year_round->round);
             $initial_institute_data = $columns->mapWithKeys(fn ($column) => [$column => null])->toArray();
             $institute_data = [];
@@ -130,6 +146,7 @@ class FieldTrends extends Component implements HasForms
             $this->old_quota_id = $this->quota_id;
             $this->old_seat_type_id = $this->seat_type_id;
             $this->old_gender_id = $this->gender_id;
+            $this->old_round_display = $this->round_display;
             $this->emit('chartDataUpdated', $data);
         } else {
             $this->old_course_id = $this->course_id;
@@ -139,6 +156,7 @@ class FieldTrends extends Component implements HasForms
             $this->old_quota_id = $this->quota_id;
             $this->old_seat_type_id = $this->seat_type_id;
             $this->old_gender_id = $this->gender_id;
+            $this->old_round_display = $this->round_display;
             $this->emit('chartDataUpdated', []);
         }
     }
@@ -224,7 +242,7 @@ class FieldTrends extends Component implements HasForms
                     })
                     ->reactive(),
             ]),
-            Grid::make(3)->schema([
+            Grid::make(4)->schema([
                 Select::make('quota_id')
                     ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
                     ->afterStateUpdated(function (Closure $get) {
@@ -258,6 +276,28 @@ class FieldTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->label('Gender')
+                    ->searchable()
+                    ->required()
+                    ->reactive(),
+                Select::make('round_display')
+                    ->options([
+                        'last' => 'Last Round Only',
+                        'all' => 'All Rounds',
+                        '1' => 'Round 1',
+                        '2' => 'Round 2',
+                        '3' => 'Round 3',
+                        '4' => 'Round 4',
+                        '5' => 'Round 5',
+                        '6' => 'Round 6',
+                        '7' => 'Round 7',
+                    ])
+                    ->afterStateUpdated(function (Closure $get) {
+                        if ($get('round_display') !== null) {
+                            session()->put('round_display', $get('round_display'));
+                        }
+                        $this->emit('updateChartData');
+                    })
+                    ->label('Display Rounds')
                     ->searchable()
                     ->required()
                     ->reactive(),

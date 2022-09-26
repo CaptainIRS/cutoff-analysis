@@ -160,7 +160,7 @@ class SearchByInstitute extends Component implements HasTable
             }),
             Filter::make('quota_filters')
                 ->form([
-                    Grid::make(3)->schema([
+                    Grid::make(4)->schema([
                         MultiSelect::make('quota_id')
                             ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
                             ->afterStateUpdated(function (Closure $get) {
@@ -189,9 +189,41 @@ class SearchByInstitute extends Component implements HasTable
                             })
                             ->default(session()->exists('gender_id') ? [session()->get('gender_id')] : null)
                             ->label('Gender'),
+                        Select::make('round_id')
+                            ->options([
+                                'last' => 'Last Round Only',
+                                'all' => 'All Rounds',
+                                '1' => 'Round 1',
+                                '2' => 'Round 2',
+                                '3' => 'Round 3',
+                                '4' => 'Round 4',
+                                '5' => 'Round 5',
+                                '6' => 'Round 6',
+                                '7' => 'Round 7',
+                            ])
+                            ->afterStateUpdated(function (Closure $get) {
+                                if ($get('round_id') !== null) {
+                                    session()->put('round_display', $get('round_id'));
+                                }
+                            })
+                            ->default(session()->get('round_display', 'last'))
+                            ->label('Display Rounds'),
                     ]),
                 ])
             ->query(function (Builder $query, array $data): Builder {
+                switch($data['round_id']) {
+                    case 'all':
+                        break;
+                    case 'last':
+                        $year_round = Cache::rememberForever('year_round_last', fn () => Rank::select('year', DB::raw('MAX(round) as round'))->groupBy('year')->orderBy('year')->get());
+                        $query = $query->whereIn(DB::raw('year || round'), $year_round->map(fn ($year_round) => $year_round->year.$year_round->round));
+                        break;
+                    default:
+                        $year_round = Cache::rememberForever('year_round_'.$data['round_id'], fn () => Rank::select('year', 'round')->where('round', $data['round_id'])->distinct()->orderBy('year')->get());
+                        $query = $query->whereIn(DB::raw('year || round'), $year_round->map(fn ($year_round) => $year_round->year.$year_round->round));
+                        break;
+                }
+
                 $query = $query->when($data['quota_id'], function (Builder $query, $quota_id) {
                     return $query->whereIn('quota_id', $quota_id);
                 });
