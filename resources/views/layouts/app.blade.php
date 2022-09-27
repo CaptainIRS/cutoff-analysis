@@ -270,8 +270,8 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
         <div class="p-2 w-full flex-1" x-show="isOpen" x-transition>
             <div class="w-full h-full">
-                <div class="m-3 rounded-lg overflow-hidden border-gray-400 dark:border-gray-600 border-2 shadow-md">
-                    <div class="p-3 overflow-y-auto bg-gray-200 dark:bg-gray-800" style="max-height: 80vh"
+                <div class="m-5 rounded-lg overflow-hidden shadow-md">
+                    <div class="p-3 overflow-y-auto bg-gray-200 dark:bg-gray-800" style="max-height: 70vh"
                         @click.away="isOpen = false">
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
