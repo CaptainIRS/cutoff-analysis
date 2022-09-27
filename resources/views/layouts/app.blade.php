@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 'darkMode': false, 'isOpen': window.innerWidth >= 1280 }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 'darkMode': false, 'isOpen': false }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
 $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" class="h-full"
     :style="{ colorScheme: darkMode && 'dark' }">
 
@@ -209,146 +209,217 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             <div></div>
         </div>
     </div>
-    <nav x-cloak
-        class="nav fixed flex items-center justify-between flex-wrap w-full z-10 top-0 bg-gray-200 dark:bg-gray-800 shadow-md h-14"
-        @click.away="
-        if (window.innerWidth < 1280) {
-            isOpen = false;
-        }
-        "
-        :class="{ 'xl:h-14 h-auto': isOpen }" @keydown.escape="isOpen = false">
+    <nav x-cloak class="absolute flex flex-col w-full z-10 top-0" @keydown.escape="isOpen = false">
 
-        <div class="flex items-center flex-shrink-0 text-white mr-6">
-            <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full"
-                href="{{ route('home') }}">
-                <span class="text-xl pl-2 inline-flex items-start"><img src="{{ asset('favicon.svg') }}"
-                        class="h-6 w-6 mr-2" alt="Logo"> {{ config('app.name') }}</span>
+        <div class="flex flex-grow-0 w-full items-center justify-between bg-gray-200 dark:bg-gray-800 shadow-md h-14">
+
+            <div class="flex items-center text-white w-full">
+                <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full"
+                    href="{{ route('home') }}">
+                    <span class="text-xl pl-2 inline-flex items-start"><img src="{{ asset('favicon.svg') }}"
+                            class="h-6 w-6 mr-2" alt="Logo"> {{ config('app.name') }}</span>
+                </a>
+            </div>
+
+            <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 text-lg"
+                href="{{ route('news') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+                </svg>
+
+                <span class="hidden md:block whitespace-nowrap">News &amp; Updates</span>
             </a>
+
+            <div class="flex justify-start items-center space-x-2 py-4 px-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-5 h-5 text-gray-800 dark:text-gray-500">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                </svg>
+
+                <label for="toggle"
+                    class="flex items-center h-5 p-1 duration-300 ease-in-out bg-gray-300 rounded-full cursor-pointer w-9 dark:bg-gray-600">
+                    <div
+                        class="w-4 h-4 duration-300 ease-in-out transform bg-white rounded-full shadow-md toggle-dot dark:translate-x-3">
+                    </div>
+                </label>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-5 h-5 text-gray-400 dark:text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                </svg>
+
+                <input id="toggle" type="checkbox" class="hidden" :value="darkMode"
+                    @change="darkMode = !darkMode" />
+            </div>
+
+            <button @click="isOpen = !isOpen" type="button"
+                class="block px-2 text-gray-800 dark:text-gray-200 focus:outline-none"
+                :class="{ 'transition transform-180': isOpen }">
+                <svg class="h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path x-show="isOpen" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z" />
+                    <path x-show="!isOpen" fill-rule="evenodd"
+                        d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
+                </svg>
+            </button>
+
         </div>
 
-        <button @click="isOpen = !isOpen" type="button"
-            class="block xl:hidden px-2 text-gray-800 dark:text-gray-200 focus:outline-none"
-            :class="{ 'transition transform-180': isOpen }">
-            <svg class="h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path x-show="isOpen" fill-rule="evenodd" clip-rule="evenodd"
-                    d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z" />
-                <path x-show="!isOpen" fill-rule="evenodd"
-                    d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
-            </svg>
-        </button>
-
-        <div class="pl-2 w-full flex-grow xl:flex xl:items-center xl:w-auto shadow-xs"
-            @resize.window="
-                if (window.innerWidth >= 1280) {
-                    isOpen = true;
-                } else {
-                    isOpen = false;
-                }
-            "
-            x-show="isOpen" x-transition>
-            <ul class="list-reset xl:flex justify-end flex-1 items-center">
-                <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
-                        href="{{ route('news') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
-                        </svg>
-
-                        <span class="xl:hidden">News &amp; Updates</span>
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
-                        href="{{ route('search-by-program') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
-                        </svg>
-
-                        Filter by Program
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
-                        href="{{ route('search-by-institute') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
-                        </svg>
-
-                        Filter by Institute
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
-                        href={{ route('branch-trends') }}><svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                        </svg>
-                        Branch Trends
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
-                        href={{ route('program-trends') }}><svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                        </svg>
-                        Program Trends
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
-                        href={{ route('institute-trends') }}><svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                        </svg>
-                        Institute Trends
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full text-lg"
-                        href={{ route('round-trends') }}><svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                        </svg>
-                        Round Trends
-                    </a>
-                </li>
-                <li class="mr-3">
-                    <div class="flex justify-start items-center space-x-2 py-4 px-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor"
-                            class="w-5 h-5 text-gray-800 dark:text-gray-500">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                        </svg>
-
-                        <label for="toggle"
-                            class="flex items-center h-5 p-1 duration-300 ease-in-out bg-gray-300 rounded-full cursor-pointer w-9 dark:bg-gray-600">
-                            <div
-                                class="w-4 h-4 duration-300 ease-in-out transform bg-white rounded-full shadow-md toggle-dot dark:translate-x-3">
+        <div class="p-2 w-full flex-1" x-show="isOpen" x-transition>
+            <div class="w-full h-full">
+                <div class="m-3 rounded-lg overflow-hidden border-gray-400 dark:border-gray-600 border-2 shadow-md">
+                    <div class="p-3 overflow-y-auto bg-gray-200 dark:bg-gray-800" style="max-height: 80vh"
+                        @click.away="isOpen = false">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Filter by Program
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        Filter by program allows you to filter the cut-off data with the selected
+                                        programs
+                                        and further
+                                        narrow down with your choice of institutes.
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-200 dark:border-gray-700">
+                                    <div class="px-4 py-4 sm:px-6">
+                                        <a href="{{ route('search-by-program') }}"
+                                            class="text-indigo-600 hover:text-indigo-900">Get
+                                            Started &rarr;</a>
+                                    </div>
+                                </div>
                             </div>
-                        </label>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400 dark:text-white">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-                        </svg>
 
-                        <input id="toggle" type="checkbox" class="hidden" :value="darkMode"
-                            @change="darkMode = !darkMode" />
+                            <div
+                                class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col border-gray-200 dark:border-gray-700">
+                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Filter by Institute
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        Filter by institute allows you to filter the cut-off data with the selected
+                                        institutes and
+                                        further narrow down with your choice of programs.
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-200 dark:border-gray-700">
+                                    <div class="px-4 py-4 sm:px-6">
+                                        <a href="{{ route('search-by-institute') }}"
+                                            class="text-indigo-600 hover:text-indigo-900">Get
+                                            Started &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Branch Trends
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        Branch trends highlight the trends of courses in a particular branch over the
+                                        years.
+                                        This helps
+                                        understand the popularity and perception of a branch among engineering
+                                        aspirants,
+                                        and thus helps
+                                        understand the demand for a particular branch during the counselling process.
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-200 dark:border-gray-700">
+                                    <div class="px-4 py-4 sm:px-6">
+                                        <a href="{{ route('branch-trends') }}"
+                                            class="text-indigo-600 hover:text-indigo-900">Get Started
+                                            &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Program Trends
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        Program trends highlight the trends of various institutes offering a particular
+                                        program over the
+                                        years. This helps understand the popularity and perception of institutes
+                                        offering
+                                        the program,
+                                        and thus helps understand the demand for a particular institute offering the
+                                        program
+                                        during
+                                        JoSAA counselling.
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-200 dark:border-gray-700">
+                                    <div class="px-4 py-4 sm:px-6">
+                                        <a href="{{ route('program-trends') }}"
+                                            class="text-indigo-600 hover:text-indigo-900">Get
+                                            Started
+                                            &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Institute Trends
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        Institute trends highlight the trends of various programs offered by a
+                                        particular
+                                        institute over
+                                        the years. This helps understand the popularity and perception of programs
+                                        offered
+                                        by the
+                                        institute, and thus helps understand the demand for a particular program in the
+                                        institute
+                                        during the counselling process.
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-200 dark:border-gray-700">
+                                    <div class="px-4 py-4 sm:px-6">
+                                        <a href="{{ route('institute-trends') }}"
+                                            class="text-indigo-600 hover:text-indigo-900">Get
+                                            Started
+                                            &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Round Trends
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        Round trends highlight the general trend of closing ranks throughout the rounds
+                                        of
+                                        the
+                                        counselling process. This helps understand the likely range of changes to the
+                                        closing ranks
+                                        throught the counselling process.
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-200 dark:border-gray-700">
+                                    <div class="px-4 py-4 sm:px-6">
+                                        <a href="{{ route('round-trends') }}"
+                                            class="text-indigo-600 hover:text-indigo-900">Get Started
+                                            &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     </nav>
 
