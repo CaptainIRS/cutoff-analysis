@@ -50,6 +50,8 @@ class InstituteTrends extends Component implements HasForms
     public function mount(): void
     {
         $this->form->fill([
+            'institute_id' => null,
+            'course_id' => [],
             'quota_id' => session()->exists('quota_id') ? session()->get('quota_id')[0] : null,
             'seat_type_id' => session('seat_type_id'),
             'gender_id' => session('gender_id'),
@@ -149,13 +151,13 @@ class InstituteTrends extends Component implements HasForms
                     ->searchable()
                     ->label('Institute')
                     ->afterStateUpdated(function (Closure $set) {
-                        $set('course_id', null);
+                        $set('course_id', []);
                         $this->emit('updateChartData');
                     })
                     ->required()
                     ->reactive(),
                 MultiSelect::make('course_id')
-                    ->options(fn (Closure $get) => DB::table('institute_course_program')->where('institute_id', $get('institute_id'))->pluck('course_id', 'course_id'))
+                    ->options($this->institute_id ? Institute::find($this->institute_id)->courses->pluck('id', 'id') : [])
                     ->label('Course')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
                     ->hidden(function (Closure $get) {

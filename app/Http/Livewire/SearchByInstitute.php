@@ -97,7 +97,7 @@ class SearchByInstitute extends Component implements HasTable
                                 '2xl' => 2,
                             ])
                             ->afterStateUpdated(function (Closure $get, Closure $set) {
-                                $set('institute_id', null);
+                                $set('institute_id', []);
                             }),
                         MultiSelect::make('institute_id')
                             ->options(function (Closure $get) {
@@ -110,8 +110,8 @@ class SearchByInstitute extends Component implements HasTable
                             ->optionsLimit(150)
                             ->label('Institute')
                             ->afterStateUpdated(function (Closure $set) {
-                                $set('course_id', null);
-                                $set('program_id', null);
+                                $set('course_id', []);
+                                $set('program_id', []);
                             })->reactive(),
                         MultiSelect::make('course_id')
                             ->options(function (Closure $get) {
@@ -123,7 +123,7 @@ class SearchByInstitute extends Component implements HasTable
                             })
                             ->label('Course')
                             ->afterStateUpdated(function (Closure $set) {
-                                $set('program_id', null);
+                                $set('program_id', []);
                             })
                             ->hidden(function (Closure $get) {
                                 return ! $get('institute_id');

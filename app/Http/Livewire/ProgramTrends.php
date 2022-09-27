@@ -61,7 +61,11 @@ class ProgramTrends extends Component implements HasForms
     public function mount(): void
     {
         $this->form->fill([
-            'quota_id' => session('quota_id'),
+            'institute_type' => [],
+            'course_id' => null,
+            'program_id' => null,
+            'institute_id' => [],
+            'quota_id' => session('quota_id', []),
             'seat_type_id' => session('seat_type_id'),
             'gender_id' => session('gender_id'),
             'round_display' => session('round_display'),
@@ -169,7 +173,7 @@ class ProgramTrends extends Component implements HasForms
                     ->searchable()
                     ->afterStateUpdated(function (Closure $set) {
                         $set('program_id', null);
-                        $set('institute_id', null);
+                        $set('institute_id', []);
                         $this->emit('updateChartData');
                     })->required()
                     ->reactive(),
@@ -180,7 +184,7 @@ class ProgramTrends extends Component implements HasForms
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $search, Closure $get) => DB::table('institute_course_program')->where('course_id', $get('course_id'))->whereIn('program_id', Program::search($search)->get()->pluck('id'))->pluck('program_id', 'program_id'))
                     ->afterStateUpdated(function (Closure $set) {
-                        $set('institute_type', null);
+                        $set('institute_type', []);
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
@@ -203,7 +207,7 @@ class ProgramTrends extends Component implements HasForms
                         '2xl' => 2,
                     ])
                     ->afterStateUpdated(function (Closure $set) {
-                        $set('institute_id', null);
+                        $set('institute_id', []);
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
@@ -215,9 +219,9 @@ class ProgramTrends extends Component implements HasForms
                         if ($get('institute_type')) {
                             $institute_ids = $institutes->pluck('institute_id');
 
-                            return Institute::whereIn('id', $institute_ids)->whereIn('type', $get('institute_type'))->pluck('id', 'id');
+                            return Institute::whereIn('id', $institute_ids)->whereIn('type', $get('institute_type'))->orderBy('id')->pluck('id', 'id');
                         } else {
-                            return $institutes->pluck('institute_id', 'institute_id');
+                            return $institutes->orderBy('institute_id')->pluck('institute_id', 'institute_id');
                         }
                     })
                     ->optionsLimit(150)

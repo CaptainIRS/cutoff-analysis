@@ -49,6 +49,9 @@ class RoundTrends extends Component implements HasForms
     public function mount(): void
     {
         $this->form->fill([
+            'institute_id' => null,
+            'program_id' => null,
+            'course_id' => null,
             'quota_id' => session()->exists('quota_id') ? session()->get('quota_id')[0] : null,
             'seat_type_id' => session('seat_type_id'),
             'gender_id' => session('gender_id'),

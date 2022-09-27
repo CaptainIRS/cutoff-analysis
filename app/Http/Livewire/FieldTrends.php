@@ -8,6 +8,7 @@ use App\Models\Program;
 use App\Models\Quota;
 use App\Models\Rank;
 use App\Models\SeatType;
+use App\Models\Tag;
 use Cache;
 use Closure;
 use DB;
@@ -60,6 +61,10 @@ class FieldTrends extends Component implements HasForms
     public function mount(): void
     {
         $this->form->fill([
+            'institute_type' => [],
+            'course_id' => [],
+            'program_id' => [],
+            'institute_id' => [],
             'quota_id' => session()->exists('quota_id') ? session()->get('quota_id')[0] : null,
             'seat_type_id' => session('seat_type_id'),
             'gender_id' => session('gender_id'),
@@ -171,8 +176,8 @@ class FieldTrends extends Component implements HasForms
                     ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
                     ->optionsLimit(150)
                     ->afterStateUpdated(function (Closure $set) {
-                        $set('course_id', null);
-                        $set('institute_id', null);
+                        $set('course_id', []);
+                        $set('institute_id', []);
                         $this->emit('updateChartData');
                     })
                     ->searchable()
@@ -180,14 +185,14 @@ class FieldTrends extends Component implements HasForms
                     ->reactive(),
                 MultiSelect::make('course_id')
                     ->options(function (Closure $get) {
-                        $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
+                        $programs = Cache::rememberForever('programs_'.implode('_', $get('program_id')), fn () => Tag::find($get('program_id'))->first()->programs->pluck('id')->toArray());
 
                         return Program::whereIn('id', $programs)->get()->pluck('courses')->flatten()->pluck('id', 'id');
                     })
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function (Closure $set) {
-                        $set('institute_id', null);
+                        $set('institute_id', []);
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
@@ -209,7 +214,7 @@ class FieldTrends extends Component implements HasForms
                         '2xl' => 2,
                     ])
                     ->afterStateUpdated(function (Closure $set) {
-                        $set('institute_id', null);
+                        $set('institute_id', []);
                         $this->emit('updateChartData');
                     })
                     ->hidden(function (Closure $get) {
@@ -218,7 +223,7 @@ class FieldTrends extends Component implements HasForms
                 MultiSelect::make('institute_id')
                     ->options(function (Closure $get) {
                         if ($get('program_id')) {
-                            $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
+                            $programs = Cache::rememberForever('programs_'.implode('_', $get('program_id')), fn () => Tag::find($get('program_id'))->first()->programs->pluck('id')->toArray());
 
                             $query = DB::table('institute_course_program')->whereIn('program_id', $programs);
                             if ($get('course_id')) {
@@ -229,7 +234,7 @@ class FieldTrends extends Component implements HasForms
                                 $query = $query->whereIn('institute_id', $institutes);
                             }
 
-                            return $query->get()->pluck('institute_id', 'institute_id');
+                            return $query->orderBy('institute_id')->get()->pluck('institute_id', 'institute_id');
                         } else {
                             return Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id'));
                         }
