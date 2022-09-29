@@ -160,28 +160,6 @@
                 href="{{ route('institute-trends') }}" target="_blank">link</a>.
         </p>
 
-        <h3 class="text-xl font-bold m-4">Program Trends</h3>
-        <source srcset="{{ asset('images/dark/josaa-analysis-program-trends.png') }}"
-            media="(prefers-color-scheme: dark)">
-        <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-program-trends.png') }}"
-            alt="Screenshot of the program trends feature of the JoSAA Analysis tool">
-        <p class="text-md m-4">
-            This feature allows you to visualise the trends of cut-offs of various institutes offering a particular program
-            over the years. This gives an idea about the popularity and perception of various institutes offering a program
-            among engineering aspirants.
-        </p>
-        <p class="text-md m-4">
-            The data is displayed in a line graph format, with the closing ranks for each round of counselling. The legend
-            at the top of the graph can be used to toggle the visibility of the data for a particular institute. The graph
-            can be zoomed in and out using the mouse wheel or by pinching on a touch screen.
-            The graph can also be panned by clicking and dragging on the graph. The data points can be hovered over or
-            tapped to see the exact values.
-        </p>
-        <p class="text-md m-4">
-            Try it out now by visiting the <a class="text-indigo-600 hover:text-indigo-900"
-                href="{{ route('program-trends') }}" target="_blank">link</a>.
-        </p>
-
         <h3 class="text-xl font-bold m-4">Round Trends</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-round-trends.png') }}" media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-round-trends.png') }}"

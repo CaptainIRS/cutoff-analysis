@@ -343,33 +343,6 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                             <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
                                 <div class="px-4 py-5 sm:px-6 flex-grow">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Program Trends
-                                    </h3>
-                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                                        Program trends highlight the trends of various institutes offering a particular
-                                        program over the
-                                        years. This helps understand the popularity and perception of institutes
-                                        offering
-                                        the program,
-                                        and thus helps understand the demand for a particular institute offering the
-                                        program
-                                        during
-                                        JoSAA counselling.
-                                    </p>
-                                </div>
-                                <div class="border-t border-gray-200 dark:border-gray-700">
-                                    <div class="px-4 py-4 sm:px-6">
-                                        <a href="{{ route('program-trends') }}"
-                                            class="text-indigo-600 hover:text-indigo-900">Get
-                                            Started
-                                            &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
-                                <div class="px-4 py-5 sm:px-6 flex-grow">
-                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                                         Institute Trends
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">

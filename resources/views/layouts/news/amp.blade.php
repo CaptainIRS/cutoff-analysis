@@ -227,7 +227,6 @@
                 <li><a href="{{ route('search-by-program') }}">Filter by Program</a></li>
                 <li><a href="{{ route('branch-trends') }}">Branch Trends</a></li>
                 <li><a href="{{ route('institute-trends') }}">Institute Trends</a></li>
-                <li><a href="{{ route('program-trends') }}">Program Trends</a></li>
                 <li><a href="{{ route('round-trends') }}">Round Trends</a></li>
             </ul>
         </nav>
