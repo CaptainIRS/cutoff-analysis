@@ -33,5 +33,5 @@
         This helps understand the popularity and perception of a branch among engineering aspirants, and thus helps
         understand the demand for a particular branch during the counselling process.
     </h2>
-    <livewire:field-trends />
+    <livewire:branch-trends />
 @endsection

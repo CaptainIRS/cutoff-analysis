@@ -38,7 +38,7 @@ Route::get('/round-trends', function () {
 })->name('round-trends');
 
 Route::get('/branch-trends', function () {
-    return view('field-trends');
+    return view('branch-trends');
 })->name('branch-trends');
 
 Route::prefix('/news')->group(function () {
