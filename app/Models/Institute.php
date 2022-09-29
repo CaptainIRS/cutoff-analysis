@@ -49,4 +49,9 @@ class Institute extends Model
     {
         return $this->belongsToMany(Course::class);
     }
+
+    public function quotas()
+    {
+        return $this->belongsToMany(Quota::class)->as('state');
+    }
 }

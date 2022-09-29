@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use App\Models\Gender;
 use App\Models\Institute;
 use App\Models\Program;
-use App\Models\Quota;
 use App\Models\Rank;
 use App\Models\SeatType;
 use App\Models\Tag;
@@ -15,6 +14,7 @@ use DB;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MultiSelect;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -30,31 +30,35 @@ class FieldTrends extends Component implements HasForms
 
     public $course_id;
 
-    public $old_course_id;
+    private $old_course_id;
 
     public $program_id;
 
-    public $old_program_id;
+    private $old_program_id;
 
     public $institute_id;
 
-    public $old_institute_id;
-
-    public $quota_id;
-
-    public $old_quota_id;
+    private $old_institute_id;
 
     public $seat_type_id;
 
-    public $old_seat_type_id;
+    private $old_seat_type_id;
 
     public $gender_id;
 
-    public $old_gender_id;
+    private $old_gender_id;
 
     public $round_display;
 
-    public $old_round_display;
+    private $old_round_display;
+
+    public $rank_type;
+
+    private $old_rank_type;
+
+    public $home_state;
+
+    private $old_home_state;
 
     protected $listeners = ['updateChartData'];
 
@@ -65,38 +69,82 @@ class FieldTrends extends Component implements HasForms
             'course_id' => [],
             'program_id' => [],
             'institute_id' => [],
-            'quota_id' => session()->exists('quota_id') ? session()->get('quota_id')[0] : null,
             'seat_type_id' => session('seat_type_id'),
             'gender_id' => session('gender_id'),
             'round_display' => session('round_display'),
+            'rank_type' => session('rank_type', 'main'),
+            'home_state' => session('home_state'),
         ]);
+    }
+
+    private function haveFieldsChanged(): bool
+    {
+        return $this->institute_id === $this->old_institute_id
+            && $this->institute_type === $this->old_institute_type
+            && $this->seat_type_id === $this->old_seat_type_id
+            && $this->course_id === $this->old_course_id
+            && $this->program_id === $this->old_program_id
+            && $this->gender_id === $this->old_gender_id
+            && $this->round_display === $this->old_round_display
+            && $this->rank_type === $this->old_rank_type
+            && $this->home_state === $this->old_home_state;
+    }
+
+    private function getInstituteQuotas(): array
+    {
+        $institute_type = $this->rank_type === 'advanced'
+                ? ['iit']
+                : ($this->institute_type
+                    ? $this->institute_type
+                    : ['iiit', 'nit', 'gfti']
+                );
+
+        return Cache::rememberForever(
+            'institute_quota_'.implode('_', $institute_type).($this->rank_type === 'main' ? '_'.$this->home_state : ''),
+            function () use ($institute_type) {
+                return DB::table('institute_quota')
+                    ->where(function ($query) use ($institute_type) {
+                        $query->whereIn('institute_id', Institute::whereIn('type', $institute_type)->pluck('id'));
+                        if ($this->rank_type === 'main') {
+                            $query->where(function ($sub_query) {
+                                $sub_query->where('quota_id', 'OS')->whereNotIn('state_id', [$this->home_state])
+                                    ->orWhere('quota_id', 'HS')->whereIn('state_id', [$this->home_state])
+                                    ->orWhereNotIn('quota_id', ['OS', 'HS'])->whereIn('state_id', [$this->home_state])
+                                    ->orWhere('quota_id', 'AI');
+                            });
+                        }
+                    })
+                    ->distinct()
+                    ->get()
+                    ->toArray();
+            }
+        );
     }
 
     public function updateChartData(): void
     {
         $data = [];
-        if ($this->program_id !== null && $this->quota_id !== null && $this->seat_type_id !== null && $this->gender_id !== null && $this->round_display !== null) {
-            if ($this->institute_id === $this->old_institute_id
-                && $this->institute_type === $this->old_institute_type
-                && $this->quota_id === $this->old_quota_id
-                && $this->seat_type_id === $this->old_seat_type_id
-                && $this->course_id === $this->old_course_id
-                && $this->program_id === $this->old_program_id
-                && $this->gender_id === $this->old_gender_id
-                && $this->round_display === $this->old_round_display) {
+        if ($this->program_id && $this->seat_type_id && $this->gender_id && $this->round_display && ($this->rank_type === 'advanced' || $this->home_state)) {
+            if ($this->haveFieldsChanged()) {
                 return;
             }
-            $programs = DB::table('program_tag')->whereIn('tag_id', $this->program_id)->pluck('program_id');
+
+            $institute_quotas = $this->getInstituteQuotas();
+            $programs = DB::table('program_tag')
+                        ->whereIn('tag_id', $this->program_id)
+                        ->pluck('program_id');
             $query = Rank::whereIn('program_id', $programs)
-                ->where('quota_id', $this->quota_id)
-                ->where('seat_type_id', $this->seat_type_id)
-                ->where('gender_id', $this->gender_id);
-            if ($this->course_id !== null && $this->course_id !== []) {
+                        ->whereIn(DB::raw('institute_id || quota_id'), array_map(function ($institute_quota) {
+                            return $institute_quota->institute_id.$institute_quota->quota_id;
+                        }, $institute_quotas))
+                        ->where('seat_type_id', $this->seat_type_id)
+                        ->where('gender_id', $this->gender_id);
+            if ($this->course_id) {
                 $query->whereIn('course_id', $this->course_id);
             }
-            if ($this->institute_id !== null && $this->institute_id !== []) {
+            if ($this->institute_id) {
                 $query->whereIn('institute_id', $this->institute_id);
-            } elseif ($this->institute_type !== null && $this->institute_type !== []) {
+            } elseif ($this->institute_type) {
                 $query->whereIn('institute_id', Institute::whereIn('type', $this->institute_type)->pluck('id'));
             }
             $program_data = $query->get();
@@ -106,6 +154,17 @@ class FieldTrends extends Component implements HasForms
                     break;
                 case 'last':
                     $year_round = Cache::rememberForever('year_round_last', fn () => Rank::select('year', DB::raw('MAX(round) as round'))->groupBy('year')->orderBy('year')->get());
+                    if ($this->rank_type === 'advanced') {
+                        // This fix is to handle the case of 2014 where there were
+                        // 3 rounds for IITs and 4 rounds for NIT+
+                        $year_round = $year_round->map(function ($item) {
+                            if ($item->year === 2014) {
+                                $item->round = 3;
+                            }
+
+                            return $item;
+                        });
+                    }
                     break;
                 default:
                     $year_round = Cache::rememberForever('year_round_'.$this->round_display, fn () => Rank::select('year', 'round')->where('round', $this->round_display)->distinct()->orderBy('year')->get());
@@ -118,10 +177,10 @@ class FieldTrends extends Component implements HasForms
                 if (! isset($institute_data[$data->institute_id])) {
                     $institute_data[$data->institute_id] = [];
                 }
-                if (! isset($institute_data[$data->institute_id][$data->course_id.', '.$data->program_id])) {
-                    $institute_data[$data->institute_id][$data->course_id.', '.$data->program_id] = $initial_institute_data;
+                if (! isset($institute_data[$data->institute_id][$data->course_id.', '.$data->program_id.' ('.$data->quota_id.')'])) {
+                    $institute_data[$data->institute_id][$data->course_id.', '.$data->program_id.' ('.$data->quota_id.')'] = $initial_institute_data;
                 }
-                $institute_data[$data->institute_id][$data->course_id.', '.$data->program_id][$data->year.'_'.$data->round] = $data->closing_rank;
+                $institute_data[$data->institute_id][$data->course_id.', '.$data->program_id.' ('.$data->quota_id.')'][$data->year.'_'.$data->round] = $data->closing_rank;
             }
 
             $datasets = [];
@@ -148,7 +207,6 @@ class FieldTrends extends Component implements HasForms
             $this->old_program_id = $this->program_id;
             $this->old_institute_id = $this->institute_id;
             $this->old_institute_type = $this->institute_type;
-            $this->old_quota_id = $this->quota_id;
             $this->old_seat_type_id = $this->seat_type_id;
             $this->old_gender_id = $this->gender_id;
             $this->old_round_display = $this->round_display;
@@ -158,7 +216,6 @@ class FieldTrends extends Component implements HasForms
             $this->old_program_id = $this->program_id;
             $this->old_institute_id = $this->institute_id;
             $this->old_institute_type = $this->institute_type;
-            $this->old_quota_id = $this->quota_id;
             $this->old_seat_type_id = $this->seat_type_id;
             $this->old_gender_id = $this->gender_id;
             $this->old_round_display = $this->round_display;
@@ -169,7 +226,81 @@ class FieldTrends extends Component implements HasForms
     protected function getFormSchema(): array
     {
         return [
-            Grid::make(4)->schema([
+            Grid::make([
+                'default' => 1,
+                'sm' => 1,
+                'md' => 3,
+                'lg' => 3,
+                'xl' => 3,
+                '2xl' => 3,
+            ])->schema([
+                Radio::make('rank_type')
+                    ->label('Rank Type')
+                    ->columns([
+                        'default' => 2,
+                        'sm' => 2,
+                        'md' => 2,
+                        'lg' => 2,
+                        'xl' => 2,
+                        '2xl' => 2,
+                    ])
+                    ->options([
+                        'main' => 'JEE (Main)',
+                        'advanced' => 'JEE (Advanced)',
+                    ])
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('course_id', []);
+                        $set('institute_id', []);
+                        $this->emit('updateChartData');
+                    })
+                    ->required()
+                    ->reactive(),
+                Select::make('home_state')
+                    ->label('Home State')
+                    ->options(
+                        Institute::select('state')
+                            ->distinct()
+                            ->orderBy('state')
+                            ->pluck('state', 'state')
+                    )
+                    ->hidden(fn () => $this->rank_type !== 'main')
+                    ->afterStateUpdated(function () {
+                        session()->put('home_state', $this->home_state);
+                        $this->emit('updateChartData');
+                    })
+                    ->searchable()
+                    ->required()
+                    ->reactive(),
+                CheckboxList::make('institute_type')
+                    ->label('Institute Types')
+                    ->options([
+                        'nit' => 'NITs',
+                        'iiit' => 'IIITs',
+                        'gfti' => 'GFTIs',
+                    ])
+                    ->columns([
+                        'default' => 3,
+                        'sm' => 3,
+                        'md' => 3,
+                        'lg' => 3,
+                        'xl' => 3,
+                        '2xl' => 3,
+                    ])
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('institute_id', []);
+                        $this->emit('updateChartData');
+                    })
+                    ->hidden(fn () => $this->rank_type !== 'main')
+                    ->reactive(),
+            ]),
+            Grid::make([
+                'default' => 1,
+                'sm' => 1,
+                'md' => 3,
+                'lg' => 3,
+                'xl' => 3,
+                '2xl' => 3,
+            ])->schema([
                 MultiSelect::make('program_id')
                     ->label('Branches')
                     ->placeholder('Select Branches')
@@ -198,28 +329,6 @@ class FieldTrends extends Component implements HasForms
                     ->hidden(function (Closure $get) {
                         return ! $get('program_id');
                     })->reactive(),
-                CheckboxList::make('institute_type')
-                    ->label('Institute Types')
-                    ->options([
-                        'iit' => 'IITs',
-                        'nit' => 'NITs',
-                        'iiit' => 'IIITs',
-                        'gfti' => 'GFTIs',
-                    ])->columns([
-                        'default' => 2,
-                        'sm' => 2,
-                        'md' => 2,
-                        'lg' => 2,
-                        'xl' => 2,
-                        '2xl' => 2,
-                    ])
-                    ->afterStateUpdated(function (Closure $set) {
-                        $set('institute_id', []);
-                        $this->emit('updateChartData');
-                    })
-                    ->hidden(function (Closure $get) {
-                        return ! $get('program_id');
-                    })->reactive(),
                 MultiSelect::make('institute_id')
                     ->options(function (Closure $get) {
                         if ($get('program_id')) {
@@ -229,12 +338,18 @@ class FieldTrends extends Component implements HasForms
                             if ($get('course_id')) {
                                 $query->whereIn('course_id', $get('course_id'));
                             }
-                            if ($get('institute_type')) {
-                                $institutes = Institute::whereIn('type', $get('institute_type'))->pluck('id');
-                                $query = $query->whereIn('institute_id', $institutes);
-                            }
+                            $institute_type = $this->rank_type === 'advanced'
+                                ? ['iit']
+                                : ($this->institute_type
+                                    ? $this->institute_type
+                                    : ['iiit', 'nit', 'gfti']
+                                );
+                            $institutes = Institute::whereIn('type', $institute_type)->pluck('id');
+                            $query = $query->whereIn('institute_id', $institutes);
 
-                            return $query->orderBy('institute_id')->get()->pluck('institute_id', 'institute_id');
+                            return $query->orderBy('institute_id')
+                                        ->get()
+                                        ->pluck('institute_id', 'institute_id');
                         } else {
                             return Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id'));
                         }
@@ -247,19 +362,14 @@ class FieldTrends extends Component implements HasForms
                     })
                     ->reactive(),
             ]),
-            Grid::make(4)->schema([
-                Select::make('quota_id')
-                    ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('quota_id') !== null) {
-                            session()->put('quota_id', [$get('quota_id')]);
-                        }
-                        $this->emit('updateChartData');
-                    })
-                    ->label('Quota')
-                    ->searchable()
-                    ->required()
-                    ->reactive(),
+            Grid::make([
+                'default' => 1,
+                'sm' => 3,
+                'md' => 3,
+                'lg' => 3,
+                'xl' => 3,
+                '2xl' => 3,
+            ])->schema([
                 Select::make('seat_type_id')
                     ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
                     ->afterStateUpdated(function (Closure $get) {
