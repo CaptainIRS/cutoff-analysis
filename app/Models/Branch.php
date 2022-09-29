@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
-class Tag extends Model
+class Branch extends Model
 {
     use Searchable;
 

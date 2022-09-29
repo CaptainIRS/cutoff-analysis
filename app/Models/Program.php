@@ -13,9 +13,9 @@ class Program extends Model
 
     public $incrementing = false;
 
-    public function tags()
+    public function branches()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Branch::class);
     }
 
     public function courses()

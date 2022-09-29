@@ -8,7 +8,6 @@ use App\Models\Quota;
 use App\Models\Rank;
 use App\Models\SeatType;
 use Cache;
-use Closure;
 use DB;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -58,18 +57,29 @@ class RoundTrends extends Component implements HasForms
         ]);
     }
 
+    private function haveFieldsChanged(): bool
+    {
+        return $this->institute_id === $this->old_institute_id
+            && $this->quota_id === $this->old_quota_id
+            && $this->seat_type_id === $this->old_seat_type_id
+            && $this->course_id === $this->old_course_id
+            && $this->program_id === $this->old_program_id
+            && $this->gender_id === $this->old_gender_id;
+    }
+
     public function updateChartData(): void
     {
-        if ($this->institute_id !== null && $this->course_id !== null && $this->program_id !== null && $this->quota_id !== null && $this->seat_type_id !== null && $this->gender_id !== null) {
-            if ($this->institute_id === $this->old_institute_id
-                && $this->quota_id === $this->old_quota_id
-                && $this->seat_type_id === $this->old_seat_type_id
-                && $this->course_id === $this->old_course_id
-                && $this->program_id === $this->old_program_id
-                && $this->gender_id === $this->old_gender_id) {
+        $data = [];
+        if ($this->institute_id
+            && $this->course_id
+            && $this->program_id
+            && $this->quota_id
+            && $this->seat_type_id
+            && $this->gender_id
+        ) {
+            if ($this->haveFieldsChanged()) {
                 return;
             }
-            $data = [];
             $query = Rank::where('institute_id', $this->institute_id)
                 ->where('course_id', $this->course_id)
                 ->where('program_id', $this->program_id)
@@ -104,22 +114,14 @@ class RoundTrends extends Component implements HasForms
                 'labels' => $labels,
                 'datasets' => $datasets,
             ];
-            $this->old_course_id = $this->course_id;
-            $this->old_program_id = $this->program_id;
-            $this->old_institute_id = $this->institute_id;
-            $this->old_quota_id = $this->quota_id;
-            $this->old_seat_type_id = $this->seat_type_id;
-            $this->old_gender_id = $this->gender_id;
-            $this->emit('chartDataUpdated', $data);
-        } else {
-            $this->old_course_id = $this->course_id;
-            $this->old_program_id = $this->program_id;
-            $this->old_institute_id = $this->institute_id;
-            $this->old_quota_id = $this->quota_id;
-            $this->old_seat_type_id = $this->seat_type_id;
-            $this->old_gender_id = $this->gender_id;
-            $this->emit('chartDataUpdated', []);
         }
+        $this->old_course_id = $this->course_id;
+        $this->old_program_id = $this->program_id;
+        $this->old_institute_id = $this->institute_id;
+        $this->old_quota_id = $this->quota_id;
+        $this->old_seat_type_id = $this->seat_type_id;
+        $this->old_gender_id = $this->gender_id;
+        $this->emit('chartDataUpdated', $data);
     }
 
     protected function getFormSchema(): array
@@ -131,39 +133,40 @@ class RoundTrends extends Component implements HasForms
                     ->optionsLimit(150)
                     ->searchable()
                     ->label('Institute')
-                    ->afterStateUpdated(function (Closure $set) {
-                        $set('course_id', null);
-                        $set('program_id', null);
+                    ->afterStateUpdated(function () {
+                        $this->course_id = null;
+                        $this->program_id = null;
                         $this->emit('updateChartData');
                     })
                     ->required()
                     ->reactive(),
                 Select::make('course_id')
-                    ->options(function (Closure $get) {
-                        return DB::table('institute_course_program')->where('institute_id', $get('institute_id'))->pluck('course_id', 'course_id');
+                    ->options(function () {
+                        return DB::table('institute_course_program')
+                            ->where('institute_id', $this->institute_id)
+                            ->pluck('course_id', 'course_id');
                     })
                     ->optionsLimit(150)
                     ->label('Course')
-                    ->afterStateUpdated(function (Closure $set) {
-                        $set('program_id', null);
+                    ->afterStateUpdated(function () {
+                        $this->program_id = null;
                         $this->emit('updateChartData');
                     })
-                    ->hidden(function (Closure $get) {
-                        return ! $get('institute_id');
-                    })
+                    ->hidden(! $this->institute_id)
                     ->searchable()
                     ->required()
                     ->reactive(),
                 Select::make('program_id')
-                    ->options(function (Closure $get) {
-                        return DB::table('institute_course_program')->where('institute_id', $get('institute_id'))->where('course_id', $get('course_id'))->pluck('program_id', 'program_id');
-                    })
+                    ->options(
+                        DB::table('institute_course_program')
+                            ->where('institute_id', $this->institute_id)
+                            ->where('course_id', $this->course_id)
+                            ->pluck('program_id', 'program_id')
+                    )
                     ->optionsLimit(150)
                     ->label('Program')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
-                    ->hidden(function (Closure $get) {
-                        return ! $get('course_id');
-                    })
+                    ->hidden(! $this->course_id)
                     ->searchable()
                     ->required()
                     ->reactive(),
@@ -171,10 +174,8 @@ class RoundTrends extends Component implements HasForms
             Grid::make(3)->schema([
                 Select::make('quota_id')
                     ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('quota_id') !== null) {
-                            session()->put('quota_id', [$get('quota_id')]);
-                        }
+                    ->afterStateUpdated(function () {
+                        session()->put('quota_id', [$this->quota_id]);
                         $this->emit('updateChartData');
                     })
                     ->label('Quota')
@@ -183,10 +184,8 @@ class RoundTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('seat_type_id')
                     ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('seat_type_id') !== null) {
-                            session()->put('seat_type_id', $get('seat_type_id'));
-                        }
+                    ->afterStateUpdated(function () {
+                        session()->put('seat_type_id', $this->seat_type_id);
                         $this->emit('updateChartData');
                     })
                     ->label('Seat Type')
@@ -195,10 +194,8 @@ class RoundTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('gender_id')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('gender_id') !== null && $get('gender_id') !== []) {
-                            session()->put('gender_id', $get('gender_id'));
-                        }
+                    ->afterStateUpdated(function () {
+                        session()->put('gender_id', $this->gender_id);
                         $this->emit('updateChartData');
                     })
                     ->label('Gender')

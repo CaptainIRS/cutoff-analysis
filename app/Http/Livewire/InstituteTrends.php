@@ -8,7 +8,6 @@ use App\Models\Quota;
 use App\Models\Rank;
 use App\Models\SeatType;
 use Cache;
-use Closure;
 use DB;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MultiSelect;
@@ -59,15 +58,25 @@ class InstituteTrends extends Component implements HasForms
         ]);
     }
 
+    private function haveFieldsChanged(): bool
+    {
+        return $this->institute_id === $this->old_institute_id
+            && $this->quota_id === $this->old_quota_id
+            && $this->seat_type_id === $this->old_seat_type_id
+            && $this->course_id === $this->old_course_id
+            && $this->gender_id === $this->old_gender_id
+            && $this->round_display === $this->old_round_display;
+    }
+
     public function updateChartData(): void
     {
-        if ($this->institute_id !== null && $this->quota_id !== null && $this->seat_type_id !== null && $this->gender_id !== null && $this->round_display !== null) {
-            if ($this->institute_id === $this->old_institute_id
-                && $this->quota_id === $this->old_quota_id
-                && $this->seat_type_id === $this->old_seat_type_id
-                && $this->course_id === $this->old_course_id
-                && $this->gender_id === $this->old_gender_id
-                && $this->round_display === $this->old_round_display) {
+        if ($this->institute_id
+            && $this->quota_id
+            && $this->seat_type_id
+            && $this->gender_id
+            && $this->round_display
+        ) {
+            if ($this->haveFieldsChanged()) {
                 return;
             }
             $data = [];
@@ -75,19 +84,39 @@ class InstituteTrends extends Component implements HasForms
                 ->where('quota_id', $this->quota_id)
                 ->where('seat_type_id', $this->seat_type_id)
                 ->where('gender_id', $this->gender_id);
-            if ($this->course_id !== null && $this->course_id !== []) {
+            if ($this->course_id) {
                 $query->whereIn('course_id', $this->course_id);
             }
             $institute_data = $query->get();
-            $year_round = Cache::rememberForever('year_round_distinct', fn () => Rank::select('year', 'round')->distinct()->orderBy('year')->orderBy('round')->get());
+            $year_round = Cache::rememberForever(
+                'year_round_distinct',
+                fn () => Rank::select('year', 'round')
+                            ->distinct()
+                            ->orderBy('year')
+                            ->orderBy('round')
+                            ->get()
+            );
             switch($this->round_display) {
                 case 'all':
                     break;
                 case 'last':
-                    $year_round = Cache::rememberForever('year_round_last', fn () => Rank::select('year', DB::raw('MAX(round) as round'))->groupBy('year')->orderBy('year')->get());
+                    $year_round = Cache::rememberForever(
+                        'year_round_last',
+                        fn () => Rank::select('year', DB::raw('MAX(round) as round'))
+                                    ->groupBy('year')
+                                    ->orderBy('year')
+                                    ->get()
+                    );
                     break;
                 default:
-                    $year_round = Cache::rememberForever('year_round_'.$this->round_display, fn () => Rank::select('year', 'round')->where('round', $this->round_display)->distinct()->orderBy('year')->get());
+                    $year_round = Cache::rememberForever(
+                        'year_round_'.$this->round_display,
+                        fn () => Rank::select('year', 'round')
+                                    ->where('round', $this->round_display)
+                                    ->distinct()
+                                    ->orderBy('year')
+                                    ->get()
+                    );
                     break;
             }
             $columns = $year_round->map(fn ($year_round) => $year_round->year.'_'.$year_round->round);
@@ -123,22 +152,14 @@ class InstituteTrends extends Component implements HasForms
                 'labels' => $labels,
                 'datasets' => $datasets,
             ];
-            $this->old_course_id = $this->course_id;
-            $this->old_institute_id = $this->institute_id;
-            $this->old_quota_id = $this->quota_id;
-            $this->old_seat_type_id = $this->seat_type_id;
-            $this->old_gender_id = $this->gender_id;
-            $this->old_round_display = $this->round_display;
-            $this->emit('chartDataUpdated', $data);
-        } else {
-            $this->old_course_id = $this->course_id;
-            $this->old_institute_id = $this->institute_id;
-            $this->old_quota_id = $this->quota_id;
-            $this->old_seat_type_id = $this->seat_type_id;
-            $this->old_gender_id = $this->gender_id;
-            $this->old_round_display = $this->round_display;
-            $this->emit('chartDataUpdated', []);
         }
+        $this->old_course_id = $this->course_id;
+        $this->old_institute_id = $this->institute_id;
+        $this->old_quota_id = $this->quota_id;
+        $this->old_seat_type_id = $this->seat_type_id;
+        $this->old_gender_id = $this->gender_id;
+        $this->old_round_display = $this->round_display;
+        $this->emit('chartDataUpdated', $data);
     }
 
     protected function getFormSchema(): array
@@ -150,8 +171,8 @@ class InstituteTrends extends Component implements HasForms
                     ->optionsLimit(150)
                     ->searchable()
                     ->label('Institute')
-                    ->afterStateUpdated(function (Closure $set) {
-                        $set('course_id', []);
+                    ->afterStateUpdated(function () {
+                        $this->course_id = [];
                         $this->emit('updateChartData');
                     })
                     ->required()
@@ -160,19 +181,15 @@ class InstituteTrends extends Component implements HasForms
                     ->options($this->institute_id ? Institute::find($this->institute_id)->courses->pluck('id', 'id') : [])
                     ->label('Course')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
-                    ->hidden(function (Closure $get) {
-                        return ! $get('institute_id');
-                    })
+                    ->hidden(! $this->institute_id)
                     ->searchable()
                     ->reactive(),
             ]),
             Grid::make(4)->schema([
                 Select::make('quota_id')
                     ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('quota_id') !== null) {
-                            session()->put('quota_id', [$get('quota_id')]);
-                        }
+                    ->afterStateUpdated(function () {
+                        session()->put('quota_id', [$this->quota_id]);
                         $this->emit('updateChartData');
                     })
                     ->searchable()
@@ -181,10 +198,8 @@ class InstituteTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('seat_type_id')
                     ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('seat_type_id') !== null) {
-                            session()->put('seat_type_id', $get('seat_type_id'));
-                        }
+                    ->afterStateUpdated(function () {
+                        session()->put('seat_type_id', $this->seat_type_id);
                         $this->emit('updateChartData');
                     })
                     ->label('Seat Type')
@@ -193,10 +208,8 @@ class InstituteTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('gender_id')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('gender_id') !== null && $get('gender_id') !== []) {
-                            session()->put('gender_id', $get('gender_id'));
-                        }
+                    ->afterStateUpdated(function () {
+                        session()->put('gender_id', $this->gender_id);
                         $this->emit('updateChartData');
                     })
                     ->label('Gender')
@@ -215,10 +228,8 @@ class InstituteTrends extends Component implements HasForms
                         '6' => 'Round 6',
                         '7' => 'Round 7',
                     ])
-                    ->afterStateUpdated(function (Closure $get) {
-                        if ($get('round_display') !== null) {
-                            session()->put('round_display', $get('round_display'));
-                        }
+                    ->afterStateUpdated(function () {
+                        session()->put('round_display', $this->round_display);
                         $this->emit('updateChartData');
                     })
                     ->label('Display Rounds')

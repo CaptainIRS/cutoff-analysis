@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Branch;
 use App\Models\Course;
 use App\Models\Gender;
 use App\Models\Institute;
@@ -81,14 +82,18 @@ class SearchByProgram extends Component implements HasTable
     protected function getTableFilters(): array
     {
         return [
-            Filter::make('institute_id')
-                ->label('Institute')
+            Filter::make('course_filter')
                 ->form([
                     Grid::make(3)->schema([
                         MultiSelect::make('program_id')
                             ->label('Branches')
                             ->placeholder('Select Branches')
-                            ->options(Cache::rememberForever('allTags', fn () => DB::table('program_tag')->select('tag_id')->distinct()->orderBy('tag_id')->get()->pluck('tag_id', 'tag_id')))
+                            ->options(
+                                Cache::rememberForever(
+                                    'allBranches',
+                                    fn () => Branch::all()->pluck('id', 'id')
+                                )
+                            )
                             ->afterStateUpdated(function (Closure $set) {
                                 $set('course_id', []);
                                 $set('institute_id', []);
@@ -96,43 +101,62 @@ class SearchByProgram extends Component implements HasTable
                         MultiSelect::make('course_id')
                             ->options(function (Closure $get) {
                                 if ($get('program_id')) {
-                                    $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
+                                    $programs = DB::table('branch_program')
+                                                    ->whereIn('branch_id', $get('program_id'))
+                                                    ->pluck('program_id');
 
-                                    return Program::whereIn('id', $programs)->get()->pluck('courses')->flatten()->pluck('id', 'id');
+                                    return Program::whereIn('id', $programs)
+                                                ->get()
+                                                ->pluck('courses')
+                                                ->flatten()
+                                                ->pluck('id', 'id');
                                 } else {
-                                    return Cache::rememberForever('allCourses', fn () => Course::all()->pluck('id', 'id'));
+                                    return Cache::rememberForever(
+                                        'allCourses',
+                                        fn () => Course::all()->pluck('id', 'id')
+                                    );
                                 }
                             })
                             ->optionsLimit(150)
                             ->label('Course')
-                            ->afterStateUpdated(function (Closure $set) {
-                                $set('institute_id', []);
-                            })
-                            ->hidden(function (Closure $get) {
-                                return ! $get('program_id');
-                            })
+                            ->afterStateUpdated(fn (Closure $set) => $set('institute_id', []))
+                            ->hidden(fn (Closure $get) => ! $get('program_id'))
                             ->reactive(),
                         MultiSelect::make('institute_id')
                             ->options(function (Closure $get) {
                                 if ($get('program_id') && $get('course_id')) {
-                                    $programs = DB::table('program_tag')->whereIn('tag_id', $get('program_id'))->pluck('program_id');
+                                    $programs = Branch::whereIn('id', $get('program_id'))
+                                                        ->get()
+                                                        ->pluck('programs')
+                                                        ->flatten()
+                                                        ->pluck('id');
 
-                                    return DB::table('institute_course_program')->whereIn('program_id', $programs)->whereIn('course_id', $get('course_id'))->orderBy('institute_id')->get()->pluck('institute_id', 'institute_id');
+                                    return DB::table('institute_course_program')
+                                            ->whereIn('program_id', $programs)
+                                            ->whereIn('course_id', $get('course_id'))
+                                            ->orderBy('institute_id')
+                                            ->get()
+                                            ->pluck('institute_id', 'institute_id');
                                 } else {
-                                    return Cache::rememberForever('allInstitutes', fn () => Institute::all()->pluck('id', 'id'));
+                                    return Cache::rememberForever(
+                                        'allInstitutes',
+                                        fn () => Institute::all()->pluck('id', 'id')
+                                    );
                                 }
                             })
                             ->optionsLimit(150)
                             ->label('Institute')
-                            ->hidden(function (Closure $get) {
-                                return ! $get('program_id') || ! $get('course_id');
-                            })
+                            ->hidden(fn (Closure $get) => ! $get('program_id') || ! $get('course_id'))
                             ->reactive(),
                     ]),
                 ])
             ->query(function (Builder $query, array $data): Builder {
                 return $query->when($data['program_id'], function (Builder $query, $program_id) use ($data) {
-                    $programs = DB::table('program_tag')->whereIn('tag_id', $program_id)->pluck('program_id');
+                    $programs = Branch::whereIn('id', $program_id)
+                                        ->get()
+                                        ->pluck('programs')
+                                        ->flatten()
+                                        ->pluck('id');
 
                     return $query->when($data['course_id'], function (Builder $query, $course_id) use ($data) {
                         return $query->when($data['institute_id'], function (Builder $query, $institute_id) {
@@ -141,36 +165,23 @@ class SearchByProgram extends Component implements HasTable
                     })->whereIn('program_id', $programs);
                 });
             }),
-            Filter::make('quota_id')
-                ->label('Quota')
+            Filter::make('seat_filter')
                 ->form([
                     Grid::make(4)->schema([
                         MultiSelect::make('quota_id')
                             ->options(Cache::rememberForever('allQuotas', fn () => Quota::all()->pluck('id', 'id')))
-                            ->afterStateUpdated(function (Closure $get) {
-                                if ($get('quota_id') !== null && $get('quota_id') != []) {
-                                    session()->put('quota_id', $get('quota_id'));
-                                }
-                            })
+                            ->afterStateUpdated(fn (Closure $get) => session()->put('quota_id', $get('quota_id')))
                             ->default(session()->get('quota_id'))
                             ->label('Quota'),
                         Select::make('seat_type_id')
                             ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
-                            ->afterStateUpdated(function (Closure $get) {
-                                if ($get('seat_type_id') !== null) {
-                                    session()->put('seat_type_id', $get('seat_type_id'));
-                                }
-                            })
+                            ->afterStateUpdated(fn (Closure $get) => session()->put('seat_type_id', $get('seat_type_id')))
                             ->searchable()
                             ->default(session()->get('seat_type_id'))
                             ->label('Seat Type'),
                         MultiSelect::make('gender_id')
                             ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
-                            ->afterStateUpdated(function (Closure $get) {
-                                if ($get('gender_id') !== null && $get('gender_id') !== []) {
-                                    session()->put('gender_id', $get('gender_id')[0]);
-                                }
-                            })
+                            ->afterStateUpdated(fn (Closure $get) => session()->put('gender_id', $get('gender_id')[0]))
                             ->default(session()->exists('gender_id') ? [session()->get('gender_id')] : null)
                             ->label('Gender'),
                         Select::make('round_id')
@@ -185,11 +196,7 @@ class SearchByProgram extends Component implements HasTable
                                 '6' => 'Round 6',
                                 '7' => 'Round 7',
                             ])
-                            ->afterStateUpdated(function (Closure $get) {
-                                if ($get('round_id') !== null) {
-                                    session()->put('round_display', $get('round_id'));
-                                }
-                            })
+                            ->afterStateUpdated(fn (Closure $get) => session()->put('round_display', $get('round_id')))
                             ->default(session()->get('round_display', 'last'))
                             ->label('Display Rounds'),
                     ]),
@@ -199,12 +206,31 @@ class SearchByProgram extends Component implements HasTable
                     case 'all':
                         break;
                     case 'last':
-                        $year_round = Cache::rememberForever('year_round_last', fn () => Rank::select('year', DB::raw('MAX(round) as round'))->groupBy('year')->orderBy('year')->get());
-                        $query = $query->whereIn(DB::raw('year || round'), $year_round->map(fn ($year_round) => $year_round->year.$year_round->round));
+                        $year_round = Cache::rememberForever(
+                            'year_round_last',
+                            fn () => Rank::select('year', DB::raw('MAX(round) as round'))
+                                        ->groupBy('year')
+                                        ->orderBy('year')
+                                        ->get()
+                        );
+                        $query = $query->whereIn(
+                            DB::raw('year || round'),
+                            $year_round->map(fn ($year_round) => $year_round->year.$year_round->round)
+                        );
                         break;
                     default:
-                        $year_round = Cache::rememberForever('year_round_'.$data['round_id'], fn () => Rank::select('year', 'round')->where('round', $data['round_id'])->distinct()->orderBy('year')->get());
-                        $query = $query->whereIn(DB::raw('year || round'), $year_round->map(fn ($year_round) => $year_round->year.$year_round->round));
+                        $year_round = Cache::rememberForever(
+                            'year_round_'.$data['round_id'],
+                            fn () => Rank::select('year', 'round')
+                                        ->where('round', $data['round_id'])
+                                        ->distinct()
+                                        ->orderBy('year')
+                                        ->get()
+                        );
+                        $query = $query->whereIn(
+                            DB::raw('year || round'),
+                            $year_round->map(fn ($year_round) => $year_round->year.$year_round->round)
+                        );
                         break;
                 }
 
@@ -222,14 +248,7 @@ class SearchByProgram extends Component implements HasTable
             Filter::make('closing_rank')
                 ->label('Rank range')
                 ->form([
-                    Grid::make([
-                        'default' => 2,
-                        'sm' => 2,
-                        'md' => 2,
-                        'lg' => 2,
-                        'xl' => 2,
-                        '2xl' => 2,
-                    ])->schema([
+                    Grid::make(['default' => 2])->schema([
                         TextInput::make('minimum_rank')
                             ->numeric()
                             ->step(500)
