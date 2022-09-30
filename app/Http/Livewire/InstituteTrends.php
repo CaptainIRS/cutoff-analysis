@@ -70,6 +70,7 @@ class InstituteTrends extends Component implements HasForms
 
     public function updateChartData(): void
     {
+        $data = [];
         if ($this->institute_id
             && $this->quota_id
             && $this->seat_type_id
@@ -79,7 +80,6 @@ class InstituteTrends extends Component implements HasForms
             if ($this->haveFieldsChanged()) {
                 return;
             }
-            $data = [];
             $query = Rank::where('institute_id', $this->institute_id)
                 ->where('quota_id', $this->quota_id)
                 ->where('seat_type_id', $this->seat_type_id)

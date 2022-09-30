@@ -209,7 +209,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             <div></div>
         </div>
     </div>
-    <nav x-cloak class="absolute flex flex-col w-full z-10 top-0" @keydown.escape="isOpen = false">
+    <nav x-cloak class="absolute flex flex-col w-full z-10 top-0 print:hidden" @keydown.escape="isOpen = false">
 
         <div class="flex flex-grow-0 w-full items-center justify-between bg-gray-200 dark:bg-gray-800 shadow-md h-14">
 
@@ -399,16 +399,16 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     @livewireStyles
     @livewireScripts
 
-    <div style="min-height: 3.5rem"></div>
+    <div class="min-h-[3.5rem] print:min-h-0"></div>
     <div @scroll="scrollBackTop = ($el.scrollTop > window.outerHeight * 0.1) ? true : false" x-cloak id="content"
-        class="content flex flex-col h-full overflow-y-auto">
-        <div class="container m-auto flex-grow">
-            <div class="container flex-1">
+        class="content flex flex-col h-full overflow-y-auto print:overflow-visible">
+        <div class="w-full m-auto flex-grow">
+            <div class="w-full flex-1">
                 @yield('content')
             </div>
         </div>
 
-        <div class="footer text-center p-2">
+        <div class="footer text-center p-2 print:hidden">
             <hr class="border-gray-200 dark:border-gray-600 my-2">
             Made with <svg class="inline h-5 w-5 pb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
@@ -442,7 +442,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         </div>
     </div>
 
-    <div x-cloak x-show="scrollBackTop">
+    <div x-cloak x-show="scrollBackTop" class="print:hidden">
         <button @click="document.getElementById('content').scrollTo({top: 0, behavior: 'smooth'})"
             aria-label="Back to top"
             class="fixed bottom-0 left-1/2 -translate-x-1/2 p-2 mb-20 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none">

@@ -24,9 +24,9 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4">Institute Trends</h1>
+    <h1 class="text-3xl font-bold m-4 print:hidden">Institute Trends</h1>
 
-    <h2 class="text-lg m-4">
+    <h2 class="text-lg m-4 print:hidden">
         Compare the cut-offs of various courses offered by an institute over 10 years in the JoSAA seat allocation process.
         <br>
         This helps understand the popularity and perception of programs offered by the institute, and thus helps understand

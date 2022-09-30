@@ -24,9 +24,9 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4">Filter by Program</h1>
+    <h1 class="text-3xl font-bold m-4 print:hidden">Filter by Program</h1>
 
-    <h2 class="text-lg m-4">
+    <h2 class="text-lg m-4 print:hidden">
         Filter by program allows you to filter the cut-off data with the selected programs and further narrow down with your
         choice of institutes.
     </h2>

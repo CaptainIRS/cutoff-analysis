@@ -47,6 +47,32 @@ canvas {
     max-height: 60vh !important;
 }
 
+@media print {
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid;
+    }
+
+    body {
+        overflow: auto !important;
+    }
+
+    #chartContainer,
+    #legend,
+    #myChart {
+        page-break-inside: avoid;
+    }
+
+    .choices__list--multiple:empty {
+        gap: unset !important;
+    }
+}
+
 .footer {
     width: 100%;
+}
+
+@page {
+    size: auto;
 }

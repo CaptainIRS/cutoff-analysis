@@ -27,8 +27,10 @@
         <div></div>
     </div>
 
-    <div wire:ignore id="legend"></div>
-    <canvas wire:ignore id="myChart"></canvas>
+    <div id="chartContainer" class="block">
+        <div wire:ignore id="legend"></div>
+        <canvas wire:ignore id="myChart"></canvas>
+    </div>
     <script wire:ignore>
         const canvas = document.getElementById('myChart');
         const ctx = canvas.getContext('2d');
