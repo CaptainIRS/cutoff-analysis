@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Branch;
+use App\Models\Course;
 use App\Models\Gender;
 use App\Models\Institute;
 use App\Models\Program;
@@ -26,27 +27,27 @@ class BranchTrends extends Component implements HasForms
 
     public ?array $institute_type = [];
 
-    public ?array $old_institute_type = [];
+    private ?array $old_institute_type = [];
 
-    public $course_id;
+    public $courses;
 
-    private $old_course_id;
+    private $old_courses;
 
-    public $program_id;
+    public $branches;
 
-    private $old_program_id;
+    private $old_branches;
 
-    public $institute_id;
+    public $institutes;
 
-    private $old_institute_id;
+    private $old_institutes;
 
-    public $seat_type_id;
+    public $seat_type;
 
-    private $old_seat_type_id;
+    private $old_seat_type;
 
-    public $gender_id;
+    public $gender;
 
-    private $old_gender_id;
+    private $old_gender;
 
     public $round_display;
 
@@ -62,29 +63,61 @@ class BranchTrends extends Component implements HasForms
 
     protected $listeners = ['updateChartData'];
 
+    protected $queryString = ['courses', 'branches', 'institutes', 'institute_type', 'seat_type', 'gender', 'round_display', 'rank_type', 'home_state'];
+
     public function mount(): void
     {
+        $courses = array_diff(
+            $this->courses ?? [],
+            Cache::rememberForever('allCourseIds', fn () => Course::all()->pluck('id')->toArray())
+        ) ? [] : $this->courses;
+        $branches = array_diff(
+            $this->branches ?? [],
+            Cache::rememberForever('allBrancheIds', fn () => Branch::all()->pluck('id')->toArray())
+        ) ? [] : $this->branches;
+        $institutes = array_diff(
+            $this->institutes ?? [],
+            Cache::rememberForever('allInstituteIds', fn () => Institute::all()->pluck('id')->toArray())
+        ) ? [] : $this->institutes;
+        $seat_type = array_search(
+            $this->seat_type,
+            Cache::rememberForever('allSeatTypeIds', fn () => SeatType::all()->pluck('id')->toArray())
+        ) ? $this->seat_type : null;
+        $gender = array_search(
+            $this->gender,
+            Cache::rememberForever('allGenderIds', fn () => Gender::all()->pluck('id')->toArray())
+        ) ? $this->gender : null;
+        $institute_type = array_diff(
+            $this->institute_type ?? [],
+            Cache::rememberForever('allInstituteTypeIds', fn () => Institute::all()->pluck('type')->toArray())
+        ) ? $this->institute_type : null;
+        $round_display = array_search($this->round_display, array_keys(Rank::ROUND_DISPLAY_OPTIONS)) !== false ? $this->round_display : null;
+        $rank_type = array_search($this->rank_type, array_keys(Rank::RANK_TYPE_OPTIONS)) !== false ? $this->rank_type : null;
+        $home_state = array_search(
+            $this->home_state,
+            Cache::rememberForever('allStateIds', fn () => State::all()->pluck('id')->toArray())
+        ) ? $this->home_state : null;
         $this->form->fill([
-            'institute_type' => [],
-            'course_id' => [],
-            'program_id' => [],
-            'institute_id' => [],
-            'seat_type_id' => session('seat_type_id'),
-            'gender_id' => session('gender_id'),
-            'round_display' => session('round_display'),
-            'rank_type' => session('rank_type', 'main'),
-            'home_state' => session('home_state'),
+            'institute_type' => $institute_type,
+            'courses' => $courses,
+            'branches' => $branches,
+            'institutes' => $institutes,
+            'seat_type' => $seat_type ?? session('seat_type', 'OPEN'),
+            'gender' => $gender ?? session('gender', 'Gender-Neutral'),
+            'round_display' => $round_display ?? session('round_display', 'last'),
+            'rank_type' => $rank_type ?? session('rank_type', 'advanced'),
+            'home_state' => $rank_type === 'main' ? ($home_state ?? session('home_state')) : null,
         ]);
     }
 
     private function haveFieldsChanged(): bool
     {
-        return $this->institute_id === $this->old_institute_id
+        return $this->institutes === $this->old_institutes
             && $this->institute_type === $this->old_institute_type
-            && $this->seat_type_id === $this->old_seat_type_id
-            && $this->course_id === $this->old_course_id
-            && $this->program_id === $this->old_program_id
-            && $this->gender_id === $this->old_gender_id
+            && $this->seat_type === $this->old_seat_type
+            && $this->courses === $this->old_courses
+            && $this->branches === $this->old_branches
+            && $this->gender === $this->old_gender
             && $this->round_display === $this->old_round_display
             && $this->rank_type === $this->old_rank_type
             && $this->home_state === $this->old_home_state;
@@ -124,9 +157,9 @@ class BranchTrends extends Component implements HasForms
     public function updateChartData(): void
     {
         $data = [];
-        if ($this->program_id
-            && $this->seat_type_id
-            && $this->gender_id
+        if ($this->branches
+            && $this->seat_type
+            && $this->gender
             && $this->round_display
             && ($this->rank_type === 'advanced' || $this->home_state)
         ) {
@@ -136,19 +169,19 @@ class BranchTrends extends Component implements HasForms
 
             $institute_quotas = $this->getInstituteQuotas();
             $programs = DB::table('branch_program')
-                        ->whereIn('branch_id', $this->program_id)
+                        ->whereIn('branch_id', $this->branches)
                         ->pluck('program_id');
             $query = Rank::whereIn('program_id', $programs)
                         ->whereIn(DB::raw('institute_id || quota_id'), array_map(function ($institute_quota) {
                             return $institute_quota->institute_id.$institute_quota->quota_id;
                         }, $institute_quotas))
-                        ->where('seat_type_id', $this->seat_type_id)
-                        ->where('gender_id', $this->gender_id);
-            if ($this->course_id) {
-                $query->whereIn('course_id', $this->course_id);
+                        ->where('seat_type_id', $this->seat_type)
+                        ->where('gender_id', $this->gender);
+            if ($this->courses) {
+                $query->whereIn('course_id', $this->courses);
             }
-            if ($this->institute_id) {
-                $query->whereIn('institute_id', $this->institute_id);
+            if ($this->institutes) {
+                $query->whereIn('institute_id', $this->institutes);
             } elseif ($this->institute_type) {
                 $query->whereIn('institute_id', Institute::whereIn('type', $this->institute_type)->pluck('id'));
             }
@@ -230,12 +263,12 @@ class BranchTrends extends Component implements HasForms
                 'datasets' => $datasets,
             ];
         }
-        $this->old_course_id = $this->course_id;
-        $this->old_program_id = $this->program_id;
-        $this->old_institute_id = $this->institute_id;
+        $this->old_courses = $this->courses;
+        $this->old_branches = $this->branches;
+        $this->old_institutes = $this->institutes;
         $this->old_institute_type = $this->institute_type;
-        $this->old_seat_type_id = $this->seat_type_id;
-        $this->old_gender_id = $this->gender_id;
+        $this->old_seat_type = $this->seat_type;
+        $this->old_gender = $this->gender;
         $this->old_round_display = $this->round_display;
         $this->emit('chartDataUpdated', $data);
     }
@@ -247,13 +280,15 @@ class BranchTrends extends Component implements HasForms
                 Radio::make('rank_type')
                     ->label('Rank Type')
                     ->columns(['default' => 2])
-                    ->options([
-                        'main' => 'JEE (Main)',
-                        'advanced' => 'JEE (Advanced)',
-                    ])
+                    ->options(Rank::RANK_TYPE_OPTIONS)
                     ->afterStateUpdated(function () {
-                        $this->course_id = [];
-                        $this->institute_id = [];
+                        $this->courses = [];
+                        $this->institutes = [];
+                        if ($this->rank_type === 'advanced') {
+                            $this->home_state = null;
+                        } else {
+                            $this->home_state = session('home_state');
+                        }
                         session()->put('rank_type', $this->rank_type);
                         $this->emit('updateChartData');
                     })
@@ -261,7 +296,12 @@ class BranchTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('home_state')
                     ->label('Home State')
-                    ->options(State::orderBy('id')->pluck('id', 'id'))
+                    ->options(
+                        Cache::rememberForever(
+                            'allHomeStates',
+                            fn () => State::orderBy('id')->pluck('id', 'id')
+                        )
+                    )
                     ->hidden(fn () => $this->rank_type !== 'main')
                     ->afterStateUpdated(function () {
                         session()->put('home_state', $this->home_state);
@@ -279,14 +319,15 @@ class BranchTrends extends Component implements HasForms
                     ])
                     ->columns(['default' => 3])
                     ->afterStateUpdated(function () {
-                        $this->institute_id = [];
+                        $this->courses = [];
+                        $this->institutes = [];
                         $this->emit('updateChartData');
                     })
                     ->hidden(fn () => $this->rank_type !== 'main')
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'md' => 3])->schema([
-                MultiSelect::make('program_id')
+                MultiSelect::make('branches')
                     ->label('Branches')
                     ->placeholder('Select Branches')
                     ->options(
@@ -297,18 +338,18 @@ class BranchTrends extends Component implements HasForms
                     )
                     ->optionsLimit(150)
                     ->afterStateUpdated(function () {
-                        $this->course_id = [];
-                        $this->institute_id = [];
+                        $this->courses = [];
+                        $this->institutes = [];
                         $this->emit('updateChartData');
                     })
                     ->searchable()
                     ->required()
                     ->reactive(),
-                MultiSelect::make('course_id')
+                MultiSelect::make('courses')
                     ->options(function () {
                         $programs = Cache::rememberForever(
-                            'programs_'.implode('_', $this->program_id),
-                            fn () => Branch::find($this->program_id)
+                            'programs_'.implode('_', $this->branches),
+                            fn () => Branch::find($this->branches)
                                         ->first()
                                         ->programs
                                         ->pluck('id')
@@ -324,25 +365,24 @@ class BranchTrends extends Component implements HasForms
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function () {
-                        $this->institute_id = [];
+                        $this->institutes = [];
                         $this->emit('updateChartData');
                     })
-                    ->hidden(! $this->program_id)->reactive(),
-                MultiSelect::make('institute_id')
+                    ->hidden(! $this->branches)->reactive(),
+                MultiSelect::make('institutes')
                     ->options(function () {
-                        if ($this->program_id) {
+                        if ($this->branches) {
                             $programs = Cache::rememberForever(
-                                'programs_'.implode('_', $this->program_id),
-                                fn () => Branch::find($this->program_id)
+                                'programs_'.implode('_', $this->branches),
+                                fn () => Branch::find($this->branches)
                                             ->first()
                                             ->programs
                                             ->pluck('id')
                                             ->toArray()
                             );
-
                             $query = DB::table('institute_course_program')->whereIn('program_id', $programs);
-                            if ($this->course_id) {
-                                $query->whereIn('course_id', $this->course_id);
+                            if ($this->courses) {
+                                $query->whereIn('course_id', $this->courses);
                             }
                             $institute_type = $this->rank_type === 'advanced'
                                 ? ['iit']
@@ -366,24 +406,24 @@ class BranchTrends extends Component implements HasForms
                     ->optionsLimit(150)
                     ->label('Institute')
                     ->afterStateUpdated(fn () => $this->emit('updateChartData'))
-                    ->hidden(! $this->program_id)
+                    ->hidden(! $this->branches)
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'sm' => 3])->schema([
-                Select::make('seat_type_id')
+                Select::make('seat_type')
                     ->options(Cache::rememberForever('allSeatTypes', fn () => SeatType::all()->pluck('id', 'id')))
                     ->afterStateUpdated(function () {
-                        session()->put('seat_type_id', $this->seat_type_id);
+                        session()->put('seat_type', $this->seat_type);
                         $this->emit('updateChartData');
                     })
                     ->label('Seat Type')
                     ->searchable()
                     ->required()
                     ->reactive(),
-                Select::make('gender_id')
+                Select::make('gender')
                     ->options(Cache::rememberForever('allGenders', fn () => Gender::all()->pluck('id', 'id')))
                     ->afterStateUpdated(function () {
-                        session()->put('gender_id', $this->gender_id);
+                        session()->put('gender', $this->gender);
                         $this->emit('updateChartData');
                     })
                     ->label('Gender')
@@ -391,17 +431,7 @@ class BranchTrends extends Component implements HasForms
                     ->required()
                     ->reactive(),
                 Select::make('round_display')
-                    ->options([
-                        'last' => 'Last Round Only',
-                        'all' => 'All Rounds',
-                        '1' => 'Round 1',
-                        '2' => 'Round 2',
-                        '3' => 'Round 3',
-                        '4' => 'Round 4',
-                        '5' => 'Round 5',
-                        '6' => 'Round 6',
-                        '7' => 'Round 7',
-                    ])
+                    ->options(Rank::ROUND_DISPLAY_OPTIONS)
                     ->afterStateUpdated(function () {
                         session()->put('round_display', $this->round_display);
                         $this->emit('updateChartData');

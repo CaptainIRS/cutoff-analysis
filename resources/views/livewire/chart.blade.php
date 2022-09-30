@@ -206,6 +206,10 @@
             myChart.update();
             myChart.resetZoom();
         });
+
+        window.addEventListener('load', () => {
+            Livewire.emit('updateChartData');
+        });
     </script>
 
 </div>
