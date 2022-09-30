@@ -114,7 +114,7 @@
         </p>
         <p class="text-md m-4">
             Try it out now by visiting the <a class="text-indigo-600 hover:text-indigo-900"
-                href="{{ route('search-by-program') }}" target="_blank">link</a>.
+                href="{{ route('search-by-branch') }}" target="_blank">link</a>.
         </p>
 
         <h3 class="text-xl font-bold m-4">Branch Trends</h3>

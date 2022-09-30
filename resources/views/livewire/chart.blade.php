@@ -1,7 +1,4 @@
-<div class="relative flex flex-col">
-    <div class="h-full w-full p-4 flex-1">
-        {{ $this->form }}
-    </div>
+<div class="relative flex flex-col-reverse">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
         integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -11,7 +8,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.1/chartjs-plugin-zoom.min.js"
         integrity="sha512-klQv6lz2YR+MecyFYMFRuU2eAl8IPRo6zHnsc9n142TJuJHS8CG0ix4Oq9na9ceeg1u5EkBfZsFcV3U7J51iew=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <div id="chartContainer" class="block">
+        <div wire:ignore id="legend"></div>
+        <canvas wire:ignore id="myChart"></canvas>
+    </div>
     <hr class="border-gray-200 dark:border-gray-600 my-2">
+    <div class="h-full w-full p-4 flex-1">
+        {{ $this->form }}
+    </div>
     <div class="lds-spinner opacity-0 transition-opacity duration-500" wire:loading.class="opacity-100">
         <div></div>
         <div></div>
@@ -25,11 +29,6 @@
         <div></div>
         <div></div>
         <div></div>
-    </div>
-
-    <div id="chartContainer" class="block">
-        <div wire:ignore id="legend"></div>
-        <canvas wire:ignore id="myChart"></canvas>
     </div>
     <script wire:ignore>
         const canvas = document.getElementById('myChart');

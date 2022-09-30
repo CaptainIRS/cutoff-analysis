@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class SearchByProgram extends Component implements HasTable
+class SearchByBranch extends Component implements HasTable
 {
     use InteractsWithTable;
 
@@ -47,7 +47,7 @@ class SearchByProgram extends Component implements HasTable
             TextColumn::make('program.id')
                 ->label('Program')
                 ->sortable(),
-            TagsColumn::make('program.tags')
+            TagsColumn::make('program.branches')
                 ->separator(',')
                 ->label('Branches')
                 ->sortable(),
@@ -276,6 +276,6 @@ class SearchByProgram extends Component implements HasTable
 
     public function render()
     {
-        return view('livewire.search-by-program');
+        return view('livewire.search-by-branch');
     }
 }

@@ -39,16 +39,16 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Filter by Program
+                            Filter by Branch
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                            Filter by program allows you to filter the cut-off data with the selected programs and further
+                            Filter by branch allows you to filter the cut-off data with the selected branches and further
                             narrow down with your choice of institutes.
                         </p>
                     </div>
                     <div class="border-t border-gray-200 dark:border-gray-700">
                         <div class="px-4 py-4 sm:px-6">
-                            <a href="{{ route('search-by-program') }}" class="text-indigo-600 hover:text-indigo-900">Get
+                            <a href="{{ route('search-by-branch') }}" class="text-indigo-600 hover:text-indigo-900">Get
                                 Started &rarr;</a>
                         </div>
                     </div>

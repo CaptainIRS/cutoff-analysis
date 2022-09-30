@@ -224,7 +224,7 @@
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('news') }}">News</a></li>
                 <li><a href="{{ route('search-by-institute') }}">Filter by Institute</a></li>
-                <li><a href="{{ route('search-by-program') }}">Filter by Program</a></li>
+                <li><a href="{{ route('search-by-branch') }}">Filter by Branch</a></li>
                 <li><a href="{{ route('branch-trends') }}">Branch Trends</a></li>
                 <li><a href="{{ route('institute-trends') }}">Institute Trends</a></li>
                 <li><a href="{{ route('round-trends') }}">Round Trends</a></li>

@@ -5,6 +5,12 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
 <head>
     <meta charset="utf-8">
+    <script>
+        window.addEventListener('popstate', function(event) {
+            event.stopImmediatePropagation();
+            location.reload();
+        }, true)
+    </script>
 
     <meta name="application-name" content="{{ config('app.name') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -273,123 +279,68 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                 <div class="m-5 rounded-lg overflow-hidden shadow-md">
                     <div class="p-3 overflow-y-auto bg-gray-200 dark:bg-gray-800" style="max-height: 70vh"
                         @click.away="isOpen = false">
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
-                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <a href="{{ route('search-by-branch') }}"
+                                    class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Filter by Program
+                                        Filter by Branch
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                                        Filter by program allows you to filter the cut-off data with the selected
-                                        programs
-                                        and further
-                                        narrow down with your choice of institutes.
+                                        Filter the cut-off data with the selected branch.
                                     </p>
-                                </div>
-                                <div class="border-t border-gray-200 dark:border-gray-700">
-                                    <div class="px-4 py-4 sm:px-6">
-                                        <a href="{{ route('search-by-program') }}"
-                                            class="text-indigo-600 hover:text-indigo-900">Get
-                                            Started &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
+                                </a>
+                            </li>
 
-                            <div
+                            <li
                                 class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col border-gray-200 dark:border-gray-700">
-                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                                <a href="{{ route('search-by-institute') }}"
+                                    class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                                         Filter by Institute
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                                        Filter by institute allows you to filter the cut-off data with the selected
-                                        institutes and
-                                        further narrow down with your choice of programs.
+                                        Filter the cut-off data with the selected institutes.
                                     </p>
-                                </div>
-                                <div class="border-t border-gray-200 dark:border-gray-700">
-                                    <div class="px-4 py-4 sm:px-6">
-                                        <a href="{{ route('search-by-institute') }}"
-                                            class="text-indigo-600 hover:text-indigo-900">Get
-                                            Started &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
+                                </a>
+                            </li>
 
-                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
-                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                            <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <a href="{{ route('branch-trends') }}"
+                                    class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                                         Branch Trends
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                                        Branch trends highlight the trends of courses in a particular branch over the
-                                        years.
-                                        This helps
-                                        understand the popularity and perception of a branch among engineering
-                                        aspirants,
-                                        and thus helps
-                                        understand the demand for a particular branch during the counselling process.
+                                        Compare the cut-off trends of courses in a particular branch of engineering.
                                     </p>
-                                </div>
-                                <div class="border-t border-gray-200 dark:border-gray-700">
-                                    <div class="px-4 py-4 sm:px-6">
-                                        <a href="{{ route('branch-trends') }}"
-                                            class="text-indigo-600 hover:text-indigo-900">Get Started
-                                            &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
+                                </a>
+                            </li>
 
-                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
-                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                            <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <a href="{{ route('institute-trends') }}"
+                                    class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                                         Institute Trends
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                                        Institute trends highlight the trends of various programs offered by a
-                                        particular
-                                        institute over
-                                        the years. This helps understand the popularity and perception of programs
-                                        offered
-                                        by the
-                                        institute, and thus helps understand the demand for a particular program in the
-                                        institute
-                                        during the counselling process.
+                                        Compare the cut-off trends of various courses offered by an institute.
                                     </p>
-                                </div>
-                                <div class="border-t border-gray-200 dark:border-gray-700">
-                                    <div class="px-4 py-4 sm:px-6">
-                                        <a href="{{ route('institute-trends') }}"
-                                            class="text-indigo-600 hover:text-indigo-900">Get
-                                            Started
-                                            &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
+                                </a>
+                            </li>
 
-                            <div class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
-                                <div class="px-4 py-5 sm:px-6 flex-grow">
+                            <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <a href="{{ route('round-trends') }}"
+                                    class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                                         Round Trends
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                                        Round trends highlight the general trend of closing ranks throughout the rounds
-                                        of
-                                        the
-                                        counselling process. This helps understand the likely range of changes to the
-                                        closing ranks
-                                        throught the counselling process.
+                                        Compare the cut-offs of a course in various rounds.
                                     </p>
-                                </div>
-                                <div class="border-t border-gray-200 dark:border-gray-700">
-                                    <div class="px-4 py-4 sm:px-6">
-                                        <a href="{{ route('round-trends') }}"
-                                            class="text-indigo-600 hover:text-indigo-900">Get Started
-                                            &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

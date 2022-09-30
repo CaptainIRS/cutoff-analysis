@@ -126,7 +126,7 @@
             table can be sorted by any column by clicking on the column header.
         </p>
         <p>
-            Try it out now by visiting the <a href="{{ route('search-by-program') }}" target="_blank">link</a>.
+            Try it out now by visiting the <a href="{{ route('search-by-branch') }}" target="_blank">link</a>.
         </p>
 
         <h3>Branch Trends</h3>
