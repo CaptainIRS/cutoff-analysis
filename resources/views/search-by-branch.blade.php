@@ -26,9 +26,9 @@
 @section('content')
     <h1 class="text-3xl font-bold m-4 print:hidden">Filter by Branch</h1>
 
-    <h2 class="text-lg m-4 print:hidden">
+    <p class="text-lg m-4 print:hidden">
         Filter by branch allows you to filter the cut-off data with the selected branch and further narrow down with your
         choice of institutes.
-    </h2>
+    </p>
     <livewire:search-by-branch />
 @endsection

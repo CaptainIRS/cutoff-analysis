@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rank extends Model
 {
+    public const ROUND_DISPLAY_LAST = 'last';
+
+    public const ROUND_DISPLAY_ALL = 'all';
+
     public const ROUND_DISPLAY_OPTIONS = [
-        'last' => 'Last Round Only',
-        'all' => 'All Rounds',
+        self::ROUND_DISPLAY_LAST => 'Last Round Only',
+        self::ROUND_DISPLAY_ALL => 'All Rounds',
         '1' => 'Round 1',
         '2' => 'Round 2',
         '3' => 'Round 3',
@@ -18,9 +22,13 @@ class Rank extends Model
         '7' => 'Round 7',
     ];
 
+    public const RANK_TYPE_MAIN = 'jee-main';
+
+    public const RANK_TYPE_ADVANCED = 'jee-advanced';
+
     public const RANK_TYPE_OPTIONS = [
-        'main' => 'JEE (Main)',
-        'advanced' => 'JEE (Advanced)',
+        self::RANK_TYPE_MAIN => 'JEE (Main)',
+        self::RANK_TYPE_ADVANCED => 'JEE (Advanced)',
     ];
 
     public function institute()

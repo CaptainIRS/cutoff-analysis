@@ -17,6 +17,12 @@ class Institute extends Model
 
     protected $fillable = ['institute'];
 
+    public const INSTITUTE_TYPE_OPTIONS = [
+        'nit' => 'NITs',
+        'iiit' => 'IIITs',
+        'gfti' => 'GFTIs',
+    ];
+
     public function searchableAs()
     {
         return 'institute';

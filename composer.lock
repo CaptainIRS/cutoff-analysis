@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f9bc394ddf413a27c319d56f2924d43",
+    "content-hash": "623881ce49a4088ba235ab94f5eea05f",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -1379,6 +1379,59 @@
                 }
             ],
             "time": "2022-08-28T14:45:39+00:00"
+        },
+        {
+            "name": "hammerstone/fast-paginate",
+            "version": "v0.1.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hammerstonedev/fast-paginate.git",
+                "reference": "e1eac1967d088a901be756f04939bcb6b5317b9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hammerstonedev/fast-paginate/zipball/e1eac1967d088a901be756f04939bcb6b5317b9e",
+                "reference": "e1eac1967d088a901be756f04939bcb6b5317b9e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^8.37|^9.0",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "laravel/scout": "^9.4",
+                "mockery/mockery": "^1.3.3",
+                "orchestra/testbench": "^6|^7",
+                "phpunit/phpunit": ">=8.5.23|^9"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Hammerstone\\FastPaginate\\FastPaginateProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hammerstone\\FastPaginate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Francis",
+                    "email": "aaron@hammerstone.dev"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/hammerstonedev/fast-paginate/issues",
+                "source": "https://github.com/hammerstonedev/fast-paginate/tree/v0.1.10"
+            },
+            "time": "2022-08-26T22:17:27+00:00"
         },
         {
             "name": "intervention/image",

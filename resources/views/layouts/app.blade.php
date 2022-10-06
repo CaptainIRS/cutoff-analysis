@@ -8,8 +8,8 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     <script>
         window.addEventListener('popstate', function(event) {
             event.stopImmediatePropagation();
-            location.reload();
-        }, true)
+            history.back();
+        }, true);
     </script>
 
     <meta name="application-name" content="{{ config('app.name') }}">
@@ -274,12 +274,12 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
         </div>
 
-        <div class="p-2 w-full flex-1" x-show="isOpen" x-transition>
-            <div class="w-full h-full">
-                <div class="m-5 rounded-lg overflow-hidden shadow-md">
-                    <div class="p-3 overflow-y-auto bg-gray-200 dark:bg-gray-800" style="max-height: 70vh"
+        <div class="p-2 w-full flex-1" x-show="isOpen" x-transition.scale.origin.top.right>
+            <div class="w-full h-full flex justify-end">
+                <div class="rounded-lg overflow-hidden shadow-md">
+                    <div class="p-3 overflow-y-auto bg-gray-200 dark:bg-gray-800 max-w-lg" style="max-height: 70vh"
                         @click.away="isOpen = false">
-                        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
                                 <a href="{{ route('search-by-branch') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
@@ -396,7 +396,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     <div x-cloak x-show="scrollBackTop" class="print:hidden">
         <button @click="document.getElementById('content').scrollTo({top: 0, behavior: 'smooth'})"
             aria-label="Back to top"
-            class="fixed bottom-0 left-1/2 -translate-x-1/2 p-2 mb-20 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none">
+            class="absolute bottom-0 right-0 -translate-x-1/2 p-2 m-5 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none z-50">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />

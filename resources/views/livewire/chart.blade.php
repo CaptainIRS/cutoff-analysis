@@ -9,6 +9,7 @@
         integrity="sha512-klQv6lz2YR+MecyFYMFRuU2eAl8IPRo6zHnsc9n142TJuJHS8CG0ix4Oq9na9ceeg1u5EkBfZsFcV3U7J51iew=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <div id="chartContainer" class="block">
+        <h2 class="text-xl font-bold m-4 text-center">{{ $title }}</h2>
         <div wire:ignore id="legend"></div>
         <canvas wire:ignore id="myChart"></canvas>
     </div>
@@ -137,7 +138,7 @@
 
         const myChart = new Chart(ctx, {
             type: 'line',
-            data: {},
+            data: @json($this->initial_chart_data),
             options: {
                 maintainAspectRatio: false,
                 datasets: {
@@ -206,6 +207,8 @@
             myChart.data = data;
             myChart.update();
             myChart.resetZoom();
+
+            document.title = data.title ?? 'JoSAA Analysis';
         });
 
         window.addEventListener('load', () => {

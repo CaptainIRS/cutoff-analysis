@@ -26,9 +26,9 @@
 @section('content')
     <h1 class="text-3xl font-bold m-4 print:hidden">Filter by Institute</h1>
 
-    <h2 class="text-lg m-4 print:hidden">
+    <p class="text-lg m-4 print:hidden">
         Filter by institute allows you to filter the cut-off data with the selected institutes and further narrow down with
         your choice of programs.
-    </h2>
+    </p>
     <livewire:search-by-institute />
 @endsection

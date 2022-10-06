@@ -26,12 +26,12 @@
 @section('content')
     <h1 class="text-3xl font-bold m-4 print:hidden">Branch Trends</h1>
 
-    <h2 class="text-lg m-4 print:hidden">
+    <p class="text-lg m-4 print:hidden">
         Compare the cut-offs for courses in a particular branch of engineering over 10 years in the JoSAA seat allocation
         process.
         <br>
         This helps understand the popularity and perception of a branch among engineering aspirants, and thus helps
         understand the demand for a particular branch during the counselling process.
-    </h2>
+    </p>
     <livewire:branch-trends />
 @endsection
