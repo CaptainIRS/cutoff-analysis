@@ -213,7 +213,11 @@
             myChart.update();
             myChart.resetZoom();
 
-            document.title = data.title ?? 'JoSAA Analysis';
+            if (data.title) {
+                document.title = data.title + ' | Trends | JoSAA Analysis';
+            } else {
+                document.title = 'Trends | JoSAA Analysis';
+            }
         });
 
         window.addEventListener('load', () => {

@@ -235,6 +235,8 @@ class SearchByInstitute extends Component implements HasTable
             $this->title = '';
         }
 
+        $this->emit('titleUpdated', $this->title);
+
         return $query;
     }
 
@@ -248,6 +250,9 @@ class SearchByInstitute extends Component implements HasTable
         ) {
             return $this->getRankQuery();
         } else {
+            $this->title = '';
+            $this->emit('titleUpdated', $this->title);
+
             return Rank::query()->where('id', null);
         }
     }

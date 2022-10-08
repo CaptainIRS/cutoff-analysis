@@ -27,4 +27,13 @@
         </div>
         {{ $this->table }}
     </div>
+    <script>
+        Livewire.on('titleUpdated', (title) => {
+            if (title) {
+                document.title = title + ' | Filter by Branch | JoSAA Analysis';
+            } else {
+                document.title = 'Filter by Branch | JoSAA Analysis';
+            }
+        });
+    </script>
 </div>
