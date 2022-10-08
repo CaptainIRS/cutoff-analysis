@@ -70,7 +70,7 @@ class BranchTrends extends Component implements HasForms
         'round_display' => ['as' => 'round-display', 'except' => 'last'],
         'seat_type' => ['as' => 'seat-type', 'except' => 'OPEN'],
         'gender' => ['except' => 'Gender-Neutral'],
-        'rank_type' => ['as' => 'rank-type'],
+        'rank_type' => ['as' => 'rank'],
         'home_state' => ['as' => 'home-state'],
     ];
 
