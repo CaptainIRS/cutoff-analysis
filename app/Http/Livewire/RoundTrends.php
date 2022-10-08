@@ -81,6 +81,17 @@ class RoundTrends extends Component implements HasForms
         $this->all_genders = Cache::rememberForever('all_genders', fn () => Gender::orderBy('id')->pluck('id', 'id')->toArray());
     }
 
+    private function getTitle(?string $institute, ?string $course, ?string $program, ?string $rank_type): string
+    {
+        if (str_starts_with($institute, 'Indian Institute of Technology')) {
+            $institute = 'IIT '.substr($institute, 31);
+        } elseif (str_starts_with($institute, 'National Institute of Technology')) {
+            $institute = 'NIT '.substr($institute, 33);
+        }
+
+        return ($institute && $course && $program) ? $institute.' - '.$course.' - '.$program.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends' : '';
+    }
+
     public function mount(): void
     {
         $course = $this->ensureBelongsTo($this->course, $this->all_courses);
@@ -102,7 +113,7 @@ class RoundTrends extends Component implements HasForms
             'round_display' => $round_display ?? session('round_display', Rank::ROUND_DISPLAY_LAST),
             'rank_type' => $rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED),
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
-            'title' => $this->institute.' - '.$this->course.' - '.$this->program.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends',
+            'title' => $this->getTitle($institute, $course, $program, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
         ]);
         $this->form->getState();
@@ -198,7 +209,7 @@ class RoundTrends extends Component implements HasForms
             foreach ($labels as $key => $label) {
                 $labels[$key] = str_replace('_', ' - R', $label);
             }
-            $this->title = $this->institute.' - '.$this->course.' - '.$this->program.' '.Rank::RANK_TYPE_OPTIONS[$this->rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends';
+            $this->title = $this->getTitle($this->institute, $this->course, $this->program, $this->rank_type);
             $data = [
                 'labels' => $labels,
                 'datasets' => $datasets,

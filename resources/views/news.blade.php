@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@push('title', 'News &amp; Updates |')
+
 @section('meta')
     <meta name="description"
         content="News and updates about the JoSAA Analysis tool, that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data">
@@ -19,8 +21,6 @@
     <meta property="twitter:description"
         content="News and updates about the JoSAA Analysis tool, that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="twitter:image" content="{{ asset('favicon.png') }}">
-
-    <title>News &amp; Updates | {{ config('app.name') }}</title>
 @endsection
 
 @section('content')

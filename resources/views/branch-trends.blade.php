@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@push('title', 'Branch Trends |')
+
 @section('meta')
     <meta name="description"
         content="Compare the cut-offs for courses in a particular branch of engineering over 10 years in the JoSAA seat allocation process.">
@@ -19,8 +21,6 @@
     <meta property="twitter:description"
         content="Compare the cut-offs for courses in a particular branch of engineering over 10 years in the JoSAA seat allocation process.">
     <meta property="twitter:image" content="{{ asset('favicon.png') }}">
-
-    <title>Branch Trends | {{ config('app.name') }}</title>
 @endsection
 
 @section('content')

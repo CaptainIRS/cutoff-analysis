@@ -9,6 +9,7 @@ use App\Models\Program;
 use App\Models\Rank;
 use App\Models\SeatType;
 use App\Models\State;
+use Arr;
 use Cache;
 use DB;
 use Filament\Forms\Components\CheckboxList;
@@ -87,6 +88,22 @@ class SearchByInstitute extends Component implements HasTable
         $this->all_genders = Cache::rememberForever('all_genders', fn () => Gender::orderBy('id')->pluck('id', 'id')->toArray());
     }
 
+    private function getTitle(?array $institutes, ?string $rank_type): string
+    {
+        $institute_names = [];
+        foreach ($institutes as $institute) {
+            if (str_starts_with($institute, 'Indian Institute of Technology')) {
+                $institute_names[] = 'IIT '.substr($institute, 31);
+            } elseif (str_starts_with($institute, 'National Institute of Technology')) {
+                $institute_names[] = 'NIT '.substr($institute, 33);
+            } else {
+                $institute_names[] = $institute;
+            }
+        }
+
+        return $institute_names ? Arr::join($institute_names ?? [], ', ', ' and ').' Year-wise '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '';
+    }
+
     public function mount(): void
     {
         $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
@@ -110,6 +127,7 @@ class SearchByInstitute extends Component implements HasTable
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) ? ($home_state ?? session('home_state')) : null,
             'minimum_rank' => $this->minimum_rank ?? session('minimum_rank'),
             'maximum_rank' => $this->maximum_rank ?? session('maximum_rank'),
+            'title' => $this->getTitle($institutes, $rank_type),
         ]);
         $this->form->getState();
     }
@@ -209,6 +227,12 @@ class SearchByInstitute extends Component implements HasTable
             default:
                 $query = $query->where('round', $this->round_display);
                 break;
+        }
+
+        if ($this->institutes) {
+            $this->title = $this->getTitle($this->institutes, $this->rank_type);
+        } else {
+            $this->title = '';
         }
 
         return $query;

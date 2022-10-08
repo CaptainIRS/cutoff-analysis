@@ -10,6 +10,7 @@ use App\Models\Program;
 use App\Models\Rank;
 use App\Models\SeatType;
 use App\Models\State;
+use Arr;
 use Cache;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
@@ -111,8 +112,14 @@ class SearchByBranch extends Component implements HasTable
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'minimum_rank' => $this->minimum_rank ?? session('minimum_rank'),
             'maximum_rank' => $this->maximum_rank ?? session('maximum_rank'),
+            'title' => $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch Year-wise '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '',
         ]);
         $this->form->getState();
+    }
+
+    private function getTitle(?array $branches, ?string $rank_type): string
+    {
+        return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch Year-wise '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '';
     }
 
     private function ensureSubsetOf(?array $values, array $array): array
@@ -217,6 +224,12 @@ class SearchByBranch extends Component implements HasTable
             default:
                 $query = $query->where('round', $this->round_display);
                 break;
+        }
+
+        if ($this->branches) {
+            $this->title = $this->getTitle($this->branches, $this->rank_type);
+        } else {
+            $this->title = '';
         }
 
         return $query;

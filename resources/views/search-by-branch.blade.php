@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@push('title', 'Filter by Branch |')
+
 @section('meta')
     <meta name="description"
         content="Find cut-offs in a range over 10 years, filtered by course in the JoSAA seat allocation process.">
@@ -19,8 +21,6 @@
     <meta property="twitter:description"
         content="Find cut-offs in a range over 10 years, filtered by course in the JoSAA seat allocation process.">
     <meta property="twitter:image" content="{{ asset('favicon.png') }}">
-
-    <title>Filter by Branch | {{ config('app.name') }}</title>
 @endsection
 
 @section('content')

@@ -76,6 +76,22 @@ class InstituteTrends extends Component implements HasForms
         $this->all_genders = Cache::rememberForever('all_genders', fn () => Gender::orderBy('id')->pluck('id', 'id')->toArray());
     }
 
+    private function getTitle(?array $institutes, ?string $rank_type): string
+    {
+        $institute_names = [];
+        foreach ($institutes as $institute) {
+            if (str_starts_with($institute, 'Indian Institute of Technology')) {
+                $institute_names[] = 'IIT '.substr($institute, 31);
+            } elseif (str_starts_with($institute, 'National Institute of Technology')) {
+                $institute_names[] = 'NIT '.substr($institute, 33);
+            } else {
+                $institute_names[] = $institute;
+            }
+        }
+
+        return $institute_names ? Arr::join($institute_names ?? [], ', ', ' and ').' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends' : '';
+    }
+
     public function mount(): void
     {
         $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
@@ -95,7 +111,7 @@ class InstituteTrends extends Component implements HasForms
             'round_display' => $round_display ?? session('round_display', Rank::ROUND_DISPLAY_LAST),
             'rank_type' => $rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED),
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
-            'title' => Arr::join($institute ?? [], ', ', ' and ').' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends',
+            'title' => $this->getTitle($institutes, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
         ]);
         $this->form->getState();
@@ -166,14 +182,7 @@ class InstituteTrends extends Component implements HasForms
             if ($this->courses) {
                 $query->whereIn('course_id', $this->courses);
             }
-            $year_round = Cache::rememberForever(
-                'year_round_distinct',
-                fn () => Rank::select('year', 'round')
-                            ->distinct()
-                            ->orderBy('year')
-                            ->orderBy('round')
-                            ->get()
-            );
+
             switch($this->round_display) {
                 case Rank::ROUND_DISPLAY_ALL:
                     break;
@@ -235,7 +244,7 @@ class InstituteTrends extends Component implements HasForms
             foreach ($labels as $key => $label) {
                 $labels[$key] = str_replace('_', ' - R', $label);
             }
-            $this->title = Arr::join($this->institutes, ', ', ' and ').' '.Rank::RANK_TYPE_OPTIONS[$this->rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends';
+            $this->title = $this->getTitle($this->institutes, $this->rank_type);
             $data = [
                 'labels' => $labels,
                 'datasets' => $datasets,

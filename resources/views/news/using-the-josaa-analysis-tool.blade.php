@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@push('title', 'Using the JoSAA Analysis tool | News &amp; Updates |')
+
 @section('meta')
     <link rel="amphtml" href="{{ route('news.amp.using-the-josaa-analysis-tool') }}">
     <meta name="description"
@@ -20,8 +22,6 @@
     <meta property="twitter:description"
         content="How to use JoSAA Analysis - a web application that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="twitter:image" content="{{ asset('favicon.png') }}">
-
-    <title>Using the JoSAA Analysis tool | News &amp; Updates | {{ config('app.name') }}</title>
 @endsection
 
 @section('content')

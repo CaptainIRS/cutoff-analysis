@@ -20,6 +20,8 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     <meta name="robots" content="index, follow">
     <meta property="og:image" content="{{ asset('favicon.svg') }}">
 
+    <title>@stack('sub-title') @stack('title') JoSAA Analysis</title>
+
     @yield('meta')
 
     <link rel="icon" href="{{ asset('favicon.svg') }}" sizes="any" type="image/svg+xml">

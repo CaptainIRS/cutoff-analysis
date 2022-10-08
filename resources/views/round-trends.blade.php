@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@push('title', 'Round Trends |')
+
 @section('meta')
     <meta name="description"
         content="Compare the cut-offs of a course in various rounds over 10 years in the JoSAA seat allocation process.">
@@ -19,8 +21,6 @@
     <meta property="twitter:description"
         content="Compare the cut-offs of a course in various rounds over 10 years in the JoSAA seat allocation process.">
     <meta property="twitter:image" content="{{ asset('favicon.png') }}">
-
-    <title>Round Trends | {{ config('app.name') }}</title>
 @endsection
 
 @section('content')

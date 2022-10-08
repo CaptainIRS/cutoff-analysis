@@ -1,3 +1,8 @@
+@push('sub-title')
+    @if ($title)
+        {{ $title }} |
+    @endif
+@endpush
 <div class="h-full w-full p-4">
     {{ $this->form }}
     <hr class="border-gray-200 dark:border-gray-600 my-4">
