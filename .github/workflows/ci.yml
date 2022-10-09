@@ -24,7 +24,7 @@ jobs:
           node-version: 16
       - name: Cache node modules
         id: cache-npm
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: npm-cache-${{ hashFiles('**/package.json') }}
@@ -37,7 +37,7 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: composer-${{ hashFiles('**/composer.lock') }}
