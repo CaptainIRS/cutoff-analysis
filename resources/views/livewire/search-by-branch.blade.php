@@ -12,7 +12,7 @@
             x-transition.opacity>
             {{ $this->table }}
         </div>
-        <div class="opacity-0 table-overlay dark:bg-black" wire:loading.class="opacity-100">
+        <div class="opacity-0 table-overlay" wire:loading.class="opacity-100">
             <div class="lds-spinner overlay-centered">
                 <div></div>
                 <div></div>
