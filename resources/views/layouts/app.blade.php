@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 'darkMode': false, 'isOpen': false }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
-$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" class="h-full"
+$watch('darkMode', value => {
+    localStorage.setItem('darkMode', JSON.stringify(value));
+    if (value) {
+        document.documentElement.style.setProperty('--overlay-bg', 'black');
+        document.documentElement.style.setProperty('--color-scheme', 'dark');
+    } else {
+        document.documentElement.style.setProperty('--overlay-bg', 'white');
+        document.documentElement.style.setProperty('--color-scheme', 'light');
+    }
+})" class="h-full"
     :style="{ colorScheme: darkMode && 'dark' }">
 
 <head>

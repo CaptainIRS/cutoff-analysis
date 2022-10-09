@@ -7,9 +7,12 @@
     {{ $this->form }}
     <hr class="border-gray-200 dark:border-gray-600 my-4">
     <div class="relative table-wrapper">
-        <div wire:loading.class="overlay-visible"
+        <div wire:loading.class="opacity-0"
             wire:target="previousPage, nextPage, gotoPage, tableRecordsPerPage, sortTable, getRankQuery, $set"
-            class="table-overlay dark:bg-black">
+            x-transition.opacity>
+            {{ $this->table }}
+        </div>
+        <div class="opacity-0 table-overlay dark:bg-black" wire:loading.class="opacity-100">
             <div class="lds-spinner overlay-centered">
                 <div></div>
                 <div></div>
@@ -25,7 +28,6 @@
                 <div></div>
             </div>
         </div>
-        {{ $this->table }}
     </div>
     <script>
         Livewire.on('titleUpdated', (title) => {

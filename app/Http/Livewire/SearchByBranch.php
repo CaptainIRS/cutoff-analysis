@@ -18,6 +18,7 @@ use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -171,18 +172,21 @@ class SearchByBranch extends Component implements HasTable
     public function getRankQuery(): Builder
     {
         $institute_quotas = $this->getInstituteQuotas();
-        $programs = Cache::rememberForever(
-            'programs_'.implode('_', $this->branches),
-            fn () => DB::table('branch_program')
-                        ->whereIn('branch_id', $this->branches)
-                        ->pluck('program_id')
-        );
-        $query = Rank::whereIn('program_id', $programs)
-                    ->whereIn(DB::raw('institute_id || quota_id'), array_map(function ($institute_quota) {
-                        return $institute_quota->institute_id.$institute_quota->quota_id;
-                    }, $institute_quotas))
+
+        $query = Rank::whereIn(DB::raw('institute_id || quota_id'), array_map(function ($institute_quota) {
+            return $institute_quota->institute_id.$institute_quota->quota_id;
+        }, $institute_quotas))
                     ->where('seat_type_id', $this->seat_type)
                     ->where('gender_id', $this->gender);
+        if ($this->branches) {
+            $programs = Cache::rememberForever(
+                'programs_'.implode('_', $this->branches),
+                fn () => DB::table('branch_program')
+                            ->whereIn('branch_id', $this->branches)
+                            ->pluck('program_id')
+            );
+            $query->whereIn('program_id', $programs);
+        }
         if ($this->courses) {
             $query->whereIn('course_id', $this->courses);
         }
@@ -239,8 +243,7 @@ class SearchByBranch extends Component implements HasTable
 
     public function getTableQuery(): Builder
     {
-        if ($this->branches
-            && $this->seat_type
+        if ($this->seat_type
             && $this->gender
             && $this->round_display
             && ($this->rank_type === Rank::RANK_TYPE_ADVANCED || $this->home_state)
@@ -312,7 +315,6 @@ class SearchByBranch extends Component implements HasTable
                         $this->form->getState();
                     })
                     ->searchable()
-                    ->required()
                     ->reactive(),
                 MultiSelect::make('courses')
                     ->options(function () {
@@ -424,15 +426,58 @@ class SearchByBranch extends Component implements HasTable
     protected function getTableColumns(): array
     {
         return [
-            TextColumn::make('institute.id')
+            TextColumn::make('institute.alias')
                 ->label('Institute')
-                ->sortable(),
-            TextColumn::make('course.id')
+                ->html()
+                ->sortable()
+                ->icon('heroicon-s-external-link')
+                ->iconPosition('after')
+                ->url(function (Rank $record) {
+                    $parameters = [
+                        'rank' => $this->rank_type,
+                        'institutes' => [$record->institute_id],
+                    ];
+                    if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
+                        $parameters['home-state'] = $this->home_state;
+                    }
+
+                    return route('institute-trends', $parameters);
+                }),
+            TextColumn::make('course.alias')
                 ->label('Course')
                 ->sortable(),
             TextColumn::make('program.id')
                 ->label('Program')
-                ->sortable(),
+                ->sortable()
+                ->icon('heroicon-s-external-link')
+                ->iconPosition('after')
+                ->url(function (Rank $record) {
+                    $parameters = [
+                        'rank' => $this->rank_type,
+                        'institute' => $record->institute_id,
+                        'course' => $record->course_id,
+                        'program' => $record->program_id,
+                    ];
+                    if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
+                        $parameters['home-state'] = $this->home_state;
+                    }
+
+                    return route('round-trends', $parameters);
+                }),
+            TagsColumn::make('program.branches')
+                ->separator(',')
+                ->label('Branch')
+                ->url(function (Rank $record) {
+                    $parameters = [
+                        'rank' => $this->rank_type,
+                        'branches' => [explode(',', $record->program->branches)[0]],
+                    ];
+                    if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
+                        $parameters['home-state'] = $this->home_state;
+                    }
+
+                    return route('branch-trends', $parameters);
+                }),
             TextColumn::make('year')
                 ->label('Year')
                 ->sortable(),
