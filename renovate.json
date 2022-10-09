@@ -1,17 +1,19 @@
 {
   "labels": ["dependencies"],
-  "groupName": "all dependencies",
-  "separateMajorMinor": false,
-  "groupSlug": "all",
+  "separateMajorMinor": true,
   "packageRules": [
     {
       "matchPackagePatterns": [
         "*"
       ],
-      "groupName": "all dependencies",
-      "groupSlug": "all"
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
     }
-  ],
+  ]
   "lockFileMaintenance": {
     "enabled": true
   }
