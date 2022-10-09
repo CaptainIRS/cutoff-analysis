@@ -7,9 +7,8 @@
     {{ $this->form }}
     <hr class="border-gray-200 dark:border-gray-600 my-4">
     <div class="relative table-wrapper">
-        <div wire:loading.class="opacity-0"
-            wire:target="previousPage, nextPage, gotoPage, tableRecordsPerPage, sortTable, getRankQuery, $set"
-            x-transition.opacity>
+        <div wire:loading.class="opacity-0 invisible"
+            wire:target="previousPage, nextPage, gotoPage, tableRecordsPerPage, sortTable, getRankQuery, $set">
             {{ $this->table }}
         </div>
         <div class="opacity-0 table-overlay" wire:loading.class="opacity-100">

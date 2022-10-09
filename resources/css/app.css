@@ -18,6 +18,10 @@
     height: 65vh;
 }
 
+.table-wrapper > * {
+    transition: visibility 0s ease, opacity 1s ease;
+}
+
 .filament-tables-header-cell {
     background-color: rgb(244 244 244);
 }
