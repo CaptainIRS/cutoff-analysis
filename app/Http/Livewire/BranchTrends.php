@@ -194,6 +194,14 @@ class BranchTrends extends Component implements HasForms
 
             switch($this->round_display) {
                 case Rank::ROUND_DISPLAY_ALL:
+                    $year_round = Cache::rememberForever(
+                        'year_round_distinct',
+                        fn () => Rank::select('year', 'round')
+                                    ->distinct()
+                                    ->orderBy('year')
+                                    ->orderBy('round')
+                                    ->get()
+                    );
                     break;
                 case Rank::ROUND_DISPLAY_LAST:
                     $year_round = Cache::rememberForever(
@@ -219,43 +227,42 @@ class BranchTrends extends Component implements HasForms
                     }));
                     break;
                 default:
+                    $year_round = Cache::rememberForever(
+                        'year_round_'.$this->round_display,
+                        fn () => Rank::select('year', 'round')
+                                    ->where('round', $this->round_display)
+                                    ->distinct()
+                                    ->orderBy('year')
+                                    ->get()
+                    );
                     $query = $query->where('round', $this->round_display);
                     break;
             }
             $columns = $year_round->map(fn ($year_round) => $year_round->year.'_'.$year_round->round);
-            $initial_institute_data = $columns->mapWithKeys(fn ($column) => [$column => null])->toArray();
-            $institute_data = [];
+            $i = 0;
+            $ds_rows = [];
+            foreach ($columns as $column) {
+                $ds_rows[$column] = $i++;
+            }
+            $ds_columns = [];
+            $dataset = [];
+            $i = 0;
             foreach ($program_data as $data) {
-                if (! isset($institute_data[$data->institute_id])) {
-                    $institute_data[$data->institute_id] = [];
+                if (isset($ds_rows[$data->year.'_'.$data->round])) {
+                    $program_label = $data->institute_id.' ('.$data->course_id.', '.$data->program_id.' ('.$data->quota_id.'))';
+                    if (! isset($ds_columns[$program_label])) {
+                        $ds_columns[$program_label] = $i++;
+                    }
+                    $row_id = $ds_rows[$data->year.'_'.$data->round];
+                    $column_id = $ds_columns[$program_label];
+                    $dataset[$row_id][$column_id] = $data->closing_rank;
                 }
-                $program_label = $data->course_id.', '.$data->program_id.' ('.$data->quota_id.')';
-                if (! isset($institute_data[$data->institute_id][$program_label])) {
-                    $institute_data[$data->institute_id][$program_label] = $initial_institute_data;
-                }
-                $institute_data[$data->institute_id][$program_label][$data->year.'_'.$data->round] = $data->closing_rank;
-            }
-
-            $datasets = [];
-            foreach ($institute_data as $institute => $program_data) {
-                foreach ($program_data as $program => $data) {
-                    $random_hue = crc32($institute.$program) % 360;
-                    $datasets[] = [
-                        'label' => $institute.' ('.$program.')',
-                        'data' => array_values($data),
-                        'backgroundColor' => 'hsl('.$random_hue.', 100%, 80%)',
-                        'borderColor' => 'hsl('.$random_hue.', 100%, 50%)',
-                    ];
-                }
-            }
-            $labels = array_keys($initial_institute_data);
-            foreach ($labels as $key => $label) {
-                $labels[$key] = str_replace('_', ' - R', $label);
             }
             $this->title = $this->getTitle($this->branches, $this->rank_type);
             $data = [
-                'labels' => $labels,
-                'datasets' => $datasets,
+                'dataset' => $dataset,
+                'columns' => array_flip($ds_columns),
+                'rows' => array_flip($ds_rows),
                 'title' => $this->title,
             ];
         } else {

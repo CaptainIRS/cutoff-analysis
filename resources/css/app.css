@@ -76,8 +76,8 @@ td {
     padding-right: 0 !important;
 }
 
-canvas {
-    max-height: 60vh !important;
+#myChart {
+    height: 60vh !important;
 }
 
 .table-overlay {
