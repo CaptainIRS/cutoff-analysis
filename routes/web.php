@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Institute;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,4 +52,14 @@ Route::prefix('/news')->group(function () {
             return view('news.amp.using-the-josaa-analysis-tool');
         })->name('news.amp.using-the-josaa-analysis-tool');
     });
+});
+
+Route::prefix('/institutes')->group(function () {
+    Route::get('/', function () {
+        return view('institute-list');
+    })->name('institute-list');
+
+    Route::get('/{institute}', function (Institute $institute) {
+        return view('institute-details', ['institute' => $institute]);
+    })->name('institute-details');
 });

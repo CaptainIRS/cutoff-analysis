@@ -226,14 +226,14 @@ class BranchTrends extends Component implements HasForms
             $initial_institute_data = $columns->mapWithKeys(fn ($column) => [$column => null])->toArray();
             $institute_data = [];
             foreach ($program_data as $data) {
-                if (! isset($institute_data[$data->institute_id])) {
-                    $institute_data[$data->institute_id] = [];
+                if (! isset($institute_data[$data->institute->alias])) {
+                    $institute_data[$data->institute->alias] = [];
                 }
-                $program_label = $data->course_id.', '.$data->program_id.' ('.$data->quota_id.')';
-                if (! isset($institute_data[$data->institute_id][$program_label])) {
-                    $institute_data[$data->institute_id][$program_label] = $initial_institute_data;
+                $program_label = $data->course->alias.' '.$data->program_id.' ('.$data->quota_id.')';
+                if (! isset($institute_data[$data->institute->alias][$program_label])) {
+                    $institute_data[$data->institute->alias][$program_label] = $initial_institute_data;
                 }
-                $institute_data[$data->institute_id][$program_label][$data->year.'_'.$data->round] = $data->closing_rank;
+                $institute_data[$data->institute->alias][$program_label][$data->year.'_'.$data->round] = $data->closing_rank;
             }
 
             $datasets = [];
