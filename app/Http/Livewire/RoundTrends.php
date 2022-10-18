@@ -197,12 +197,9 @@ class RoundTrends extends Component implements HasForms
 
             $datasets = [];
             foreach ($round_data as $year => $year_data) {
-                $random_hue = crc32($year) % 360;
                 $datasets[] = [
                     'label' => $year,
                     'data' => array_values($year_data),
-                    'backgroundColor' => 'hsl('.$random_hue.', 100%, 80%)',
-                    'borderColor' => 'hsl('.$random_hue.', 100%, 50%)',
                 ];
             }
             $labels = array_keys($initial_round_data);

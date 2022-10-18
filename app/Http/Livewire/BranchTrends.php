@@ -194,6 +194,14 @@ class BranchTrends extends Component implements HasForms
 
             switch($this->round_display) {
                 case Rank::ROUND_DISPLAY_ALL:
+                    $year_round = Cache::rememberForever(
+                        'year_round_distinct',
+                        fn () => Rank::select('year', 'round')
+                                    ->distinct()
+                                    ->orderBy('year')
+                                    ->orderBy('round')
+                                    ->get()
+                    );
                     break;
                 case Rank::ROUND_DISPLAY_LAST:
                     $year_round = Cache::rememberForever(
@@ -219,6 +227,14 @@ class BranchTrends extends Component implements HasForms
                     }));
                     break;
                 default:
+                    $year_round = Cache::rememberForever(
+                        'year_round_'.$this->round_display,
+                        fn () => Rank::select('year', 'round')
+                                    ->where('round', $this->round_display)
+                                    ->distinct()
+                                    ->orderBy('year')
+                                    ->get()
+                    );
                     $query = $query->where('round', $this->round_display);
                     break;
             }
@@ -239,12 +255,9 @@ class BranchTrends extends Component implements HasForms
             $datasets = [];
             foreach ($institute_data as $institute => $program_data) {
                 foreach ($program_data as $program => $data) {
-                    $random_hue = crc32($institute.$program) % 360;
                     $datasets[] = [
                         'label' => $institute.' ('.$program.')',
                         'data' => array_values($data),
-                        'backgroundColor' => 'hsl('.$random_hue.', 100%, 80%)',
-                        'borderColor' => 'hsl('.$random_hue.', 100%, 50%)',
                     ];
                 }
             }

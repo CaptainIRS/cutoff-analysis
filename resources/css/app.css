@@ -76,8 +76,9 @@ td {
     padding-right: 0 !important;
 }
 
-canvas {
-    max-height: 60vh !important;
+#myChart {
+    height: 60vh !important;
+    margin: 1rem;
 }
 
 .table-overlay {
@@ -96,6 +97,11 @@ canvas {
     left: 50%;
     transform: translate(-40px, 0);
     position: absolute;
+}
+
+.lds-spinner-bottom {
+    bottom: 40px;
+    left: 0;
 }
 
 .overlay-visible {

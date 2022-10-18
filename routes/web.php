@@ -54,12 +54,12 @@ Route::prefix('/news')->group(function () {
     });
 });
 
-Route::prefix('/institutes')->group(function () {
-    Route::get('/', function () {
-        return view('institute-list');
-    })->name('institute-list');
+// Route::prefix('/institutes')->group(function () {
+//     Route::get('/', function () {
+//         return view('institute-list');
+//     })->name('institute-list');
 
-    Route::get('/{institute}', function (Institute $institute) {
-        return view('institute-details', ['institute' => $institute]);
-    })->name('institute-details');
-});
+//     Route::get('/{institute}', function (Institute $institute) {
+//         return view('institute-details', ['institute' => $institute]);
+//     })->name('institute-details');
+// });
