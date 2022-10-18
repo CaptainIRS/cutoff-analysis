@@ -20,7 +20,10 @@ echarts.use([
 ]);
 
 window.addEventListener("load", () => {
-    var myChart = echarts.init(document.getElementById("myChart"));
+    var myChart = echarts.init(
+        document.getElementById("myChart"),
+        localStorage.getItem("darkMode") === "true" ? "dark" : "light"
+    );
     window.onresize = function () {
         myChart.resize();
     };
