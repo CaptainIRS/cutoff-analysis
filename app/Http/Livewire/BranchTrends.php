@@ -190,8 +190,6 @@ class BranchTrends extends Component implements HasForms
             $institute_type = $this->getInstituteType();
             $query->whereIn('institute_id', Institute::whereIn('type', $institute_type)->pluck('id'));
 
-            $program_data = $query->get();
-
             switch($this->round_display) {
                 case Rank::ROUND_DISPLAY_ALL:
                     $year_round = Cache::rememberForever(
@@ -238,6 +236,7 @@ class BranchTrends extends Component implements HasForms
                     $query = $query->where('round', $this->round_display);
                     break;
             }
+            $program_data = $query->get();
             $columns = $year_round->map(fn ($year_round) => $year_round->year.'_'.$year_round->round);
             $initial_institute_data = $columns->mapWithKeys(fn ($column) => [$column => null])->toArray();
             $institute_data = [];
