@@ -189,6 +189,10 @@ class RoundTrends extends Component implements HasForms
             $initial_round_data = ['1' => null, '2' => null, '3' => null, '4' => null, '5' => null, '6' => null, '7' => null];
             $round_data = [];
             foreach ($institute_data as $data) {
+                if ($this->rank_type === Rank::RANK_TYPE_MAIN && $data->year === 2014 && $this->seat_type !== 'OPEN') {
+                    // Fix for 2014 data, as general rank is used for all categories
+                    continue;
+                }
                 if (! isset($round_data[$data->year])) {
                     $round_data[$data->year] = $initial_round_data;
                 }

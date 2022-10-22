@@ -219,6 +219,10 @@ class BranchTrends extends Component implements HasForms
 
                             return $item;
                         });
+                    } else {
+                        // Remove 2014 from the list for NIT+ if category is not OPEN
+                        // as ranks for other categories are shown as general ranks in 2014
+                        $year_round = $year_round->filter(fn ($item) => $item->year !== 2014 || $this->seat_type === 'OPEN');
                     }
                     $query = $query->whereIn(DB::raw('year || round'), $year_round->map(function ($item) {
                         return $item->year.$item->round;

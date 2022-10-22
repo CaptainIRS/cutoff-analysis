@@ -292,6 +292,29 @@ $watch('darkMode', value => {
                         @click.away="isOpen = false">
                         <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <a href="{{ route('branch-list') }}"
+                                    class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Branches
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        View all branches available in JoSAA counselling.
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
+                                <a href="{{ route('institute-list') }}"
+                                    class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                        Institutes
+                                    </h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                        View all institutes participating in JoSAA counselling.
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="bg-white dark:bg-black shadow-md overflow-hidden rounded-lg flex flex-col">
                                 <a href="{{ route('search-by-branch') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">

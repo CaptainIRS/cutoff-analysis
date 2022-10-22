@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Branch;
 use App\Models\Institute;
 use Illuminate\Support\Facades\Route;
 
@@ -54,12 +55,22 @@ Route::prefix('/news')->group(function () {
     });
 });
 
-// Route::prefix('/institutes')->group(function () {
-//     Route::get('/', function () {
-//         return view('institute-list');
-//     })->name('institute-list');
+Route::prefix('/institutes')->group(function () {
+    Route::get('/', function () {
+        return view('institute-list');
+    })->name('institute-list');
 
-//     Route::get('/{institute}', function (Institute $institute) {
-//         return view('institute-details', ['institute' => $institute]);
-//     })->name('institute-details');
-// });
+    Route::get('/{institute}', function (Institute $institute) {
+        return view('institute-details', ['institute' => $institute]);
+    })->name('institute-details');
+});
+
+Route::prefix('/branches')->group(function () {
+    Route::get('/', function () {
+        return view('branch-list');
+    })->name('branch-list');
+
+    Route::get('/{branch}', function (Branch $branch) {
+        return view('branch-details', ['branch' => $branch]);
+    })->name('branch-details');
+});

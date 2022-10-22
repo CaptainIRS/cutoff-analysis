@@ -29,7 +29,6 @@ window.addEventListener("load", () => {
     };
     Livewire.on("chartDataUpdated", (dataObj) => {
         console.log("Updating chart data");
-        console.log(dataObj);
         var series = [];
         for (const data of dataObj.datasets ?? []) {
             series.push({
@@ -37,6 +36,15 @@ window.addEventListener("load", () => {
                 type: "line",
                 data: data.data,
                 smooth: true,
+                symbol: function (_value, params) {
+                    const color = params.color;
+                    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100">
+                    <circle cx="0" cy="0" r="10" fill="${color}" />
+                    <circle cx="0" cy="0" r="50" fill="transparent" />
+                  </svg>`;
+                    return `image://data:image/svg+xml;base64,${btoa(svg)}`;
+                },
+                symbolSize: 30,
             });
         }
         var option = {
@@ -85,10 +93,10 @@ window.addEventListener("load", () => {
                 },
             },
             grid: {
-                top: 100,
-                right: 30,
+                top: 80,
+                right: 10,
                 left: 50,
-                bottom: 20,
+                bottom: 50,
             },
             xAxis: {
                 data: dataObj.labels ?? [],
@@ -97,6 +105,11 @@ window.addEventListener("load", () => {
                 },
                 type: "category",
                 boundaryGap: false,
+                axisLabel: {
+                    interval: 0,
+                    rotate: 45,
+                    hideOverlap: true,
+                },
             },
             dataZoom: [
                 {
@@ -108,6 +121,7 @@ window.addEventListener("load", () => {
             yAxis: {
                 inverse: true,
                 min: (value) => (value.min - 20 < 0 ? 0 : value.min - 20),
+                type: "value",
             },
             series: series,
         };
