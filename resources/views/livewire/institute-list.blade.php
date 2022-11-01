@@ -7,16 +7,16 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow flex flex-col">
                         <div class="flex-grow">
-                            <h3 class="text-xl leading-6 font-medium text-gray-900 dark:text-white">
+                            <h3 class="text-xl leading-6 font-medium py-2 text-gray-900 dark:text-white">
                                 {!! $institute['alias'] !!}
                             </h3>
                             @if ($institute['alias'] !== $institute['id'])
-                                <p class="mt-1 max-w-2xl text-lg text-gray-500 dark:text-gray-300">
+                                <p class="max-w-2xl text-lg py-2 text-gray-500 dark:text-gray-300">
                                     {{ $institute['id'] }}
                                 </p>
                             @endif
                         </div>
-                        <p class="mt-1 max-w-2xl text-sm flex-shrink text-gray-500 dark:text-gray-300 bottom-0">
+                        <p class="max-w-2xl text-sm flex-shrink py-2 text-gray-500 dark:text-gray-300 bottom-0">
                             {{ $institute['state'] }}
                         </p>
                     </div>

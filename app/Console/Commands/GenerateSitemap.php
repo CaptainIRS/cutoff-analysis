@@ -8,7 +8,7 @@ use App\Models\State;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Console\Command;
-use Spatie\Sitemap\SitemapGenerator;
+use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url as TagsUrl;
 
 class GenerateSitemap extends Command
@@ -34,7 +34,17 @@ class GenerateSitemap extends Command
      */
     public function handle()
     {
-        $sitemap = SitemapGenerator::create(config('app.url'))->getSitemap();
+        $sitemap = Sitemap::create();
+        $sitemap->add(TagsUrl::create(route('home'))->setLastModificationDate(new Carbon('2022-11-01')))
+            ->add(TagsUrl::create(route('branch-list'))->setLastModificationDate(new Carbon('2022-11-01')))
+            ->add(TagsUrl::create(route('branch-trends'))->setLastModificationDate(new Carbon('2022-10-31')))
+            ->add(TagsUrl::create(route('institute-list'))->setLastModificationDate(new Carbon('2022-11-01')))
+            ->add(TagsUrl::create(route('institute-trends'))->setLastModificationDate(new Carbon('2022-10-31')))
+            ->add(TagsUrl::create(route('news'))->setLastModificationDate(new Carbon('2022-10-31')))
+            ->add(TagsUrl::create(route('news.using-the-josaa-analysis-tool'))->setLastModificationDate(new Carbon('2022-10-31')))
+            ->add(TagsUrl::create(route('round-trends'))->setLastModificationDate(new Carbon('2022-10-31')))
+            ->add(TagsUrl::create(route('search-by-branch'))->setLastModificationDate(new Carbon('2022-10-31')))
+            ->add(TagsUrl::create(route('search-by-institute'))->setLastModificationDate(new Carbon('2022-10-31')));
         $institutes = Institute::all();
         $branches = Branch::all();
         $states = State::all();
@@ -47,43 +57,36 @@ class GenerateSitemap extends Command
                 $parameters['home-state'] = $institute->state;
             }
             $sitemap->add(
-                TagsUrl::create(route('search-by-institute', $parameters))
-                    ->setLastModificationDate(Carbon::now())
-                    ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                    ->setPriority(0.5)
+                TagsUrl::create(route('institute-details', ['institute' => $institute->id]))
+                    ->setLastModificationDate(new Carbon('2022-11-01'))
             );
-            foreach (['1', '2', '3', '4', '5', '6'] as $round) {
-                $parameters['round-display'] = $round;
-                $sitemap->add(
-                    TagsUrl::create(route('search-by-institute', $parameters))
-                        ->setLastModificationDate(Carbon::now())
-                        ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                        ->setPriority(0.5)
-                );
-            }
+            $sitemap->add(
+                TagsUrl::create(route('search-by-institute', $parameters))
+                    ->setLastModificationDate(new Carbon('2022-10-31'))
+            );
             $sitemap->add(
                 TagsUrl::create(route('institute-trends', $parameters))
-                    ->setLastModificationDate(Carbon::now())
-                    ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                    ->setPriority(0.5)
+                    ->setLastModificationDate(new Carbon('2022-10-31'))
             );
         }
         foreach ($branches as $branch) {
             $sitemap->add(
+                TagsUrl::create(route('branch-details', ['branch' => $branch->id]))
+                    ->setLastModificationDate(new Carbon('2022-11-01'))
+            );
+            $sitemap->add(
                 TagsUrl::create(route('search-by-branch', [
                     'rank' => 'jee-advanced',
                     'branches' => [$branch->id],
-                ]))->setLastModificationDate(Carbon::now())
-                ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                ->setPriority(0.5)
+                ]))
+                ->setLastModificationDate(new Carbon('2022-10-31'))
             );
             $sitemap->add(
                 TagsUrl::create(route('branch-trends', [
                     'rank' => 'jee-advanced',
                     'branches' => [$branch->id],
-                ]))->setLastModificationDate(Carbon::now())
-                ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                ->setPriority(0.5)
+                ]))
+                ->setLastModificationDate(new Carbon('2022-10-31'))
             );
             foreach ($states as $state) {
                 $sitemap->add(
@@ -91,18 +94,16 @@ class GenerateSitemap extends Command
                         'rank' => 'jee-main',
                         'branches' => [$branch->id],
                         'home-state' => $state->id,
-                    ]))->setLastModificationDate(Carbon::now())
-                    ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                    ->setPriority(0.5)
+                    ]))
+                    ->setLastModificationDate(new Carbon('2022-10-31'))
                 );
                 $sitemap->add(
                     TagsUrl::create(route('branch-trends', [
                         'rank' => 'jee-main',
                         'branches' => [$branch->id],
                         'home-state' => $state->id,
-                    ]))->setLastModificationDate(Carbon::now())
-                    ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                    ->setPriority(0.5)
+                    ]))
+                    ->setLastModificationDate(new Carbon('2022-10-31'))
                 );
             }
         }
@@ -120,9 +121,7 @@ class GenerateSitemap extends Command
             }
             $sitemap->add(
                 TagsUrl::create(route('round-trends', $parameters))
-                    ->setLastModificationDate(Carbon::now())
-                    ->setChangeFrequency(TagsUrl::CHANGE_FREQUENCY_ALWAYS)
-                    ->setPriority(0.5)
+                    ->setLastModificationDate(new Carbon('2022-10-31'))
             );
         }
         $sitemap->writeToFile(public_path('sitemap.xml'));

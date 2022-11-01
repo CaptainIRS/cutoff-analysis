@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@push('title', 'Branches |')
+@push('title', 'Branch Details |')
 
 @section('meta')
     <meta name="description" content="Details of {{ $branch['id'] }} branch in JoSAA">

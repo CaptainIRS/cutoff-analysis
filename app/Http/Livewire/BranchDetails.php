@@ -10,6 +10,7 @@ use DB;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Livewire\Component;
@@ -31,6 +32,12 @@ class BranchDetails extends Component implements HasForms
     public $branch_options;
 
     public $show_courses;
+
+    protected $queryString = [
+        'types' => ['as' => 'institute-types'],
+        'duration',
+        'show_courses' => ['as' => 'show-courses', 'except' => 'latest'],
+    ];
 
     public function mount(Branch $branch): void
     {
@@ -54,20 +61,21 @@ class BranchDetails extends Component implements HasForms
                     ])
                     ->afterStateUpdated(fn () => $this->filterPrograms())
                     ->reactive(),
-                MultiSelect::make('duration')
+                Select::make('duration')
                     ->label('Duration')
                     ->options([
                         '4' => '4 Years',
                         '5' => '5 Years',
                     ])
                     ->afterStateUpdated(fn () => $this->filterPrograms())
+                    ->searchable()
                     ->reactive(),
                 Radio::make('show_courses')
                     ->columns(['default' => 2])
                     ->label('Show Courses')
                     ->options([
-                        'latest' => 'Show Latest Courses',
-                        'all' => 'Show All Courses',
+                        'latest' => 'Only show latest',
+                        'include-discontinued' => 'Include discontinued',
                     ])
                     ->afterStateUpdated(fn () => $this->filterPrograms())
                     ->reactive(),
@@ -82,7 +90,7 @@ class BranchDetails extends Component implements HasForms
             ->when($this->types, function ($query, $types) {
                 $query->whereIn('institute_id', Institute::whereIn('type', $types)->pluck('id'));
             })
-            ->when($this->duration, fn ($query, $duration) => $query->whereIn('duration', $duration))
+            ->when($this->duration, fn ($query, $duration) => $query->where('duration', $duration))
             ->when($this->show_courses === 'latest', fn ($query) => $query->where('years', 'like', '%'.$this->max_year.'%'))
             ->get();
     }

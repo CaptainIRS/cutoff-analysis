@@ -26,9 +26,14 @@ class InstituteDetails extends Component implements HasForms
 
     public $duration;
 
-    public $branch_options;
+    public $branch_options = [];
 
     public $show_courses;
+
+    protected $queryString = [
+        'duration',
+        'show_courses' => ['as' => 'show-courses', 'except' => 'latest'],
+    ];
 
     public function mount(Institute $institute): void
     {
@@ -59,8 +64,8 @@ class InstituteDetails extends Component implements HasForms
                     ->columns(['default' => 2])
                     ->label('Show Courses')
                     ->options([
-                        'latest' => 'Show Latest Courses',
-                        'all' => 'Show All Courses',
+                        'latest' => 'Only show latest',
+                        'include-discontinued' => 'Include discontinued',
                     ])
                     ->afterStateUpdated(fn () => $this->filterPrograms())
                     ->reactive(),
