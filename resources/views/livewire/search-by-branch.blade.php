@@ -29,12 +29,29 @@
         </div>
     </div>
     <script>
+        const script = document.createElement('script');
+        script.setAttribute('type', 'application/ld+json');
+        script.setAttribute('id', 'json-ld');
+        script.textContent = JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Table",
+            "name": "{{ $title }}" || "All Branches Year-wise JEE (Advanced) Cut-off Ranks",
+            "cssSelector": ".filament-tables-table",
+        });
+        document.head.appendChild(script);
         Livewire.on('titleUpdated', (title) => {
             if (title) {
                 document.title = title + ' | Filter by Branch | JoSAA Analysis';
             } else {
-                document.title = 'Filter by Branch | JoSAA Analysis';
+                document.title =
+                    'All Branches Year-wise JEE (Advanced) Cut-off Ranks | Filter by Branch | JoSAA Analysis';
             }
+            document.getElementById('json-ld').textContent = JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Table",
+                "name": document.title || "All Branches Year-wise JEE (Advanced) Cut-off Ranks",
+                "cssSelector": ".filament-tables-table",
+            });
         });
     </script>
 </div>
