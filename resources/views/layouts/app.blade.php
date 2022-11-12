@@ -209,6 +209,19 @@ $watch('darkMode', value => {
     });
 </script>
 
+<script type="text/javascript">
+    (function(c, l, a, r, i, t, y) {
+        c[a] = c[a] || function() {
+            (c[a].q = c[a].q || []).push(arguments)
+        };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "{{ config('app.clarity_tag') }}");
+</script>
+
 <body x-data="{ scrollBackTop: false }" class="body antialiased flex flex-col h-full" :class="{ 'dark': darkMode === true }">
     <div x-cloak class="overlay">
         <div class="lds-spinner overlay-centered">
