@@ -4,6 +4,24 @@
     @endif
 @endpush
 <div class="h-full w-full p-4">
+    <div>
+        <div class="overlay opacity-0" wire:loading.class="opacity-100">
+            <div class="lds-spinner overlay-centered">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
     {{ $this->form }}
     <hr class="border-gray-200 dark:border-gray-600 my-4">
     <div class="relative table-wrapper">

@@ -18,7 +18,6 @@ use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -444,20 +443,6 @@ class SearchByInstitute extends Component implements HasTable
                     }
 
                     return route('round-trends', $parameters);
-                }),
-            TagsColumn::make('program.branches')
-                ->separator(',')
-                ->label('Branch')
-                ->url(function (Rank $record) {
-                    $parameters = [
-                        'rank' => $this->rank_type,
-                        'branches' => [explode(',', $record->program->branches)[0]],
-                    ];
-                    if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
-                        $parameters['home-state'] = $this->home_state;
-                    }
-
-                    return route('branch-trends', $parameters);
                 }),
             TextColumn::make('year')
                 ->label('Year')
