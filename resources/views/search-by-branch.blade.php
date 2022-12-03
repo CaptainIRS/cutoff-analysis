@@ -24,7 +24,7 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4 print:hidden">Filter by Branch</h1>
+    <h1 class="text-3xl font-bold m-4 print:hidden">View Branch-wise Cut-offs</h1>
 
     <p class="text-lg m-4 print:hidden">
         Filter by branch allows you to filter the cut-off data with the selected branch and further narrow down with your

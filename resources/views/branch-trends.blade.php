@@ -24,7 +24,7 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4 print:hidden">Branch Trends</h1>
+    <h1 class="text-3xl font-bold m-4 print:hidden">Analyse Branch-wise Cut-off Trends</h1>
 
     <p class="text-lg m-4 print:hidden">
         Compare the cut-offs for courses in a particular branch of engineering over 10 years in the JoSAA seat allocation

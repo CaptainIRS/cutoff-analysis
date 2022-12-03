@@ -251,25 +251,14 @@ $watch('darkMode', value => {
         <div class="flex flex-grow-0 w-full items-center justify-between bg-gray-200 dark:bg-gray-800 shadow-md h-14">
 
             <div class="flex items-center text-white w-full">
-                <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 w-full"
+                <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline px-2 w-full"
                     href="{{ route('home') }}">
                     <span class="text-xl pl-2 inline-flex items-start"><img src="{{ asset('favicon.svg') }}"
                             class="h-6 w-6 mr-2" alt="Logo"> {{ config('app.name') }}</span>
                 </a>
             </div>
 
-            <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline py-3 px-2 text-lg"
-                href="{{ route('news') }}" aria-label="Read the latest news and updates about the JoSAA Analysis tool">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
-                </svg>
-
-                <span class="hidden md:block whitespace-nowrap">News &amp; Updates</span>
-            </a>
-
-            <div class="flex justify-start items-center space-x-2 py-4 px-2">
+            <div class="flex justify-start items-center space-x-2 px-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5 text-gray-800 dark:text-gray-500">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -315,7 +304,7 @@ $watch('darkMode', value => {
                                 <a href="{{ route('branch-list') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Branches
+                                        View All Branches
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                         View all branches available in JoSAA counselling.
@@ -326,7 +315,7 @@ $watch('darkMode', value => {
                                 <a href="{{ route('institute-list') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Institutes
+                                        View All Institutes
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                         View all institutes participating in JoSAA counselling.
@@ -338,7 +327,7 @@ $watch('darkMode', value => {
                                 <a href="{{ route('search-by-branch') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Filter by Branch
+                                        View Branch-wise Cut-offs
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                         Filter the cut-off data with the selected branch.
@@ -351,7 +340,7 @@ $watch('darkMode', value => {
                                 <a href="{{ route('search-by-institute') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Filter by Institute
+                                        View Institute-wise Cut-offs
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                         Filter the cut-off data with the selected institutes.
@@ -363,7 +352,7 @@ $watch('darkMode', value => {
                                 <a href="{{ route('branch-trends') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Branch Trends
+                                        Analyse Branch-wise Cut-off Trends
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                         Compare the cut-off trends of courses in a particular branch of engineering.
@@ -375,7 +364,7 @@ $watch('darkMode', value => {
                                 <a href="{{ route('institute-trends') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Institute Trends
+                                        Analyse Institute-wise Cut-off Trends
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                         Compare the cut-off trends of various courses offered by an institute.
@@ -387,7 +376,7 @@ $watch('darkMode', value => {
                                 <a href="{{ route('round-trends') }}"
                                     class="px-4 py-5 sm:px-6 flex-grow hover:opacity-80">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                                        Round Trends
+                                        Analyse Round-wise Cut-off Trends
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                         Compare the cut-offs of a course in various rounds.

@@ -18,7 +18,7 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4 print:hidden">Institutes</h1>
+    <h1 class="text-3xl font-bold m-4 print:hidden">View All Institutes</h1>
 
     <p class="text-lg m-4 print:hidden">
         List of institutes participating in JoSAA.
