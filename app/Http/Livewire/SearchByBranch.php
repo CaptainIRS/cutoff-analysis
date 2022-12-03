@@ -12,9 +12,9 @@ use App\Models\SeatType;
 use App\Models\State;
 use Arr;
 use Cache;
+use Closure;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -264,14 +264,14 @@ class SearchByBranch extends Component implements HasTable
                     ->label('Rank type')
                     ->columns(['default' => 2])
                     ->options(Rank::RANK_TYPE_OPTIONS)
-                    ->afterStateUpdated(function () {
-                        $this->branches = [];
-                        if ($this->rank_type === Rank::RANK_TYPE_ADVANCED) {
-                            $this->home_state = null;
+                    ->afterStateUpdated(function (Closure $get, Closure $set) {
+                        $set('branches', []);
+                        if ($get('rank_type') === Rank::RANK_TYPE_ADVANCED) {
+                            $set('home_state', null);
                         } else {
-                            $this->home_state = session('home_state');
+                            $set('home_state', session('home_state'));
                         }
-                        session()->put('rank_type', $this->rank_type);
+                        session()->put('rank_type', $get('rank_type'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -280,9 +280,9 @@ class SearchByBranch extends Component implements HasTable
                 Select::make('home_state')
                     ->label('Home state')
                     ->options(fn () => $this->all_states)
-                    ->hidden(fn () => $this->rank_type !== Rank::RANK_TYPE_MAIN)
-                    ->afterStateUpdated(function () {
-                        session()->put('home_state', $this->home_state);
+                    ->hidden(fn (Closure $get) => $get('rank_type') !== Rank::RANK_TYPE_MAIN)
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('home_state', $get('home_state'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -293,53 +293,57 @@ class SearchByBranch extends Component implements HasTable
                     ->label('Institute types')
                     ->options(Institute::INSTITUTE_TYPE_OPTIONS)
                     ->columns(['default' => 3])
-                    ->afterStateUpdated(function () {
-                        $this->institutes = [];
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('institutes', []);
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
-                    ->hidden(fn () => $this->rank_type !== Rank::RANK_TYPE_MAIN)
+                    ->hidden(fn (Closure $get) => $get('rank_type') !== Rank::RANK_TYPE_MAIN)
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'md' => 3])->schema([
-                MultiSelect::make('branches')
+                Select::make('branches')
+                    ->multiple()
                     ->label('Branches')
                     ->placeholder('Select Branches')
                     ->options(fn () => $this->all_branches)
                     ->optionsLimit(150)
-                    ->afterStateUpdated(function () {
-                        $this->courses = [];
-                        $this->institutes = [];
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('courses', []);
+                        $set('institutes', []);
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
                     ->searchable()
                     ->reactive(),
-                MultiSelect::make('courses')
-                    ->options(function () {
+                Select::make('courses')
+                    ->multiple()
+                    ->options(function (Closure $get) {
                         $programs = DB::table('branch_program')
-                                        ->whereIn('branch_id', $this->branches)
+                                        ->whereIn('branch_id', $get('branches'))
                                         ->pluck('program_id');
 
                         return Program::whereIn('id', $programs)
                                     ->get()
                                     ->pluck('courses')
                                     ->flatten()
-                                    ->pluck('id', 'id');
+                                    ->pluck('alias', 'id');
                     })
                     ->label('Course')
                     ->searchable()
-                    ->afterStateUpdated(function () {
-                        $this->institutes = [];
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('institutes', []);
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
-                    ->hidden(! $this->branches)
+                    ->hidden(fn (Closure $get) => ! $get('branches'))
                     ->reactive(),
-                MultiSelect::make('institutes')
-                    ->options(function () {
+                Select::make('institutes')
+                    ->multiple()
+                    ->allowHtml()
+                    ->options(function (Closure $get) {
                         $programs = DB::table('branch_program')
-                                        ->whereIn('branch_id', $this->branches)
+                                        ->whereIn('branch_id', $get('branches'))
                                         ->pluck('program_id');
                         $institutes = Institute::whereIn('type', $this->getInstituteType())
                                                 ->get()
@@ -348,10 +352,10 @@ class SearchByBranch extends Component implements HasTable
                         return DB::table('institute_course_program')
                                     ->whereIn('institute_id', $institutes)
                                     ->whereIn('program_id', $programs)
-                                    ->whereIn('course_id', $this->courses)
+                                    ->whereIn('course_id', $get('courses'))
                                     ->orderBy('institute_id')
                                     ->get()
-                                    ->pluck('institute_id', 'institute_id');
+                                    ->pluck('institute_alias', 'institute_id');
                     })
                     ->optionsLimit(150)
                     ->label('Institute')
@@ -359,14 +363,14 @@ class SearchByBranch extends Component implements HasTable
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
-                    ->hidden(! $this->branches || ! $this->courses)
+                    ->hidden(fn (Closure $get) => ! $get('branches') || ! $get('courses'))
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'sm' => 3])->schema([
                 Select::make('seat_type')
                     ->options($this->all_seat_types)
-                    ->afterStateUpdated(function () {
-                        session()->put('seat_type', $this->seat_type);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('seat_type', $get('seat_type'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -376,8 +380,8 @@ class SearchByBranch extends Component implements HasTable
                     ->reactive(),
                 Select::make('gender')
                     ->options($this->all_genders)
-                    ->afterStateUpdated(function () {
-                        session()->put('gender', $this->gender);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('gender', $get('gender'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -387,8 +391,8 @@ class SearchByBranch extends Component implements HasTable
                     ->reactive(),
                 Select::make('round_display')
                     ->options(Rank::ROUND_DISPLAY_OPTIONS)
-                    ->afterStateUpdated(function () {
-                        session()->put('round_display', $this->round_display);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('round_display', $get('round_display'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -402,8 +406,8 @@ class SearchByBranch extends Component implements HasTable
                     ->numeric()
                     ->nullable()
                     ->step(500)
-                    ->afterStateUpdated(function () {
-                        session()->put('minimum_rank', $this->minimum_rank);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('minimum_rank', $get('minimum_rank'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -414,8 +418,8 @@ class SearchByBranch extends Component implements HasTable
                     ->numeric()
                     ->nullable()
                     ->step(500)
-                    ->afterStateUpdated(function () {
-                        session()->put('maximum_rank', $this->maximum_rank);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('maximum_rank', $get('maximum_rank'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })

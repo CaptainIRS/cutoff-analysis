@@ -11,10 +11,10 @@ use App\Models\SeatType;
 use App\Models\State;
 use Arr;
 use Cache;
+use Closure;
 use DB;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -266,15 +266,15 @@ class SearchByInstitute extends Component implements HasTable
                     ->label('Rank type')
                     ->columns(['default' => 2])
                     ->options(Rank::RANK_TYPE_OPTIONS)
-                    ->afterStateUpdated(function () {
-                        $this->courses = [];
-                        $this->institutes = [];
-                        if ($this->rank_type === Rank::RANK_TYPE_ADVANCED) {
-                            $this->home_state = null;
+                    ->afterStateUpdated(function (Closure $get, Closure $set) {
+                        $set('courses', []);
+                        $set('institutes', []);
+                        if ($get('rank_type') === Rank::RANK_TYPE_ADVANCED) {
+                            $set('home_state', null);
                         } else {
-                            $this->home_state = session('home_state');
+                            $set('home_state', session('home_state'));
                         }
-                        session()->put('rank_type', $this->rank_type);
+                        session()->put('rank_type', $get('rank_type'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -282,9 +282,9 @@ class SearchByInstitute extends Component implements HasTable
                 Select::make('home_state')
                     ->label('Home state')
                     ->options($this->all_states)
-                    ->hidden(fn () => $this->rank_type !== Rank::RANK_TYPE_MAIN)
-                    ->afterStateUpdated(function () {
-                        session()->put('home_state', $this->home_state);
+                    ->hidden(fn (Closure $get) => $get('rank_type') !== Rank::RANK_TYPE_MAIN)
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('home_state', $get('home_state'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -295,56 +295,60 @@ class SearchByInstitute extends Component implements HasTable
                     ->label('Institute types')
                     ->options(Institute::INSTITUTE_TYPE_OPTIONS)
                     ->columns(['default' => 3])
-                    ->afterStateUpdated(function () {
-                        $this->courses = [];
-                        $this->institutes = [];
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('courses', []);
+                        $set('institutes', []);
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
-                    ->hidden(fn () => $this->rank_type !== Rank::RANK_TYPE_MAIN)
+                    ->hidden(fn (Closure $get) => $get('rank_type') !== Rank::RANK_TYPE_MAIN)
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'md' => 3])->schema([
-                MultiSelect::make('institutes')
-                    ->options(fn () => Institute::whereIn('type', $this->getInstituteType())->pluck('id', 'id'))
+                Select::make('institutes')
+                    ->multiple()
+                    ->allowHtml()
+                    ->options(fn () => Institute::whereIn('type', $this->getInstituteType())->pluck('alias', 'id'))
                     ->optionsLimit(150)
                     ->label('Institute')
-                    ->afterStateUpdated(function () {
-                        $this->courses = [];
-                        $this->programs = [];
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('courses', []);
+                        $set('programs', []);
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
                     ->reactive(),
-                MultiSelect::make('courses')
-                    ->options(fn () => Institute::whereIn('id', $this->institutes)->get()->pluck('courses')->flatten()->pluck('id', 'id'))
+                Select::make('courses')
+                    ->multiple()
+                    ->options(fn (Closure $get) => Institute::whereIn('id', $get('institutes'))->get()->pluck('courses')->flatten()->pluck('alias', 'id'))
                     ->label('Course')
                     ->searchable()
-                    ->afterStateUpdated(function () {
-                        $this->programs = [];
+                    ->afterStateUpdated(function (Closure $set) {
+                        $set('programs', []);
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
-                    ->hidden(! $this->institutes)
+                    ->hidden(fn (Closure $get) => ! $get('institutes'))
                     ->reactive(),
-                MultiSelect::make('programs')
+                Select::make('programs')
+                    ->multiple()
                     ->label('Programs')
                     ->placeholder('Select Programs')
-                    ->options(fn () => DB::table('institute_course_program')->whereIn('institute_id', $this->institutes)->whereIn('course_id', $this->courses)->get()->pluck('program_id', 'program_id'))
+                    ->options(fn (Closure $get) => DB::table('institute_course_program')->whereIn('institute_id', $get('institutes'))->whereIn('course_id', $get('courses'))->get()->pluck('program_id', 'program_id'))
                     ->optionsLimit(150)
                     ->afterStateUpdated(function () {
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
                     ->searchable()
-                    ->hidden(! $this->courses || ! $this->institutes)
+                    ->hidden(fn (Closure $get) => ! $get('courses') || ! $get('institutes'))
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'sm' => 3])->schema([
                 Select::make('seat_type')
                     ->options($this->all_seat_types)
-                    ->afterStateUpdated(function () {
-                        session()->put('seat_type', $this->seat_type);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('seat_type', $get('seat_type'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -354,8 +358,8 @@ class SearchByInstitute extends Component implements HasTable
                     ->reactive(),
                 Select::make('gender')
                     ->options($this->all_genders)
-                    ->afterStateUpdated(function () {
-                        session()->put('gender', $this->gender);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('gender', $get('gender'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -365,8 +369,8 @@ class SearchByInstitute extends Component implements HasTable
                     ->reactive(),
                 Select::make('round_display')
                     ->options(Rank::ROUND_DISPLAY_OPTIONS)
-                    ->afterStateUpdated(function () {
-                        session()->put('round_display', $this->round_display);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('round_display', $get('round_display'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -380,8 +384,8 @@ class SearchByInstitute extends Component implements HasTable
                     ->numeric()
                     ->nullable()
                     ->step(500)
-                    ->afterStateUpdated(function () {
-                        session()->put('minimum_rank', $this->minimum_rank);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('minimum_rank', $get('minimum_rank'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })
@@ -392,8 +396,8 @@ class SearchByInstitute extends Component implements HasTable
                     ->numeric()
                     ->nullable()
                     ->step(500)
-                    ->afterStateUpdated(function () {
-                        session()->put('maximum_rank', $this->maximum_rank);
+                    ->afterStateUpdated(function (Closure $get) {
+                        session()->put('maximum_rank', $get('maximum_rank'));
                         $this->gotoPage(1);
                         $this->form->getState();
                     })

@@ -14,7 +14,6 @@ use Cache;
 use DB;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -333,7 +332,8 @@ class BranchTrends extends Component implements HasForms
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'md' => 3])->schema([
-                MultiSelect::make('branches')
+                Select::make('branches')
+                    ->multiple()
                     ->label('Branches')
                     ->placeholder('Select Branches')
                     ->options($this->all_branches)
@@ -346,7 +346,8 @@ class BranchTrends extends Component implements HasForms
                     ->searchable()
                     ->required()
                     ->reactive(),
-                MultiSelect::make('courses')
+                Select::make('courses')
+                    ->multiple()
                     ->options(function () {
                         if ($this->branches) {
                             $programs = Cache::rememberForever(
@@ -372,7 +373,8 @@ class BranchTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->hidden(! $this->branches)->reactive(),
-                MultiSelect::make('institutes')
+                Select::make('institutes')
+                    ->multiple()
                     ->options(function () {
                         if ($this->branches) {
                             $programs = Cache::rememberForever(

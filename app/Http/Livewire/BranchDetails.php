@@ -8,7 +8,6 @@ use App\Models\Rank;
 use Cache;
 use DB;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -51,7 +50,8 @@ class BranchDetails extends Component implements HasForms
     {
         return [
             Grid::make(['default' => 1, 'sm' => 3])->schema([
-                MultiSelect::make('types')
+                Select::make('types')
+                    ->multiple()
                     ->label('Institute Type')
                     ->options([
                         'iit' => 'IITs',

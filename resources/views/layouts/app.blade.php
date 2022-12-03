@@ -415,7 +415,7 @@ $watch('darkMode', value => {
             <hr class="border-gray-200 dark:border-gray-600 mt-2 text-lg">
             <div class="footer p-4 print:hidden flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
                 <div>
-                    <span class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-8">
+                    <span class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-8">
                         <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-700">Home</a>
                         <a href="{{ route('branch-list') }}"
                             class="text-blue-600 hover:text-blue-700">View&nbsp;All&nbsp;Branches</a>

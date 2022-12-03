@@ -13,7 +13,6 @@ use Cache;
 use DB;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -326,7 +325,8 @@ class InstituteTrends extends Component implements HasForms
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'md' => 2])->schema([
-                MultiSelect::make('institutes')
+                Select::make('institutes')
+                    ->multiple()
                     ->options(fn () => Institute::whereIn('type', $this->getInstituteType())->pluck('id', 'id'))
                     ->optionsLimit(150)
                     ->label('Institute')
@@ -336,7 +336,8 @@ class InstituteTrends extends Component implements HasForms
                     })
                     ->required()
                     ->reactive(),
-                MultiSelect::make('courses')
+                Select::make('courses')
+                    ->multiple()
                     ->options(fn () => Institute::whereIn('id', $this->institutes)->get()->pluck('courses')->flatten()->pluck('id', 'id'))
                     ->label('Course')
                     ->searchable()
