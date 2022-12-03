@@ -348,6 +348,7 @@ class BranchTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('courses')
                     ->multiple()
+                    ->allowHtml()
                     ->options(function () {
                         if ($this->branches) {
                             $programs = Cache::rememberForever(
@@ -361,7 +362,7 @@ class BranchTrends extends Component implements HasForms
                                         ->get()
                                         ->pluck('courses')
                                         ->flatten()
-                                        ->pluck('id', 'id');
+                                        ->pluck('alias', 'id');
                         } else {
                             return [];
                         }
@@ -375,6 +376,7 @@ class BranchTrends extends Component implements HasForms
                     ->hidden(! $this->branches)->reactive(),
                 Select::make('institutes')
                     ->multiple()
+                    ->allowHtml()
                     ->options(function () {
                         if ($this->branches) {
                             $programs = Cache::rememberForever(
@@ -393,7 +395,7 @@ class BranchTrends extends Component implements HasForms
 
                             return $query->orderBy('institute_id')
                                         ->get()
-                                        ->pluck('institute_id', 'institute_id');
+                                        ->pluck('institute_alias', 'institute_id');
                         } else {
                             return [];
                         }

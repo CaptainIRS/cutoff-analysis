@@ -278,7 +278,8 @@ class RoundTrends extends Component implements HasForms
             ]),
             Grid::make(['default' => 1, 'md' => 3])->schema([
                 Select::make('institute')
-                    ->options(fn () => Institute::whereIn('type', $this->getInstituteType())->pluck('id', 'id'))
+                    ->allowHtml()
+                    ->options(fn () => Institute::whereIn('type', $this->getInstituteType())->pluck('alias', 'id'))
                     ->optionsLimit(150)
                     ->label('Institute')
                     ->afterStateUpdated(function () {
@@ -290,7 +291,8 @@ class RoundTrends extends Component implements HasForms
                     ->required()
                     ->reactive(),
                 Select::make('course')
-                    ->options(fn () => Institute::where('id', $this->institute)->get()->pluck('courses')->flatten()->pluck('id', 'id'))
+                    ->allowHtml()
+                    ->options(fn () => Institute::where('id', $this->institute)->get()->pluck('courses')->flatten()->pluck('alias', 'id'))
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function () {

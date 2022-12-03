@@ -327,7 +327,8 @@ class InstituteTrends extends Component implements HasForms
             Grid::make(['default' => 1, 'md' => 2])->schema([
                 Select::make('institutes')
                     ->multiple()
-                    ->options(fn () => Institute::whereIn('type', $this->getInstituteType())->pluck('id', 'id'))
+                    ->allowHtml()
+                    ->options(fn () => Institute::whereIn('type', $this->getInstituteType())->pluck('alias', 'id'))
                     ->optionsLimit(150)
                     ->label('Institute')
                     ->afterStateUpdated(function () {
@@ -338,7 +339,8 @@ class InstituteTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('courses')
                     ->multiple()
-                    ->options(fn () => Institute::whereIn('id', $this->institutes)->get()->pluck('courses')->flatten()->pluck('id', 'id'))
+                    ->allowHtml()
+                    ->options(fn () => Institute::whereIn('id', $this->institutes)->get()->pluck('courses')->flatten()->pluck('alias', 'id'))
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function () {
