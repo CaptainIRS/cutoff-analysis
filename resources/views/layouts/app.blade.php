@@ -1,14 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 'darkMode': false, 'isOpen': false }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 'darkMode': false, 'isOpen': false }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) ?? window.matchMedia('(prefers-color-scheme: dark)').matches;
 $watch('darkMode', value => {
     localStorage.setItem('darkMode', JSON.stringify(value));
-    if (value) {
-        document.documentElement.style.setProperty('--overlay-bg', 'black');
-        document.documentElement.style.setProperty('--color-scheme', 'dark');
-    } else {
-        document.documentElement.style.setProperty('--overlay-bg', 'white');
-        document.documentElement.style.setProperty('--color-scheme', 'light');
-    }
+    window.location.reload();
 })" class="h-full"
     :style="{ colorScheme: darkMode && 'dark' }">
 
@@ -184,13 +178,17 @@ $watch('darkMode', value => {
         }
     </style>
     <script>
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.documentElement.style.setProperty('--overlay-bg', 'black');
-            document.documentElement.style.setProperty('--color-scheme', 'dark');
-        } else {
-            document.documentElement.style.setProperty('--overlay-bg', 'white');
-            document.documentElement.style.setProperty('--color-scheme', 'light');
-        }
+        let isDarkMode = JSON.parse(localStorage.getItem('darkMode')) ?? window.matchMedia('(prefers-color-scheme: dark)')
+            .matches;
+
+        localStorage.setItem('darkMode', isDarkMode);
+        document.documentElement.style.setProperty('--overlay-bg', isDarkMode ? 'black' : 'white');
+        document.documentElement.style.setProperty('--color-scheme', isDarkMode ? 'dark' : 'light');
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            localStorage.setItem('darkMode', e.matches);
+            window.location.reload();
+        })
     </script>
 </head>
 

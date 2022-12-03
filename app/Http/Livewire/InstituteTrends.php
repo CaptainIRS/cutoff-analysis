@@ -77,18 +77,13 @@ class InstituteTrends extends Component implements HasForms
 
     private function getTitle(?array $institutes, ?string $rank_type): string
     {
-        $institute_names = [];
-        foreach ($institutes as $institute) {
-            if (str_starts_with($institute, 'Indian Institute of Technology')) {
-                $institute_names[] = 'IIT '.substr($institute, 31);
-            } elseif (str_starts_with($institute, 'National Institute of Technology')) {
-                $institute_names[] = 'NIT '.substr($institute, 33);
-            } else {
-                $institute_names[] = $institute;
-            }
-        }
+        $institute_names = array_map(fn ($institute_alias) => str_replace('&nbsp;', ' ', $institute_alias), $institutes);
 
-        return $institute_names ? Arr::join($institute_names ?? [], ', ', ' and ').' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends' : '';
+        return $institute_names
+            ? Arr::join($institute_names, ', ', ' and ')
+                .' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)]
+                .' Cut-off Trends'
+            : '';
     }
 
     public function mount(): void
@@ -240,7 +235,7 @@ class InstituteTrends extends Component implements HasForms
                 if (! isset($institute_data[$data->institute->alias])) {
                     $institute_data[$data->institute->alias] = [];
                 }
-                $program_label = $data->course->alias.', '.$data->program_id.' ('.$data->quota_id.')';
+                $program_label = $data->course->alias.' '.$data->program_id.' ('.$data->quota_id.')';
                 if (! isset($institute_data[$data->institute->alias][$program_label])) {
                     $institute_data[$data->institute->alias][$program_label] = $initial_institute_data;
                 }
@@ -260,7 +255,7 @@ class InstituteTrends extends Component implements HasForms
             foreach ($labels as $key => $label) {
                 $labels[$key] = str_replace('_', ' - R', $label);
             }
-            $this->title = $this->getTitle($this->institutes, $this->rank_type);
+            $this->title = $this->getTitle(array_keys($institute_data), $this->rank_type);
             $data = [
                 'labels' => $labels,
                 'datasets' => $datasets,

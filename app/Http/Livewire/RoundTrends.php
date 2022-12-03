@@ -83,13 +83,10 @@ class RoundTrends extends Component implements HasForms
 
     private function getTitle(?string $institute, ?string $course, ?string $program, ?string $rank_type): string
     {
-        if (str_starts_with($institute, 'Indian Institute of Technology')) {
-            $institute = 'IIT '.substr($institute, 31);
-        } elseif (str_starts_with($institute, 'National Institute of Technology')) {
-            $institute = 'NIT '.substr($institute, 33);
-        }
+        $institute_alias = $institute ? str_replace('&nbsp;', ' ', Institute::find($institute)->alias) : null;
+        $course_alias = $course ? str_replace('&nbsp;', ' ', Course::find($course)->alias) : null;
 
-        return ($institute && $course && $program) ? $institute.' - '.$course.' - '.$program.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Rank Trends' : '';
+        return ($institute_alias && $course_alias && $program) ? $institute_alias.' '.$course_alias.' '.$program.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Trends' : '';
     }
 
     public function mount(): void
@@ -186,7 +183,7 @@ class RoundTrends extends Component implements HasForms
                         ->where('seat_type_id', $this->seat_type)
                         ->where('gender_id', $this->gender);
             $institute_data = $query->get();
-            $initial_round_data = ['1' => null, '2' => null, '3' => null, '4' => null, '5' => null, '6' => null, '7' => null];
+            $initial_round_data = ['Round 1' => null, 'Round 2' => null, 'Round 3' => null, 'Round 4' => null, 'Round 5' => null, 'Round 6' => null, 'Round 7' => null];
             $round_data = [];
             foreach ($institute_data as $data) {
                 if ($this->rank_type === Rank::RANK_TYPE_MAIN && $data->year === 2014 && $this->seat_type !== 'OPEN') {
@@ -196,7 +193,7 @@ class RoundTrends extends Component implements HasForms
                 if (! isset($round_data[$data->year])) {
                     $round_data[$data->year] = $initial_round_data;
                 }
-                $round_data[$data->year][$data->round] = $data->closing_rank;
+                $round_data[$data->year]['Round '.$data->round] = $data->closing_rank;
             }
 
             $datasets = [];
@@ -207,9 +204,6 @@ class RoundTrends extends Component implements HasForms
                 ];
             }
             $labels = array_keys($initial_round_data);
-            foreach ($labels as $key => $label) {
-                $labels[$key] = str_replace('_', ' - R', $label);
-            }
             $this->title = $this->getTitle($this->institute, $this->course, $this->program, $this->rank_type);
             $data = [
                 'labels' => $labels,

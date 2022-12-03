@@ -28,11 +28,10 @@ window.addEventListener("load", () => {
         myChart.resize();
     };
     Livewire.on("chartDataUpdated", (dataObj) => {
-        console.log("Updating chart data");
         var series = [];
         for (const data of dataObj.datasets ?? []) {
             series.push({
-                name: `${data.label}`.replaceAll("&nbsp;", " "),
+                name: `${data.label.replaceAll("&nbsp;", " ")}`,
                 type: "line",
                 data: data.data,
                 smooth: true,
@@ -130,7 +129,7 @@ window.addEventListener("load", () => {
         });
 
         if (dataObj.title) {
-            document.title = dataObj.title + " | Trends | JoSAA Analysis";
+            document.title = dataObj.title;
         } else {
             document.title = "Trends | JoSAA Analysis";
         }

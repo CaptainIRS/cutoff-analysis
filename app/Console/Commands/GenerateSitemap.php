@@ -62,11 +62,11 @@ class GenerateSitemap extends Command
             );
             $sitemap->add(
                 TagsUrl::create(route('search-by-institute', $parameters))
-                    ->setLastModificationDate(new Carbon('2022-10-31'))
+                    ->setLastModificationDate(new Carbon('2022-12-03'))
             );
             $sitemap->add(
                 TagsUrl::create(route('institute-trends', $parameters))
-                    ->setLastModificationDate(new Carbon('2022-10-31'))
+                    ->setLastModificationDate(new Carbon('2022-12-03'))
             );
         }
         foreach ($branches as $branch) {
@@ -79,14 +79,14 @@ class GenerateSitemap extends Command
                     'rank' => 'jee-advanced',
                     'branches' => [$branch->id],
                 ]))
-                ->setLastModificationDate(new Carbon('2022-10-31'))
+                ->setLastModificationDate(new Carbon('2022-12-03'))
             );
             $sitemap->add(
                 TagsUrl::create(route('branch-trends', [
                     'rank' => 'jee-advanced',
                     'branches' => [$branch->id],
                 ]))
-                ->setLastModificationDate(new Carbon('2022-10-31'))
+                ->setLastModificationDate(new Carbon('2022-12-03'))
             );
             foreach ($states as $state) {
                 $sitemap->add(
@@ -95,7 +95,7 @@ class GenerateSitemap extends Command
                         'branches' => [$branch->id],
                         'home-state' => $state->id,
                     ]))
-                    ->setLastModificationDate(new Carbon('2022-10-31'))
+                    ->setLastModificationDate(new Carbon('2022-12-03'))
                 );
                 $sitemap->add(
                     TagsUrl::create(route('branch-trends', [
@@ -103,7 +103,7 @@ class GenerateSitemap extends Command
                         'branches' => [$branch->id],
                         'home-state' => $state->id,
                     ]))
-                    ->setLastModificationDate(new Carbon('2022-10-31'))
+                    ->setLastModificationDate(new Carbon('2022-12-03'))
                 );
             }
         }
@@ -121,7 +121,7 @@ class GenerateSitemap extends Command
             }
             $sitemap->add(
                 TagsUrl::create(route('round-trends', $parameters))
-                    ->setLastModificationDate(new Carbon('2022-10-31'))
+                    ->setLastModificationDate(new Carbon('2022-12-03'))
             );
         }
         $sitemap->writeToFile(public_path('sitemap.xml'));
