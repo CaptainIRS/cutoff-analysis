@@ -31,7 +31,7 @@ window.addEventListener("load", () => {
         var series = [];
         for (const data of dataObj.datasets ?? []) {
             series.push({
-                name: `${data.label.replaceAll("&nbsp;", " ")}`,
+                name: `${data.label}`.replaceAll("&nbsp;", " "),
                 type: "line",
                 data: data.data,
                 smooth: true,
