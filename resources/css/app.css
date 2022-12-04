@@ -112,6 +112,19 @@ td {
     word-break: break-word !important;
 }
 
+.dark .choices__list--multiple .choices__item {
+    color: rgb(165 180 252);
+    background-color: black;
+}
+
+.dark a .filament-tables-text-column {
+    color: rgb(165 180 252);
+}
+
+.dark .filament-tables-pagination-container {
+    --tw-ring-color: rgb(165 180 252);
+}
+
 @media print {
     canvas {
         width: 100% !important;

@@ -108,6 +108,10 @@ window.addEventListener("load", () => {
                     interval: 0,
                     rotate: 45,
                     hideOverlap: true,
+                    rich: {},
+                    formatter: function (value) {
+                        return "{value|" + value + "}";
+                    },
                 },
             },
             dataZoom: [
@@ -128,11 +132,17 @@ window.addEventListener("load", () => {
             replaceMerge: ["xAxis", "yAxis", "series"],
         });
 
+        let metaDescription = "";
         if (dataObj.title) {
             document.title = dataObj.title;
+            metaDescription = `Analyse ${dataObj.title} in JoSAA Counselling using past 10 years data.`;
         } else {
             document.title = "Trends | JoSAA Analysis";
+            metaDescription = `Analyse the trends of JoSAA cut-offs using past 10 years data.`;
         }
+        document
+            .querySelector('meta[name="description"]')
+            .setAttribute("content", metaDescription);
     });
     Livewire.emit("updateChartData");
 });

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@push('title', 'Filter by Institute |')
+@push('title', 'View Institute-wise Cut-offs |')
 
 @section('meta')
     <meta name="description"
@@ -8,13 +8,13 @@
     <meta name="keywords"
         content="josaa, josaa analysis, josaa cut-offs, josaa closing rank, josaa counselling, josaa counselling analysis, josaa counselling tool, engineering, engineering aspirants, closing rank trends, cutoff trends, search cutoffs, cutoffs data, cutoff range, cutoff predict, indian colleges, josaa closing rank in round, iits, nits, iiits">
 
-    <meta property="og:title" content="Filter by Institute - JoSAA Analysis">
+    <meta property="og:title" content="View Institute-wise Cut-offs - JoSAA Analysis">
     <meta property="og:description"
         content="Find cut-offs in a range over 10 years, filtered by institute in the JoSAA seat allocation process.">
     <meta property="og:url" content="{{ route('search-by-institute') }}">
     <meta property="og:type" content="website">
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Filter by Institute - JoSAA Analysis">
+    <meta property="twitter:title" content="View Institute-wise Cut-offs - JoSAA Analysis">
     <meta property="twitter:url" content="{{ route('search-by-institute') }}">
     <meta property="twitter:site" content="@@JoSAA_Analysis">
     <meta property="twitter:creator" content="@@CaptainIRS">

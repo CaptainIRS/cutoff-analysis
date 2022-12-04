@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@push('title', 'Institutes |')
+@push('title', 'View All Institutes |')
 
 @section('meta')
     <meta name="description" content="List of institutes participating in JoSAA">
-    <meta property="og:title" content="Institutes - JoSAA Analysis">
+    <meta property="og:title" content="View All Institutes - JoSAA Analysis">
     <meta property="og:description" content="List of institutes participating in JoSAA">
     <meta property="og:url" content="{{ route('institute-list') }}">
     <meta property="og:type" content="website">
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Institutes - JoSAA Analysis">
+    <meta property="twitter:title" content="View All Institutes - JoSAA Analysis">
     <meta property="twitter:url" content="{{ route('institute-list') }}">
     <meta property="twitter:site" content="@@JoSAA_Analysis">
     <meta property="twitter:creator" content="@@CaptainIRS">

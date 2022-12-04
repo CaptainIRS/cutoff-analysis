@@ -112,14 +112,14 @@ class SearchByBranch extends Component implements HasTable
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'minimum_rank' => $this->minimum_rank ?? session('minimum_rank'),
             'maximum_rank' => $this->maximum_rank ?? session('maximum_rank'),
-            'title' => $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch Year-wise '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '',
+            'title' => $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '',
         ]);
         $this->form->getState();
     }
 
     private function getTitle(?array $branches, ?string $rank_type): string
     {
-        return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch Year-wise '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '';
+        return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '';
     }
 
     private function ensureSubsetOf(?array $values, array $array): array
@@ -153,12 +153,16 @@ class SearchByBranch extends Component implements HasTable
                     ->where(function ($query) use ($institute_type) {
                         $query->whereIn('institute_id', Institute::whereIn('type', $institute_type)->pluck('id'));
                         if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
-                            $query->where(function ($sub_query) {
-                                $sub_query->where('quota_id', 'OS')->whereNotIn('state_id', [$this->home_state])
-                                    ->orWhere('quota_id', 'HS')->whereIn('state_id', [$this->home_state])
-                                    ->orWhereNotIn('quota_id', ['OS', 'HS'])->whereIn('state_id', [$this->home_state])
-                                    ->orWhere('quota_id', 'AI');
-                            });
+                            if ($this->home_state) {
+                                $query->where(function ($sub_query) {
+                                    $sub_query->where('quota_id', 'OS')->whereNotIn('state_id', [$this->home_state])
+                                        ->orWhere('quota_id', 'HS')->whereIn('state_id', [$this->home_state])
+                                        ->orWhereNotIn('quota_id', ['OS', 'HS'])->whereIn('state_id', [$this->home_state])
+                                        ->orWhere('quota_id', 'AI');
+                                });
+                            } else {
+                                $query->whereIn('quota_id', ['OS', 'AI']);
+                            }
                         }
                     })
                     ->distinct()
@@ -245,7 +249,6 @@ class SearchByBranch extends Component implements HasTable
         if ($this->seat_type
             && $this->gender
             && $this->round_display
-            && ($this->rank_type === Rank::RANK_TYPE_ADVANCED || $this->home_state)
         ) {
             return $this->getRankQuery();
         } else {
@@ -279,6 +282,8 @@ class SearchByBranch extends Component implements HasTable
                     ->reactive(),
                 Select::make('home_state')
                     ->label('Home state')
+                    ->hint('To show home state quota ranks')
+                    ->hintIcon('heroicon-o-information-circle')
                     ->options(fn () => $this->all_states)
                     ->hidden(fn (Closure $get) => $get('rank_type') !== Rank::RANK_TYPE_MAIN)
                     ->afterStateUpdated(function (Closure $get) {
@@ -287,7 +292,6 @@ class SearchByBranch extends Component implements HasTable
                         $this->form->getState();
                     })
                     ->searchable()
-                    ->required()
                     ->reactive(),
                 CheckboxList::make('institute_type')
                     ->label('Institute types')

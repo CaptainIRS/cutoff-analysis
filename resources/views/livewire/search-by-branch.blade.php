@@ -53,21 +53,20 @@
         script.textContent = JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Table",
-            "name": "{{ $title }}" || "All Branches Year-wise JEE (Advanced) Cut-off Ranks",
+            "name": "{{ $title }}" || "All Branches JoSAA Cut-off Ranks",
             "cssSelector": ".filament-tables-table",
         });
         document.head.appendChild(script);
         Livewire.on('titleUpdated', (title) => {
             if (title) {
-                document.title = title + ' | Filter by Branch | JoSAA Analysis';
+                document.title = title;
             } else {
-                document.title =
-                    'All Branches Year-wise JEE (Advanced) Cut-off Ranks | Filter by Branch | JoSAA Analysis';
+                document.title = 'All Branches JoSAA Cut-off Ranks';
             }
             document.getElementById('json-ld').textContent = JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "Table",
-                "name": document.title || "All Branches Year-wise JEE (Advanced) Cut-off Ranks",
+                "name": document.title || "All Branches JoSAA Cut-off Ranks",
                 "cssSelector": ".filament-tables-table",
             });
         });

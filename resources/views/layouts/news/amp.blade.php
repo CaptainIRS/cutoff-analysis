@@ -223,11 +223,11 @@
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('news') }}">News</a></li>
-                <li><a href="{{ route('search-by-institute') }}">Filter by Institute</a></li>
-                <li><a href="{{ route('search-by-branch') }}">Filter by Branch</a></li>
-                <li><a href="{{ route('branch-trends') }}">Branch Trends</a></li>
-                <li><a href="{{ route('institute-trends') }}">Institute Trends</a></li>
-                <li><a href="{{ route('round-trends') }}">Round Trends</a></li>
+                <li><a href="{{ route('search-by-institute') }}">View Institute-wise Cut-offs</a></li>
+                <li><a href="{{ route('search-by-branch') }}">View Branch-wise Cut-offs</a></li>
+                <li><a href="{{ route('branch-trends') }}">Analyse Branch-wise Cut-off Trends</a></li>
+                <li><a href="{{ route('institute-trends') }}">Analyse Institute-wise Cut-off Trends</a></li>
+                <li><a href="{{ route('round-trends') }}">Analyse Round-wise Cut-off Trends</a></li>
             </ul>
         </nav>
     </amp-sidebar>

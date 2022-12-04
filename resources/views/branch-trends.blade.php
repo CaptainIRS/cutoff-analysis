@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@push('title', 'Branch Trends |')
+@push('title', 'Analyse Branch-wise Cut-off Trends |')
 
 @section('meta')
     <meta name="description"
@@ -8,13 +8,13 @@
     <meta name="keywords"
         content="josaa, josaa analysis, josaa cut-offs, josaa closing rank, josaa counselling, josaa counselling analysis, josaa counselling tool, engineering, engineering aspirants, branch trends, indian institutes, course popularity, iits, nits, iiits">
 
-    <meta property="og:title" content="Branch Trends - JoSAA Analysis">
+    <meta property="og:title" content="Analyse Branch-wise Cut-off Trends - JoSAA Analysis">
     <meta property="og:description"
         content="Compare the cut-offs for courses in a particular branch of engineering over 10 years in the JoSAA seat allocation process.">
     <meta property="og:url" content="{{ route('branch-trends') }}">
     <meta property="og:type" content="website" />
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Branch Trends - JoSAA Analysis">
+    <meta property="twitter:title" content="Analyse Branch-wise Cut-off Trends - JoSAA Analysis">
     <meta property="twitter:url" content="{{ route('branch-trends') }}">
     <meta property="twitter:site" content="@@JoSAA_Analysis">
     <meta property="twitter:creator" content="@@CaptainIRS">

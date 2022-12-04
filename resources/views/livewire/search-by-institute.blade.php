@@ -35,16 +35,15 @@
         script.textContent = JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Table",
-            "name": "{{ $title }}" || "All Institutes Year-wise JEE (Advanced) Cut-off Ranks",
+            "name": "{{ $title }}" || "All Institutes JoSAA Cut-off Ranks",
             "cssSelector": ".filament-tables-table",
         });
         document.head.appendChild(script);
         Livewire.on('titleUpdated', (title) => {
             if (title) {
-                document.title = title + ' | Filter by Institute | JoSAA Analysis';
+                document.title = title;
             } else {
-                document.title =
-                    'All Institutes Year-wise JEE (Advanced) Cut-off Ranks | Filter by Institute | JoSAA Analysis';
+                document.title = 'All Institutes JoSAA Cut-off Ranks';
             }
             document.getElementById('json-ld').textContent = JSON.stringify({
                 "@context": "https://schema.org",

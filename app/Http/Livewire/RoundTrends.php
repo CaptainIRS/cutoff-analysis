@@ -147,12 +147,16 @@ class RoundTrends extends Component implements HasForms
                     ->where(function ($query) use ($institute_type) {
                         $query->whereIn('institute_id', Institute::whereIn('type', $institute_type)->pluck('id'));
                         if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
-                            $query->where(function ($sub_query) {
-                                $sub_query->where('quota_id', 'OS')->whereNotIn('state_id', [$this->home_state])
-                                    ->orWhere('quota_id', 'HS')->whereIn('state_id', [$this->home_state])
-                                    ->orWhereNotIn('quota_id', ['OS', 'HS'])->whereIn('state_id', [$this->home_state])
-                                    ->orWhere('quota_id', 'AI');
-                            });
+                            if ($this->home_state) {
+                                $query->where(function ($sub_query) {
+                                    $sub_query->where('quota_id', 'OS')->whereNotIn('state_id', [$this->home_state])
+                                        ->orWhere('quota_id', 'HS')->whereIn('state_id', [$this->home_state])
+                                        ->orWhereNotIn('quota_id', ['OS', 'HS'])->whereIn('state_id', [$this->home_state])
+                                        ->orWhere('quota_id', 'AI');
+                                });
+                            } else {
+                                $query->whereIn('quota_id', ['OS', 'AI']);
+                            }
                         }
                     })
                     ->distinct()
@@ -171,7 +175,6 @@ class RoundTrends extends Component implements HasForms
             && $this->seat_type
             && $this->gender
             && $this->round_display
-            && ($this->rank_type === Rank::RANK_TYPE_ADVANCED || $this->home_state)
         ) {
             $institute_quotas = $this->getInstituteQuotas();
             $query = Rank::where('institute_id', $this->institute)
@@ -248,6 +251,8 @@ class RoundTrends extends Component implements HasForms
                     ->reactive(),
                 Select::make('home_state')
                     ->label('Home state')
+                    ->hint('To show home state quota ranks')
+                    ->hintIcon('heroicon-o-information-circle')
                     ->options($this->all_states)
                     ->hidden(fn () => $this->rank_type !== Rank::RANK_TYPE_MAIN)
                     ->afterStateUpdated(function () {
@@ -255,7 +260,6 @@ class RoundTrends extends Component implements HasForms
                         $this->emit('updateChartData');
                     })
                     ->searchable()
-                    ->required()
                     ->reactive(),
                 CheckboxList::make('institute_type')
                     ->label('Institute types')

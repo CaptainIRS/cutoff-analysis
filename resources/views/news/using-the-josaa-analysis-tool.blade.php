@@ -76,7 +76,7 @@
             Here are the features of the JoSAA Analysis tool and how to use them:
         </p>
 
-        <h3 class="text-xl font-bold m-4">Filter by Institute</h3>
+        <h3 class="text-xl font-bold m-4">View Institute-wise Cut-offs</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-filter-by-institute.png') }}"
             media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-filter-by-institute.png') }}"
@@ -117,7 +117,7 @@
                 href="{{ route('search-by-branch') }}" target="_blank">link</a>.
         </p>
 
-        <h3 class="text-xl font-bold m-4">Branch Trends</h3>
+        <h3 class="text-xl font-bold m-4">Analyse Branch-wise Cut-off Trends</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-branch-trends.png') }}" media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-branch-trends.png') }}"
             alt="Screenshot of the branch trends feature of the JoSAA Analysis tool">
@@ -138,7 +138,7 @@
                 href="{{ route('branch-trends') }}" target="_blank">link</a>.
         </p>
 
-        <h3 class="text-xl font-bold m-4">Institute Trends</h3>
+        <h3 class="text-xl font-bold m-4">Analyse Institute-wise Cut-off Trends</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-institute-trends.png') }}"
             media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-institute-trends.png') }}"
@@ -160,7 +160,7 @@
                 href="{{ route('institute-trends') }}" target="_blank">link</a>.
         </p>
 
-        <h3 class="text-xl font-bold m-4">Round Trends</h3>
+        <h3 class="text-xl font-bold m-4">Analyse Round-wise Cut-off Trends</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-round-trends.png') }}" media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-round-trends.png') }}"
             alt="Screenshot of the round trends feature of the JoSAA Analysis tool">

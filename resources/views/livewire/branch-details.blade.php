@@ -24,7 +24,7 @@
                             <div class="mt-4">
                                 @foreach (explode(',', $course->years) as $year)
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-800 dark:text-indigo-100">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-100">
                                         {{ $year }}
                                     </span>
                                 @endforeach
@@ -32,7 +32,8 @@
                         </div>
                         <div class="flex justify-between flex-wrap mt-4 gap-2">
                             <a href="{{ route('search-by-branch', ['rank' => $course->institute_type === 'iit' ? 'jee-advanced' : 'jee-main', 'institutes' => [$course->institute_id], 'courses' => [$course->course_id], 'branches' => [$branch['id']]]) }}"
-                                target="_blank" class="text-indigo-600 hover:text-indigo-900 flex gap-2">
+                                target="_blank"
+                                class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100 flex gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -41,7 +42,8 @@
                                 View Cut-off Ranks
                             </a>
                             <a href="{{ route('round-trends', ['rank' => $course->institute_type === 'iit' ? 'jee-advanced' : 'jee-main', 'institute' => $course->institute_id, 'course' => $course->course_id, 'program' => $course->program_id]) }}"
-                                target="_blank" class="text-indigo-600 hover:text-indigo-900 flex gap-2"><svg
+                                target="_blank"
+                                class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100 flex gap-2"><svg
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -70,7 +72,8 @@
                         <div class="flex justify-between">
                             <div class="px-2">
                                 <a href="{{ route('search-by-branch', ['branches' => [$branch['id']], 'round-display' => $key !== 'last' ? $key : null]) }}"
-                                    target="_blank" class="text-indigo-600 hover:text-indigo-900">
+                                    target="_blank"
+                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -80,7 +83,8 @@
                             </div>
                             <div class="px-2">
                                 <a href="{{ route('branch-trends', ['branches' => [$branch['id']], 'round-display' => $key !== 'last' ? $key : null]) }}"
-                                    target="_blank" class="text-indigo-600 hover:text-indigo-900"><svg
+                                    target="_blank"
+                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100"><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"

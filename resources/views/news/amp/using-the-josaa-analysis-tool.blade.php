@@ -82,7 +82,7 @@
             Here are the features of the JoSAA Analysis tool and how to use them:
         </p>
 
-        <h3>Filter by Institute</h3>
+        <h3>View Institute-wise Cut-offs</h3>
         <amp-img media="(prefers-color-scheme: dark)"
             src="{{ asset('images/dark/josaa-analysis-filter-by-institute.png') }}" width="500" height="250"
             layout="responsive" alt="Screenshot of the filter by institute feature of the JoSAA Analysis tool">
@@ -129,7 +129,7 @@
             Try it out now by visiting the <a href="{{ route('search-by-branch') }}" target="_blank">link</a>.
         </p>
 
-        <h3>Branch Trends</h3>
+        <h3>Analyse Branch-wise Cut-off Trends</h3>
         <amp-img media="(prefers-color-scheme: dark)" src="{{ asset('images/dark/josaa-analysis-branch-trends.png') }}"
             width="500" height="250" layout="responsive"
             alt="Screenshot of the branch trends feature of the JoSAA Analysis tool">
@@ -154,7 +154,7 @@
             Try it out now by visiting the <a href="{{ route('branch-trends') }}" target="_blank">link</a>.
         </p>
 
-        <h3>Institute Trends</h3>
+        <h3>Analyse Institute-wise Cut-off Trends</h3>
         <amp-img media="(prefers-color-scheme: dark)" src="{{ asset('images/dark/josaa-analysis-institute-trends.png') }}"
             width="500" height="250" layout="responsive"
             alt="Screenshot of the institute trends feature of the JoSAA Analysis tool">
@@ -179,7 +179,7 @@
             Try it out now by visiting the <a href="{{ route('institute-trends') }}" target="_blank">link</a>.
         </p>
 
-        <h3>Round Trends</h3>
+        <h3>Analyse Round-wise Cut-off Trends</h3>
         <amp-img media="(prefers-color-scheme: dark)" src="{{ asset('images/dark/josaa-analysis-round-trends.png') }}"
             width="500" height="250" layout="responsive"
             alt="Screenshot of the round trends feature of the JoSAA Analysis tool">

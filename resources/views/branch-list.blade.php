@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@push('title', 'Branches |')
+@push('title', 'View All Branches |')
 
 @section('meta')
     <meta name="description" content="List of branches available in JoSAA counselling">
-    <meta property="og:title" content="Branches - JoSAA Analysis">
+    <meta property="og:title" content="View All Branches - JoSAA Analysis">
     <meta property="og:description" content="List of branches available in JoSAA counselling">
     <meta property="og:url" content="{{ route('branch-list') }}">
     <meta property="og:type" content="website">
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Branches - JoSAA Analysis">
+    <meta property="twitter:title" content="View All Branches - JoSAA Analysis">
     <meta property="twitter:url" content="{{ route('branch-list') }}">
     <meta property="twitter:site" content="@@JoSAA_Analysis">
     <meta property="twitter:creator" content="@@CaptainIRS">

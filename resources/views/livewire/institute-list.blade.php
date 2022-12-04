@@ -9,7 +9,8 @@
                     <a href="{{ route('institute-details', ['institute' => $institute['id']]) }}"
                         class="px-4 py-5 sm:px-6 h-full flex-grow flex flex-col">
                         <div class="flex-grow">
-                            <h3 class="text-xl leading-6 font-medium py-2 text-indigo-600 hover:text-indigo-900">
+                            <h3
+                                class="text-xl leading-6 font-medium py-2 text-indigo-600 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100">
                                 {!! $institute['alias'] !!}
                             </h3>
                             @if ($institute['alias'] !== $institute['id'])

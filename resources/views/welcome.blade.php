@@ -39,7 +39,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Branches
+                            View All Branches
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                             View all the branches and courses belonging to the branches available for JoSAA counselling.
@@ -56,7 +56,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Institutes
+                            View All Institutes
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                             View all the institutes participating in JoSAA counselling and the courses offered by them.
@@ -73,7 +73,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Filter by Branch
+                            View Branch-wise Cut-offs
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                             Filter by branch allows you to filter the cut-off data with the selected branches and further
@@ -91,7 +91,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Filter by Institute
+                            View Institute-wise Cut-offs
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                             Filter by institute allows you to filter the cut-off data with the selected institutes and
@@ -109,7 +109,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Branch Trends
+                            Analyse Branch-wise Cut-off Trends
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                             Branch trends highlight the trends of courses in a particular branch over the years. This helps
@@ -127,7 +127,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Institute Trends
+                            Analyse Institute-wise Cut-off Trends
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                             Institute trends highlight the trends of various programs offered by a particular institute over
@@ -148,7 +148,7 @@
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-4 py-5 sm:px-6 flex-grow">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                            Round Trends
+                            Analyse Round-wise Cut-off Trends
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                             Round trends highlight the general trend of closing ranks throughout the rounds of the

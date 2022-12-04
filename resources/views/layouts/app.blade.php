@@ -402,22 +402,22 @@ $watch('darkMode', value => {
             <hr class="border-gray-200 dark:border-gray-600 mt-2 text-lg">
             <div class="footer p-4 print:hidden flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
                 <div>
-                    <span class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-8">
-                        <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-700">Home</a>
-                        <a href="{{ route('branch-list') }}"
-                            class="text-blue-600 hover:text-blue-700">View&nbsp;All&nbsp;Branches</a>
-                        <a href="{{ route('institute-list') }}"
-                            class="text-blue-600 hover:text-blue-700">View&nbsp;All&nbsp;Institutes</a>
-                        <a href="{{ route('search-by-branch') }}"
-                            class="text-blue-600 hover:text-blue-700">View&nbsp;Branch-wise&nbsp;Cut-offs</a>
-                        <a href="{{ route('search-by-institute') }}"
-                            class="text-blue-600 hover:text-blue-700">View&nbsp;Institute-wise&nbsp;Cut-offs</a>
-                        <a href="{{ route('branch-trends') }}"
-                            class="text-blue-600 hover:text-blue-700">Analyse&nbsp;Branch-wise&nbsp;Cut-off&nbsp;Trends</a>
-                        <a href="{{ route('institute-trends') }}"
-                            class="text-blue-600 hover:text-blue-700">Analyse&nbsp;Institute-wise&nbsp;Cut-off&nbsp;Trends</a>
-                        <a href="{{ route('round-trends') }}"
-                            class="text-blue-600 hover:text-blue-700">Analyse&nbsp;Round-wise&nbsp;Trends</a>
+                    <span class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-8 text-blue-600 dark:text-indigo-300">
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200" href="{{ route('home') }}">Home</a>
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200"
+                            href="{{ route('branch-list') }}">View&nbsp;All&nbsp;Branches</a>
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200"
+                            href="{{ route('institute-list') }}">View&nbsp;All&nbsp;Institutes</a>
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200"
+                            href="{{ route('search-by-branch') }}">View&nbsp;Branch-wise&nbsp;Cut-offs</a>
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200"
+                            href="{{ route('search-by-institute') }}">View&nbsp;Institute-wise&nbsp;Cut-offs</a>
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200"
+                            href="{{ route('branch-trends') }}">Analyse&nbsp;Branch-wise&nbsp;Cut-off&nbsp;Trends</a>
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200"
+                            href="{{ route('institute-trends') }}">Analyse&nbsp;Institute-wise&nbsp;Cut-off&nbsp;Trends</a>
+                        <a class="hover:text-blue-700 dark:hover:text-indigo-200"
+                            href="{{ route('round-trends') }}">Analyse&nbsp;Round-wise&nbsp;Trends</a>
                     </span>
                 </div>
                 <div class="self-start sm:text-right">
@@ -427,7 +427,7 @@ $watch('darkMode', value => {
                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                         </path>
                     </svg> by <a href="https://github.com/CaptainIRS"
-                        class="text-blue-600 hover:text-blue-700 underline">@@CaptainIRS</a>
+                        class="text-blue-600 hover:text-blue-700 dark:text-indigo-300 dark:hover:text-indigo-200 underline">@@CaptainIRS</a>
                     <br>
                     Share via<span id="#share" class="pl-1"></span>
                     <script>
