@@ -6,7 +6,7 @@
             @foreach ($institutes as $institute)
                 <div
                     class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg hover:shadow-lg hover:bg-gray-50 hover:dark:bg-gray-700">
-                    <a href="{{ route('institute-details', ['institute' => $institute['id']]) }}"
+                    <a href="{{ route('institute-details', ['institute' => $institute['slug']]) }}"
                         class="px-4 py-5 sm:px-6 h-full flex-grow flex flex-col">
                         <div class="flex-grow">
                             <h3

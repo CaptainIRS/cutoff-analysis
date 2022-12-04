@@ -19,25 +19,50 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/search-by-branch', function () {
+Route::get('/view-branch-cutoff-ranks', function () {
     return view('search-by-branch');
 })->name('search-by-branch');
 
-Route::get('/search-by-institute', function () {
+// NOTE: Deprecated route
+Route::get('/search-by-branch', function () {
+    return redirect(status: 301)->route('search-by-branch', request()->all());
+});
+
+Route::get('/view-institute-cutoff-ranks', function () {
     return view('search-by-institute');
 })->name('search-by-institute');
 
-Route::get('/institute-trends', function () {
+// NOTE: Deprecated route
+Route::get('/search-by-institute', function () {
+    return redirect(status: 301)->route('search-by-institute', request()->all());
+});
+
+Route::get('/analyse-institute-cutoff-trends', function () {
     return view('institute-trends');
 })->name('institute-trends');
 
-Route::get('/round-trends', function () {
+// NOTE: Deprecated route
+Route::get('/institute-trends', function () {
+    return redirect(status: 301)->route('institute-trends', request()->all());
+});
+
+Route::get('/analyse-round-wise-cutoff-trends', function () {
     return view('round-trends');
 })->name('round-trends');
 
-Route::get('/branch-trends', function () {
+// NOTE: Deprecated route
+Route::get('/round-trends', function () {
+    return redirect(status: 301)->route('round-trends', request()->all());
+});
+
+Route::get('/analyse-branch-cutoff-trends', function () {
     return view('branch-trends');
 })->name('branch-trends');
+
+// NOTE: Deprecated route
+Route::get('/branch-trends', function () {
+    return redirect(status: 301)->route('branch-trends', request()->all());
+});
 
 Route::prefix('/news')->group(function () {
     Route::get('/', function () {
@@ -60,7 +85,7 @@ Route::prefix('/institutes')->group(function () {
         return view('institute-list');
     })->name('institute-list');
 
-    Route::get('/{institute}', function (Institute $institute) {
+    Route::get('/{institute:slug}', function (Institute $institute) {
         return view('institute-details', ['institute' => $institute]);
     })->name('institute-details');
 });
@@ -70,7 +95,7 @@ Route::prefix('/branches')->group(function () {
         return view('branch-list');
     })->name('branch-list');
 
-    Route::get('/{branch}', function (Branch $branch) {
+    Route::get('/{branch:slug}', function (Branch $branch) {
         return view('branch-details', ['branch' => $branch]);
     })->name('branch-details');
 });
