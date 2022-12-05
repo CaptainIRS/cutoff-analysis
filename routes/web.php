@@ -25,7 +25,7 @@ Route::get('/view-branch-cutoff-ranks', function () {
 
 // NOTE: Deprecated route
 Route::get('/search-by-branch', function () {
-    return redirect(status: 301)->route('search-by-branch', request()->all());
+    return redirect()->route('search-by-branch', request()->all(), 301);
 });
 
 Route::get('/view-institute-cutoff-ranks', function () {
@@ -34,7 +34,7 @@ Route::get('/view-institute-cutoff-ranks', function () {
 
 // NOTE: Deprecated route
 Route::get('/search-by-institute', function () {
-    return redirect(status: 301)->route('search-by-institute', request()->all());
+    return redirect()->route('search-by-institute', request()->all(), 301);
 });
 
 Route::get('/analyse-institute-cutoff-trends', function () {
@@ -43,7 +43,7 @@ Route::get('/analyse-institute-cutoff-trends', function () {
 
 // NOTE: Deprecated route
 Route::get('/institute-trends', function () {
-    return redirect(status: 301)->route('institute-trends', request()->all());
+    return redirect()->route('institute-trends', request()->all(), 301);
 });
 
 Route::get('/analyse-round-wise-cutoff-trends', function () {
@@ -52,7 +52,7 @@ Route::get('/analyse-round-wise-cutoff-trends', function () {
 
 // NOTE: Deprecated route
 Route::get('/round-trends', function () {
-    return redirect(status: 301)->route('round-trends', request()->all());
+    return redirect()->route('round-trends', request()->all(), 301);
 });
 
 Route::get('/analyse-branch-cutoff-trends', function () {
@@ -61,7 +61,7 @@ Route::get('/analyse-branch-cutoff-trends', function () {
 
 // NOTE: Deprecated route
 Route::get('/branch-trends', function () {
-    return redirect(status: 301)->route('branch-trends', request()->all());
+    return redirect()->route('branch-trends', request()->all(), 301);
 });
 
 Route::prefix('/news')->group(function () {
