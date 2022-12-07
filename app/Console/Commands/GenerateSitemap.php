@@ -107,9 +107,6 @@ class GenerateSitemap extends Command
                 'course' => $entry->course_id,
                 'program' => $entry->program_id,
             ];
-            if ($institute->type !== 'iit') {
-                $parameters['home-state'] = $institute->state;
-            }
             $sitemap->add(
                 TagsUrl::create(route('round-trends', $parameters))
                     ->setLastModificationDate(new Carbon('2022-12-04'))
