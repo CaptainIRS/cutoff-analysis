@@ -93,7 +93,7 @@ class SearchByInstitute extends Component implements HasTable
         $institutes = $institutes ? Institute::whereIn('id', $institutes)->pluck('alias')->toArray() : [];
         $institute_names = array_map(fn ($institute_alias) => str_replace('&nbsp;', ' ', $institute_alias), $institutes);
 
-        return $institute_names ? Arr::join($institute_names ?? [], ', ', ' and ').' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '';
+        return $institute_names ? Arr::join($institute_names ?? [], ', ', ' and ').' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : 'View Institute-wise Cut-off Ranks in JoSAA Counselling';
     }
 
     public function mount(): void

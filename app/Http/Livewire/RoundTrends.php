@@ -86,7 +86,7 @@ class RoundTrends extends Component implements HasForms
         $institute_alias = $institute ? str_replace('&nbsp;', ' ', Institute::find($institute)->alias) : null;
         $course_alias = $course ? str_replace('&nbsp;', ' ', Course::find($course)->alias) : null;
 
-        return ($institute_alias && $course_alias && $program) ? $institute_alias.' '.$course_alias.' '.$program.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Trends' : '';
+        return ($institute_alias && $course_alias && $program) ? $institute_alias.' '.$course_alias.' '.$program.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Trends' : 'Analyse Round-wise Cut-off Trends in JoSAA Counselling';
     }
 
     public function mount(): void

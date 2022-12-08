@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@push('title', 'Branch Details |')
-
 @section('meta')
     <meta name="description" content="Details of {{ $branch['id'] }} branch in JoSAA">
     <meta property="og:title" content="{{ $branch['id'] }} | JoSAA Analysis">

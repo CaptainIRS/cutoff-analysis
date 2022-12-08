@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@push('title', 'Institutes |')
-
 @section('meta')
     <meta name="description" content="Details of {{ $institute['id'] }} participating in JoSAA">
     <meta property="og:title" content="{{ $institute['id'] }} | JoSAA Analysis">

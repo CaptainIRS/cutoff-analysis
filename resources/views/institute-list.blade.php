@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@push('title', 'View All Institutes |')
+@push('title', 'View All Institutes Participating in JoSAA Counselling')
 
 @section('meta')
     <meta name="description" content="List of institutes participating in JoSAA">

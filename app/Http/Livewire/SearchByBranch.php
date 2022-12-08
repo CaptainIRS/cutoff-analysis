@@ -89,6 +89,11 @@ class SearchByBranch extends Component implements HasTable
         $this->all_genders = Cache::rememberForever('all_genders', fn () => Gender::orderBy('id')->pluck('id', 'id')->toArray());
     }
 
+    private function getTitle(?array $branches, ?string $rank_type): string
+    {
+        return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : 'View Branch-wise Cut-off Ranks of IITs, NITs, IIITs and GFTIs';
+    }
+
     public function mount(): void
     {
         $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
@@ -112,14 +117,9 @@ class SearchByBranch extends Component implements HasTable
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'minimum_rank' => $this->minimum_rank ?? session('minimum_rank'),
             'maximum_rank' => $this->maximum_rank ?? session('maximum_rank'),
-            'title' => $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '',
+            'title' => $this->getTitle($branches, $rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)),
         ]);
         $this->form->getState();
-    }
-
-    private function getTitle(?array $branches, ?string $rank_type): string
-    {
-        return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : '';
     }
 
     private function ensureSubsetOf(?array $values, array $array): array

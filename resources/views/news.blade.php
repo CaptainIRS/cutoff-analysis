@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@push('title', 'News &amp; Updates |')
+@push('title', 'News &amp; Updates of the JoSAA Analysis Tool')
 
 @section('meta')
     <meta name="description"

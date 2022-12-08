@@ -83,7 +83,7 @@ class InstituteTrends extends Component implements HasForms
             ? Arr::join($institute_names, ', ', ' and ')
                 .' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)]
                 .' Cut-off Trends'
-            : '';
+            : 'Analyze Institute Cut-off Trends in JoSAA Counselling';
     }
 
     public function mount(): void

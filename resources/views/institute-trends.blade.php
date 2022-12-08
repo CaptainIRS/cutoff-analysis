@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@push('title', 'Analyse Institute-wise Cut-off Trends |')
-
 @section('meta')
     <meta name="description"
         content="Compare the cut-offs of various courses offered by an institute over 10 years in the JoSAA seat allocation process.">

@@ -1,7 +1,5 @@
-@push('sub-title')
-    @if ($title)
-        {{ $title }} |
-    @endif
+@push('title')
+    {{ $title }}
 @endpush
 <div class="relative flex flex-col-reverse">
     <div id="chartContainer" class="block">

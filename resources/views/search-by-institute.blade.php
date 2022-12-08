@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@push('title', 'View Institute-wise Cut-offs |')
+@push('title', 'View Institute-wise Cut-offs of IITs, NITs, IIITs, GFTIs')
 
 @section('meta')
     <meta name="description"

@@ -1,5 +1,5 @@
-@push('sub-title')
-    {!! $institute['alias'] !!} |
+@push('title')
+    {!! $institute['alias'] !!} Cut-offs
 @endpush
 <div>
     <h2 class="text-2xl font-bold ml-4 mt-10 mb-10 print:hidden">Compare cut-offs of programs offered by

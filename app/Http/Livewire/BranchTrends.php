@@ -85,7 +85,7 @@ class BranchTrends extends Component implements HasForms
 
     private function getTitle(?array $branches, ?string $rank_type): string
     {
-        return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Trends' : '';
+        return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Trends' : 'Analyze Branch-wise Cut-off Trends of IITs, NITs, IIITs and GFTIs';
     }
 
     public function mount(): void
