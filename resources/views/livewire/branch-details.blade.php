@@ -1,4 +1,4 @@
-@push('sub-title')
+@push('title')
     {{ $branch['id'] }} Cut-offs in IITs, NITs, IIITs and GFTIs
 @endpush
 <div>
