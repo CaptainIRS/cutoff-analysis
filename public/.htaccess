@@ -3,6 +3,24 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    <FilesMatch ".(js|css|jpg|jpeg|png|gif|js|css|ico|swf)$">
+        Header set Cache-Control "max-age=31536000, public"
+        Header unset Last-Modified
+        Header unset ETag
+    </FilesMatch>
+
+    <FilesMatch ".(php|html)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+
+    <If "%{QUERY_STRING} =~ /round-display=(all|1|2|3|4|5|6)/">
+        Header set X-Robots-Tag "noindex"
+    </If>
+
+    <If "%{QUERY_STRING} =~ /home-state/">
+        Header set X-Robots-Tag "noindex"
+    </If>
+
     RewriteEngine On
 
     # Handle Authorization Header
