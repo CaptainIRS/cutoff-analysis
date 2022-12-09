@@ -53,20 +53,21 @@
         script.textContent = JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Table",
-            "name": "{{ $title }}" || "All Branches JoSAA Cut-off Ranks",
+            "name": "{{ $title }}" || "View Branch-wise Cut-off Ranks of IITs, NITs, IIITs and GFTIs",
             "cssSelector": ".filament-tables-table",
         });
         document.head.appendChild(script);
         Livewire.on('titleUpdated', (title) => {
             if (title) {
-                document.title = title;
+                document.title = title + ' | JoSAA Analysis';
             } else {
-                document.title = 'All Branches JoSAA Cut-off Ranks';
+                document.title = 'View Branch-wise Cut-off Ranks of IITs, NITs, IIITs and GFTIs | JoSAA Analysis';
             }
             document.getElementById('json-ld').textContent = JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "Table",
-                "name": document.title || "All Branches JoSAA Cut-off Ranks",
+                "name": document.title ||
+                    "View Branch-wise Cut-off Ranks of IITs, NITs, IIITs and GFTIs | JoSAA Analysis",
                 "cssSelector": ".filament-tables-table",
             });
         });

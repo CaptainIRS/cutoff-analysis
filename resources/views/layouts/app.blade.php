@@ -23,7 +23,7 @@ $watch('darkMode', value => {
     <meta name="robots" content="index, follow">
     <meta property="og:image" content="{{ asset('favicon.svg') }}">
 
-    <title>@stack('title')</title>
+    <title>@stack('title') | JoSAA Analysis</title>
 
     @yield('meta')
 
