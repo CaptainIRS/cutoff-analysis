@@ -1,6 +1,6 @@
-@push('sub-title')
+@push('title')
     @if ($title)
-        {{ $title }} |
+        {{ $title }}
     @endif
 @endpush
 <div class="h-full w-full p-4">

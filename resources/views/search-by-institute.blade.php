@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@push('title', 'View Institute-wise Cut-offs of IITs, NITs, IIITs, GFTIs')
-
 @section('meta')
     <meta name="description"
         content="Find cut-offs in a range over 10 years, filtered by institute in the JoSAA seat allocation process.">

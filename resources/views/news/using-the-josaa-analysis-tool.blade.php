@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@push('title', 'Using the JoSAA Analysis tool | News &amp; Updates |')
+@push('title', 'Using the JoSAA Analysis tool | News &amp; Updates')
 
 @section('meta')
     <link rel="amphtml" href="{{ route('news.amp.using-the-josaa-analysis-tool') }}">
