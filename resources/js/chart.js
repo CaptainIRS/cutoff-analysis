@@ -134,10 +134,9 @@ window.addEventListener("load", () => {
 
         let metaDescription = "";
         if (dataObj.title) {
-            document.title = dataObj.title + " | JoSAA Analysis";
+            document.title = dataObj.title;
             metaDescription = `Analyse ${dataObj.title} in JoSAA Counselling using past 10 years data.`;
         } else {
-            document.title = "Trends | JoSAA Analysis";
             metaDescription = `Analyse the trends of JoSAA cut-offs using past 10 years data.`;
         }
         document

@@ -90,7 +90,7 @@ class InstituteDetails extends Component implements HasForms
             ->when($this->duration, fn ($query, $duration) => $query->whereIn('duration', $duration))
             ->when($this->show_courses === 'latest', fn ($query) => $query->where('years', 'like', '%'.$this->max_year.'%'))
             ->get();
-        $this->branch_options = DB::table('branch_program')->whereIn('program_id', collect($this->courses)->pluck('program_id')->unique())->pluck('branch_id', 'branch_id')->toArray();
+        $this->branch_options = Branch::whereHas('programs', fn ($query) => $query->whereIn('id', collect($this->courses)->pluck('program_id')->unique()))->pluck('name', 'id')->toArray();
     }
 
     public function render()

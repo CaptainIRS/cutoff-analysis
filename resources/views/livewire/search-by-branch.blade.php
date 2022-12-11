@@ -57,19 +57,5 @@
             "cssSelector": ".filament-tables-table",
         });
         document.head.appendChild(script);
-        Livewire.on('titleUpdated', (title) => {
-            if (title) {
-                document.title = title + ' | JoSAA Analysis';
-            } else {
-                document.title = 'View Branch-wise Cut-off Ranks of IITs, NITs, IIITs and GFTIs | JoSAA Analysis';
-            }
-            document.getElementById('json-ld').textContent = JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Table",
-                "name": document.title ||
-                    "View Branch-wise Cut-off Ranks of IITs, NITs, IIITs and GFTIs | JoSAA Analysis",
-                "cssSelector": ".filament-tables-table",
-            });
-        });
     </script>
 </div>

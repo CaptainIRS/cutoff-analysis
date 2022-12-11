@@ -3,7 +3,7 @@
 @endpush
 <div>
     <h2 class="text-2xl font-bold ml-4 mt-10 mb-10 print:hidden">Compare cut-offs of programs offered by
-        {{ $institute['id'] }}</h2>
+        {{ $institute['name'] }}</h2>
 
     <div class="mx-4 my-10">
         {{ $this->form }}

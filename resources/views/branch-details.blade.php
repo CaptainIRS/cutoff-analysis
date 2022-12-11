@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4 print:hidden">{{ $branch['id'] }}</h1>
+    <h1 class="text-3xl font-bold m-4 print:hidden">{{ $branch['name'] }}</h1>
 
     <livewire:branch-details :branch="$branch" />
 @endsection

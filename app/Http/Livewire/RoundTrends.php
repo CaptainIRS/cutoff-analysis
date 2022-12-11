@@ -73,8 +73,8 @@ class RoundTrends extends Component implements HasForms
 
     public function __construct()
     {
-        $this->all_institutes = Cache::rememberForever('all_institutes', fn () => Institute::orderBy('id')->pluck('id', 'id')->toArray());
-        $this->all_courses = Cache::rememberForever('all_courses', fn () => Course::orderBy('id')->pluck('id', 'id')->toArray());
+        $this->all_institutes = Cache::rememberForever('all_institutes', fn () => Institute::orderBy('id')->pluck('name', 'id')->toArray());
+        $this->all_courses = Cache::rememberForever('all_courses', fn () => Course::orderBy('id')->pluck('name', 'id')->toArray());
         $this->all_programs = Cache::rememberForever('all_programs', fn () => Program::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_states = Cache::rememberForever('all_states', fn () => State::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_seat_types = Cache::rememberForever('all_seat_types', fn () => SeatType::orderBy('id')->pluck('id', 'id')->toArray());
@@ -91,9 +91,9 @@ class RoundTrends extends Component implements HasForms
 
     public function mount(): void
     {
-        $course = $this->ensureBelongsTo($this->course, $this->all_courses);
+        $course = $this->ensureBelongsTo($this->course, array_keys($this->all_courses));
         $program = $this->ensureBelongsTo($this->program, $this->all_programs);
-        $institute = $this->ensureBelongsTo($this->institute, $this->all_institutes);
+        $institute = $this->ensureBelongsTo($this->institute, array_keys($this->all_institutes));
         $seat_type = $this->ensureBelongsTo($this->seat_type, $this->all_seat_types);
         $gender = $this->ensureBelongsTo($this->gender, $this->all_genders);
         $institute_type = $this->ensureSubsetOf($this->institute_type, array_keys(Institute::INSTITUTE_TYPE_OPTIONS));

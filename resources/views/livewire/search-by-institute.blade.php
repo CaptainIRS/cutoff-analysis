@@ -40,19 +40,5 @@
             "cssSelector": ".filament-tables-table",
         });
         document.head.appendChild(script);
-        Livewire.on('titleUpdated', (title) => {
-            if (title) {
-                document.title = title + ' | JoSAA Analysis';
-            } else {
-                document.title = 'View Institute-wise Cut-off Ranks in JoSAA Counselling | JoSAA Analysis';
-            }
-            document.getElementById('json-ld').textContent = JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Table",
-                "name": document.title ||
-                    "View Institute-wise Cut-off Ranks in JoSAA Counselling | JoSAA Analysis",
-                "cssSelector": ".filament-tables-table",
-            });
-        });
     </script>
 </div>

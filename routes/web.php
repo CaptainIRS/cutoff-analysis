@@ -85,7 +85,7 @@ Route::prefix('/institutes')->group(function () {
         return view('institute-list');
     })->name('institute-list');
 
-    Route::get('/{institute:slug}', function (Institute $institute) {
+    Route::get('/{institute}', function (Institute $institute) {
         return view('institute-details', ['institute' => $institute]);
     })->name('institute-details');
 });
@@ -95,7 +95,7 @@ Route::prefix('/branches')->group(function () {
         return view('branch-list');
     })->name('branch-list');
 
-    Route::get('/{branch:slug}', function (Branch $branch) {
+    Route::get('/{branch}', function (Branch $branch) {
         return view('branch-details', ['branch' => $branch]);
     })->name('branch-details');
 });

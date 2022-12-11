@@ -6,7 +6,7 @@
             @foreach ($institutes as $institute)
                 <div
                     class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg hover:shadow-lg hover:bg-gray-50 hover:dark:bg-gray-700">
-                    <a href="{{ route('institute-details', ['institute' => $institute['slug']]) }}"
+                    <a href="{{ route('institute-details', ['institute' => $institute['id']]) }}"
                         class="px-4 py-5 sm:px-6 h-full flex-grow flex flex-col">
                         <div class="flex-grow">
                             <h3
@@ -15,7 +15,7 @@
                             </h3>
                             @if ($institute['alias'] !== $institute['id'])
                                 <p class="max-w-2xl text-lg py-2 text-gray-500 dark:text-gray-300">
-                                    {{ $institute['id'] }}
+                                    {{ $institute['name'] }}
                                 </p>
                             @endif
                         </div>

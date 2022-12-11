@@ -68,8 +68,8 @@ class InstituteTrends extends Component implements HasForms
 
     public function __construct()
     {
-        $this->all_institutes = Cache::rememberForever('all_institutes', fn () => Institute::orderBy('id')->pluck('id', 'id')->toArray());
-        $this->all_courses = Cache::rememberForever('all_courses', fn () => Course::orderBy('id')->pluck('id', 'id')->toArray());
+        $this->all_institutes = Cache::rememberForever('all_institutes', fn () => Institute::orderBy('id')->pluck('alias', 'id')->toArray());
+        $this->all_courses = Cache::rememberForever('all_courses', fn () => Course::orderBy('id')->pluck('alias', 'id')->toArray());
         $this->all_states = Cache::rememberForever('all_states', fn () => State::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_seat_types = Cache::rememberForever('all_seat_types', fn () => SeatType::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_genders = Cache::rememberForever('all_genders', fn () => Gender::orderBy('id')->pluck('id', 'id')->toArray());
@@ -77,7 +77,7 @@ class InstituteTrends extends Component implements HasForms
 
     private function getTitle(?array $institutes, ?string $rank_type): string
     {
-        $institute_names = array_map(fn ($institute_alias) => str_replace('&nbsp;', ' ', $institute_alias), $institutes);
+        $institute_names = array_map(fn ($id) => str_replace('&nbsp;', ' ', $this->all_institutes[$id]), $institutes ?? []);
 
         return $institute_names
             ? Arr::join($institute_names, ', ', ' and ')
@@ -88,8 +88,8 @@ class InstituteTrends extends Component implements HasForms
 
     public function mount(): void
     {
-        $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
-        $institutes = $this->ensureSubsetOf($this->institutes, $this->all_institutes);
+        $courses = $this->ensureSubsetOf($this->courses, array_keys($this->all_courses));
+        $institutes = $this->ensureSubsetOf($this->institutes, array_keys($this->all_institutes));
         $seat_type = $this->ensureBelongsTo($this->seat_type, $this->all_seat_types);
         $gender = $this->ensureBelongsTo($this->gender, $this->all_genders);
         $institute_type = $this->ensureSubsetOf($this->institute_type, array_keys(Institute::INSTITUTE_TYPE_OPTIONS));
@@ -261,7 +261,8 @@ class InstituteTrends extends Component implements HasForms
             foreach ($labels as $key => $label) {
                 $labels[$key] = str_replace('_', "\nRound ", $label);
             }
-            $this->title = $this->getTitle(array_keys($institute_data), $this->rank_type);
+            $institute_ids = Institute::whereIn('alias', array_keys($institute_data))->pluck('id')->toArray();
+            $this->title = $this->getTitle($institute_ids, $this->rank_type);
             $data = [
                 'labels' => $labels,
                 'datasets' => $datasets,

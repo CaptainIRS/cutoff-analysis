@@ -23,7 +23,7 @@ $watch('darkMode', value => {
     <meta name="robots" content="index, follow">
     <meta property="og:image" content="{{ asset('favicon.svg') }}">
 
-    <title>@stack('title') | JoSAA Analysis</title>
+    <title>@stack('title')</title>
 
     @yield('meta')
 
@@ -144,7 +144,7 @@ $watch('darkMode', value => {
         }
 
         [x-cloak].overlay {
-            opacity: 100 !important;
+            opacity: 1 !important;
         }
 
         .nav,
@@ -390,6 +390,14 @@ $watch('darkMode', value => {
 
     @livewireStyles
     @livewireScripts
+
+    <script>
+        Livewire.on('titleUpdated', (title) => {
+            if (title) {
+                document.title = title;
+            }
+        });
+    </script>
 
     <div class="mt-[3.5rem]" x-cloak id="content" class="content flex flex-col">
         <div class="w-full m-auto flex-grow">

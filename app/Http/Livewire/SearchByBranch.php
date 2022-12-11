@@ -81,9 +81,9 @@ class SearchByBranch extends Component implements HasTable
 
     public function __construct()
     {
-        $this->all_institutes = Cache::rememberForever('all_institutes', fn () => Institute::orderBy('id')->pluck('id', 'id')->toArray());
-        $this->all_courses = Cache::rememberForever('all_courses', fn () => Course::orderBy('id')->pluck('id', 'id')->toArray());
-        $this->all_branches = Cache::rememberForever('all_branches', fn () => Branch::orderBy('id')->pluck('id', 'id')->toArray());
+        $this->all_institutes = Cache::rememberForever('all_institutes', fn () => Institute::orderBy('id')->pluck('name', 'id')->toArray());
+        $this->all_courses = Cache::rememberForever('all_courses', fn () => Course::orderBy('id')->pluck('name', 'id')->toArray());
+        $this->all_branches = Cache::rememberForever('all_branches', fn () => Branch::orderBy('id')->pluck('name', 'id')->toArray());
         $this->all_states = Cache::rememberForever('all_states', fn () => State::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_seat_types = Cache::rememberForever('all_seat_types', fn () => SeatType::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_genders = Cache::rememberForever('all_genders', fn () => Gender::orderBy('id')->pluck('id', 'id')->toArray());
@@ -91,14 +91,16 @@ class SearchByBranch extends Component implements HasTable
 
     private function getTitle(?array $branches, ?string $rank_type): string
     {
+        $branches = array_map(fn ($branch) => $this->all_branches[$branch], $branches ?? []);
+
         return $branches ? Arr::join($branches ?? [], ', ', ' and ').' Branch '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Ranks' : 'View Branch-wise Cut-off Ranks of IITs, NITs, IIITs and GFTIs';
     }
 
     public function mount(): void
     {
-        $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
-        $branches = $this->ensureSubsetOf($this->branches, $this->all_branches);
-        $institutes = $this->ensureSubsetOf($this->institutes, $this->all_institutes);
+        $courses = $this->ensureSubsetOf($this->courses, array_keys($this->all_courses));
+        $branches = $this->ensureSubsetOf($this->branches, array_keys($this->all_branches));
+        $institutes = $this->ensureSubsetOf($this->institutes, array_keys($this->all_institutes));
         $seat_type = $this->ensureBelongsTo($this->seat_type, $this->all_seat_types);
         $gender = $this->ensureBelongsTo($this->gender, $this->all_genders);
         $institute_type = $this->ensureSubsetOf($this->institute_type, array_keys(Institute::INSTITUTE_TYPE_OPTIONS));
