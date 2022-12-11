@@ -11,14 +11,15 @@
 |
 */
 
-Route::post('/clear-cache', function (string $appKey) {
-    if ($appKey !== config('app.key')) {
-        return response('Invalid app key', 403);
-    }
-    Artisan::call('cache:clear');
-    Artisan::call('config:clear');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
+Route::post('/clear-cache', function () {
+    if (request()->query('appKey') && request()->query('appKey') === config('app.key')) {
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
 
-    return response('Cache cleared', 200);
+        return response('Cache cleared', 200);
+    }
+
+    return response('Invalid app key', 403);
 })->name('clear-cache');
