@@ -1,6 +1,15 @@
 @push('title')
     {{ $title }}
 @endpush
+
+@push('robots')
+    @if ($prevent_indexing)
+        <meta name="robots" content="noindex">
+    @else
+        <meta name="robots" content="index, follow">
+    @endif
+@endpush
+
 <div class="relative flex flex-col-reverse">
     <div id="chartContainer" class="block">
         <h2 class="text-xl font-bold m-4 text-center">{{ $title }}</h2>

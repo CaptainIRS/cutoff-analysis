@@ -53,6 +53,8 @@ class InstituteTrends extends Component implements HasForms
 
     private $all_genders;
 
+    public bool $prevent_indexing = false;
+
     protected $listeners = ['updateChartData'];
 
     protected $queryString = [
@@ -113,11 +115,19 @@ class InstituteTrends extends Component implements HasForms
 
     private function ensureSubsetOf(?array $values, array $array): array
     {
+        if ($values && array_diff($values, $array)) {
+            $this->prevent_indexing = true;
+        }
+
         return array_diff($values ?? [], $array) ? [] : ($values ?? []);
     }
 
     private function ensureBelongsTo(?string $value, array $array): ?string
     {
+        if ($value && ! in_array($value, $array, true)) {
+            $this->prevent_indexing = true;
+        }
+
         return array_search($value, $array) !== false ? $value : null;
     }
 

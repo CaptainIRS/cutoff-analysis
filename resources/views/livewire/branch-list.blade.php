@@ -1,3 +1,7 @@
+@push('robots')
+    <meta name="robots" content="index, follow">
+@endpush
+
 <div class="h-full w-full p-4">
     <div class="mt-10 mb-10">
         <div class="grid grid-cols-1 gap-4 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 x">

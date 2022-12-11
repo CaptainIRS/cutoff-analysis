@@ -3,6 +3,15 @@
         {{ $title }}
     @endif
 @endpush
+
+@push('robots')
+    @if ($prevent_indexing)
+        <meta name="robots" content="noindex">
+    @else
+        <meta name="robots" content="index, follow">
+    @endif
+@endpush
+
 <div class="h-full w-full p-4">
     <div>
         <div class="overlay opacity-0" wire:loading.class="opacity-100">

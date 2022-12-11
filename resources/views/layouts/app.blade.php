@@ -20,7 +20,9 @@ $watch('darkMode', value => {
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="author" content="CaptainIRS">
-    <meta name="robots" content="index, follow">
+
+    @stack('robots')
+
     <meta property="og:image" content="{{ asset('favicon.svg') }}">
 
     <title>@stack('title')</title>

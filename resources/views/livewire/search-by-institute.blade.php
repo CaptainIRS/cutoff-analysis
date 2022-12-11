@@ -3,6 +3,15 @@
         {{ $title }}
     @endif
 @endpush
+
+@push('robots')
+    @if ($prevent_indexing)
+        <meta name="robots" content="noindex">
+    @else
+        <meta name="robots" content="index, follow">
+    @endif
+@endpush
+
 <div class="h-full w-full p-4">
     {{ $this->form }}
     <hr class="border-gray-200 dark:border-gray-600 my-4">

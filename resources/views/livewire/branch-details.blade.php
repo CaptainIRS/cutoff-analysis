@@ -1,6 +1,11 @@
 @push('title')
     {{ $branch['name'] }} Cut-offs in IITs, NITs, IIITs and GFTIs
 @endpush
+
+@push('robots')
+    <meta name="robots" content="index, follow">
+@endpush
+
 <div>
     <h2 class="text-2xl font-bold ml-4 mt-10 mb-10 print:hidden">Compare cut-offs of institutes offering programs in
         {{ $branch['name'] }} branch</h2>
