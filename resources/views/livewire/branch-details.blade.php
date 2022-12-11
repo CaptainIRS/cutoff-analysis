@@ -64,7 +64,7 @@
     </div>
 
     <h2 class="text-2xl font-bold ml-4 mt-10 mb-10 print:hidden">Compare the cut-offs of all institutes offering
-        programs in {{ $branch['id'] }} branch from 2012-2022</h2>
+        programs in {{ $branch['name'] }} branch from 2012-2022</h2>
 
     <div class="m-4">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
