@@ -245,7 +245,7 @@ $watch('darkMode', value => {
             <div></div>
         </div>
     </div>
-    <nav x-show="showNav" x-transition.opacity x-cloak class="fixed flex flex-col w-full z-10 top-0 print:hidden"
+    <nav x-show="showNav" x-transition.opacity x-cloak class="fixed flex flex-col w-full z-50 top-0 print:hidden"
         @keydown.escape="isOpen = false">
 
         <div class="flex flex-grow-0 w-full items-center justify-between bg-gray-200 dark:bg-gray-800 shadow-md h-14">
@@ -403,9 +403,9 @@ $watch('darkMode', value => {
 
     <div class="mt-[3.5rem]" x-cloak id="content" class="content flex flex-col">
         <div class="w-full m-auto flex-grow">
-            <main class="w-full flex-1">
+            <div class="w-full flex-1">
                 @yield('content')
-            </main>
+            </div>
         </div>
 
         @if (!request()->routeIs('home'))

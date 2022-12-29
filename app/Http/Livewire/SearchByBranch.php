@@ -65,6 +65,10 @@ class SearchByBranch extends Component implements HasTable
 
     public bool $prevent_indexing = false;
 
+    public bool $hide_controls = false;
+
+    public string $canonical_url = '';
+
     protected $queryString = [
         'tableSortColumn' => ['except' => 'closing_rank'],
         'tableSortDirection' => ['except' => 'asc'],
@@ -100,14 +104,14 @@ class SearchByBranch extends Component implements HasTable
 
     public function mount(): void
     {
-        $courses = $this->ensureSubsetOf($this->courses, array_keys($this->all_courses));
-        $branches = $this->ensureSubsetOf($this->branches, array_keys($this->all_branches));
-        $institutes = $this->ensureSubsetOf($this->institutes, array_keys($this->all_institutes));
+        $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
+        $branches = $this->ensureSubsetOf($this->branches, $this->all_branches);
+        $institutes = $this->ensureSubsetOf($this->institutes, $this->all_institutes);
         $seat_type = $this->ensureBelongsTo($this->seat_type, $this->all_seat_types);
         $gender = $this->ensureBelongsTo($this->gender, $this->all_genders);
-        $institute_type = $this->ensureSubsetOf($this->institute_type, array_keys(Institute::INSTITUTE_TYPE_OPTIONS));
-        $round_display = $this->ensureBelongsTo($this->round_display, array_keys(Rank::ROUND_DISPLAY_OPTIONS));
-        $rank_type = $this->ensureBelongsTo($this->rank_type, array_keys(Rank::RANK_TYPE_OPTIONS));
+        $institute_type = $this->ensureSubsetOf($this->institute_type, Institute::INSTITUTE_TYPE_OPTIONS);
+        $round_display = $this->ensureBelongsTo($this->round_display, Rank::ROUND_DISPLAY_OPTIONS);
+        $rank_type = $this->ensureBelongsTo($this->rank_type, Rank::RANK_TYPE_OPTIONS);
         $home_state = $this->ensureBelongsTo($this->home_state, $this->all_states);
         $this->form->fill([
             'institute_type' => $institute_type,
@@ -122,12 +126,14 @@ class SearchByBranch extends Component implements HasTable
             'minimum_rank' => $this->minimum_rank ?? session('minimum_rank'),
             'maximum_rank' => $this->maximum_rank ?? session('maximum_rank'),
             'title' => $this->getTitle($branches, $rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)),
+            'canonical_url' => route('search-by-branch', ['rank' => $rank_type, 'branches' => $branches]),
         ]);
         $this->form->getState();
     }
 
     private function ensureSubsetOf(?array $values, array $array): array
     {
+        $array = array_keys($array);
         if ($values && array_diff($values, $array)) {
             $this->prevent_indexing = true;
         }
@@ -137,6 +143,7 @@ class SearchByBranch extends Component implements HasTable
 
     private function ensureBelongsTo(?string $value, array $array): ?string
     {
+        $array = array_keys($array);
         if ($value && ! in_array($value, $array, true)) {
             $this->prevent_indexing = true;
         }
@@ -453,40 +460,18 @@ class SearchByBranch extends Component implements HasTable
                 ->label('Institute')
                 ->html()
                 ->sortable()
-                ->icon('heroicon-s-external-link')
-                ->iconPosition('after')
-                ->url(function (Rank $record) {
-                    $parameters = [
-                        'rank' => $this->rank_type,
-                        'institutes' => [$record->institute_id],
-                    ];
-                    if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
-                        $parameters['home-state'] = $this->home_state;
-                    }
-
-                    return route('institute-trends', $parameters);
-                }),
+                ->url(fn (Rank $record) => route('institute-trends-proxy', ['institute' => $record->institute_id])),
             TextColumn::make('course.alias')
                 ->label('Course')
                 ->sortable(),
-            TextColumn::make('program.id')
+            TextColumn::make('program.name')
                 ->label('Program')
                 ->sortable()
-                ->icon('heroicon-s-external-link')
-                ->iconPosition('after')
-                ->url(function (Rank $record) {
-                    $parameters = [
-                        'rank' => $this->rank_type,
-                        'institute' => $record->institute_id,
-                        'course' => $record->course_id,
-                        'program' => $record->program_id,
-                    ];
-                    if ($this->rank_type === Rank::RANK_TYPE_MAIN) {
-                        $parameters['home-state'] = $this->home_state;
-                    }
-
-                    return route('round-trends', $parameters);
-                }),
+                ->url(fn (Rank $record) => route('round-trends-proxy', [
+                    'institute' => $record->institute_id,
+                    'course' => $record->course_id,
+                    'program' => $record->program_id,
+                ])),
             TextColumn::make('year')
                 ->label('Year')
                 ->sortable(),

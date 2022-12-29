@@ -5,22 +5,39 @@
 @endpush
 
 @push('robots')
-    @if ($prevent_indexing)
-        <meta name="robots" content="noindex">
-    @else
+    @if ($hide_controls)
         <meta name="robots" content="index, follow">
+    @else
+        <meta name="robots" content="noindex">
     @endif
 @endpush
 
-<div class="h-full w-full p-4">
-    {{ $this->form }}
+<div class="h-full w-full">
+    @if ($hide_controls)
+        <h1 class="text-xl font-bold m-4 text-center">{{ $title }}</h2>
+    @endif
+    <div class="relative h-full w-full flex-1">
+        @if ($hide_controls)
+            <a class="absolute w-full h-full z-40 bg-gray-100/60 dark:bg-gray-800/60 cursor-pointer"
+                href="{{ $canonical_url }}" wire:loading.class="opacity-100">
+                <div class="flex flex-col items-center justify-center h-full">
+                    <div class="text-gray-500 dark:text-gray-400 text-xl font-bold">
+                        {{ __('Click to customise...') }}
+                    </div>
+                </div>
+            </a>
+        @endif
+        <div class="p-4">
+            {{ $this->form }}
+        </div>
+    </div>
     <hr class="border-gray-200 dark:border-gray-600 my-4">
-    <div class="relative table-wrapper">
+    <main class="relative table-wrapper h-full px-4">
         <div wire:loading.class="opacity-0 invisible"
             wire:target="previousPage, nextPage, gotoPage, tableRecordsPerPage, sortTable, getRankQuery, $set">
             {{ $this->table }}
         </div>
-        <div class="opacity-0 table-overlay" wire:loading.class="opacity-100">
+        <div wire:loading.class.remove="opacity-0" class="opacity-0 table-overlay">
             <div class="lds-spinner overlay-centered">
                 <div></div>
                 <div></div>
@@ -36,7 +53,7 @@
                 <div></div>
             </div>
         </div>
-    </div>
+    </main>
     <script>
         const script = document.createElement('script');
         script.setAttribute('type', 'application/ld+json');

@@ -35,81 +35,71 @@ class GenerateSitemap extends Command
     {
         $sitemap = Sitemap::create();
         $sitemap->add(TagsUrl::create(route('home'))->setLastModificationDate(new Carbon('2022-12-10')))
-            ->add(TagsUrl::create(route('branch-list'))->setLastModificationDate(new Carbon('2022-12-11')))
-            ->add(TagsUrl::create(route('branch-trends'))->setLastModificationDate(new Carbon('2022-12-10')))
-            ->add(TagsUrl::create(route('institute-list'))->setLastModificationDate(new Carbon('2022-12-11')))
-            ->add(TagsUrl::create(route('institute-trends'))->setLastModificationDate(new Carbon('2022-12-10')))
+            ->add(TagsUrl::create(route('branch-list'))->setLastModificationDate(new Carbon('2022-12-29')))
+            ->add(TagsUrl::create(route('institute-list'))->setLastModificationDate(new Carbon('2022-12-29')))
             ->add(TagsUrl::create(route('news'))->setLastModificationDate(new Carbon('2022-12-10')))
-            ->add(TagsUrl::create(route('news.using-the-josaa-analysis-tool'))->setLastModificationDate(new Carbon('2022-12-10')))
-            ->add(TagsUrl::create(route('round-trends'))->setLastModificationDate(new Carbon('2022-12-10')))
-            ->add(TagsUrl::create(route('search-by-branch'))->setLastModificationDate(new Carbon('2022-12-10')))
-            ->add(TagsUrl::create(route('search-by-institute'))->setLastModificationDate(new Carbon('2022-12-10')));
+            ->add(TagsUrl::create(route('news.using-the-josaa-analysis-tool'))->setLastModificationDate(new Carbon('2022-12-10')));
         $institutes = Institute::all();
         $branches = Branch::all();
         foreach ($institutes as $institute) {
-            $parameters = [
-                'rank' => $institute->type === 'iit' ? 'jee-advanced' : 'jee-main',
-                'institutes' => [$institute->id],
-            ];
             $sitemap->add(
                 TagsUrl::create(route('institute-details', ['institute' => $institute->id]))
-                    ->setLastModificationDate(new Carbon('2022-12-11'))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
-                TagsUrl::create(route('search-by-institute', $parameters))
-                    ->setLastModificationDate(new Carbon('2022-12-11'))
+                TagsUrl::create(route('search-by-institute-proxy', ['institute' => $institute->id]))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
-                TagsUrl::create(route('institute-trends', $parameters))
-                    ->setLastModificationDate(new Carbon('2022-12-11'))
+                TagsUrl::create(route('institute-trends-proxy', ['institute' => $institute->id]))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
         }
         foreach ($branches as $branch) {
             $sitemap->add(
                 TagsUrl::create(route('branch-details', ['branch' => $branch->id]))
-                    ->setLastModificationDate(new Carbon('2022-12-11'))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
-                TagsUrl::create(route('search-by-branch', [
+                TagsUrl::create(route('search-by-branch-proxy', [
                     'rank' => 'jee-advanced',
-                    'branches' => [$branch->id],
+                    'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-11'))
+                ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
-                TagsUrl::create(route('branch-trends', [
+                TagsUrl::create(route('branch-trends-proxy', [
                     'rank' => 'jee-advanced',
-                    'branches' => [$branch->id],
+                    'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-11'))
+                ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
-                TagsUrl::create(route('search-by-branch', [
+                TagsUrl::create(route('search-by-branch-proxy', [
                     'rank' => 'jee-main',
-                    'branches' => [$branch->id],
+                    'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-11'))
+                ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
-                TagsUrl::create(route('branch-trends', [
+                TagsUrl::create(route('branch-trends-proxy', [
                     'rank' => 'jee-main',
-                    'branches' => [$branch->id],
+                    'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-11'))
+                ->setLastModificationDate(new Carbon('2022-12-29'))
             );
         }
         $entries = DB::table('institute_course_program')->get();
         foreach ($entries as $entry) {
             $institute = Institute::find($entry->institute_id);
             $parameters = [
-                'rank' => $institute->type === 'iit' ? 'jee-advanced' : 'jee-main',
                 'institute' => $institute->id,
                 'course' => $entry->course_id,
                 'program' => $entry->program_id,
             ];
             $sitemap->add(
-                TagsUrl::create(route('round-trends', $parameters))
-                    ->setLastModificationDate(new Carbon('2022-12-11'))
+                TagsUrl::create(route('round-trends-proxy', $parameters))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
         }
         $sitemap->writeToFile(public_path('sitemap.xml'));

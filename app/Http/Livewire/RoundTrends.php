@@ -59,7 +59,13 @@ class RoundTrends extends Component implements HasForms
 
     public bool $prevent_indexing = false;
 
+    public bool $show_form = true;
+
     protected $listeners = ['updateChartData'];
+
+    public bool $hide_controls = false;
+
+    public string $canonical_url = '';
 
     protected $queryString = [
         'course',
@@ -77,7 +83,7 @@ class RoundTrends extends Component implements HasForms
     {
         $this->all_institutes = Cache::rememberForever('all_institutes', fn () => Institute::orderBy('id')->pluck('alias', 'id')->toArray());
         $this->all_courses = Cache::rememberForever('all_courses', fn () => Course::orderBy('id')->pluck('alias', 'id')->toArray());
-        $this->all_programs = Cache::rememberForever('all_programs', fn () => Program::orderBy('id')->pluck('id', 'id')->toArray());
+        $this->all_programs = Cache::rememberForever('all_programs', fn () => Program::orderBy('id')->pluck('name', 'id')->toArray());
         $this->all_states = Cache::rememberForever('all_states', fn () => State::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_seat_types = Cache::rememberForever('all_seat_types', fn () => SeatType::orderBy('id')->pluck('id', 'id')->toArray());
         $this->all_genders = Cache::rememberForever('all_genders', fn () => Gender::orderBy('id')->pluck('id', 'id')->toArray());
@@ -85,22 +91,23 @@ class RoundTrends extends Component implements HasForms
 
     private function getTitle(?string $institute, ?string $course, ?string $program, ?string $rank_type): string
     {
-        $institute_alias = $institute ? str_replace('&nbsp;', ' ', Institute::find($institute)->alias) : null;
-        $course_alias = $course ? str_replace('&nbsp;', ' ', Course::find($course)->alias) : null;
+        $institute_alias = $institute ? str_replace('&nbsp;', ' ', $this->all_institutes[$institute]) : null;
+        $course_alias = $course ? str_replace('&nbsp;', ' ', $this->all_courses[$course]) : null;
+        $program_name = $program ? $this->all_programs[$program] : null;
 
-        return ($institute_alias && $course_alias && $program) ? $institute_alias.' '.$course_alias.' '.$program.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Trends' : 'Analyse Round-wise Cut-off Trends in JoSAA Counselling';
+        return ($institute_alias && $course_alias && $program_name) ? $institute_alias.' '.$course_alias.' '.$program_name.' '.Rank::RANK_TYPE_OPTIONS[$rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)].' Cut-off Trends' : 'Analyse Round-wise Cut-off Trends in JoSAA Counselling';
     }
 
     public function mount(): void
     {
-        $course = $this->ensureBelongsTo($this->course, array_keys($this->all_courses));
+        $course = $this->ensureBelongsTo($this->course, $this->all_courses);
         $program = $this->ensureBelongsTo($this->program, $this->all_programs);
-        $institute = $this->ensureBelongsTo($this->institute, array_keys($this->all_institutes));
+        $institute = $this->ensureBelongsTo($this->institute, $this->all_institutes);
         $seat_type = $this->ensureBelongsTo($this->seat_type, $this->all_seat_types);
         $gender = $this->ensureBelongsTo($this->gender, $this->all_genders);
-        $institute_type = $this->ensureSubsetOf($this->institute_type, array_keys(Institute::INSTITUTE_TYPE_OPTIONS));
-        $round_display = $this->ensureBelongsTo($this->round_display, array_keys(Rank::ROUND_DISPLAY_OPTIONS));
-        $rank_type = $this->ensureBelongsTo($this->rank_type, array_keys(Rank::RANK_TYPE_OPTIONS));
+        $institute_type = $this->ensureSubsetOf($this->institute_type, Institute::INSTITUTE_TYPE_OPTIONS);
+        $round_display = $this->ensureBelongsTo($this->round_display, Rank::ROUND_DISPLAY_OPTIONS);
+        $rank_type = $this->ensureBelongsTo($this->rank_type, Rank::RANK_TYPE_OPTIONS);
         $home_state = $this->ensureBelongsTo($this->home_state, $this->all_states);
         $this->form->fill([
             'institute_type' => $institute_type,
@@ -114,12 +121,14 @@ class RoundTrends extends Component implements HasForms
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'title' => $this->getTitle($institute, $course, $program, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
+            'canonical_url' => route('round-trends', ['rank' => $rank_type, 'institute' => $institute, 'course' => $course, 'program' => $program]),
         ]);
         $this->form->getState();
     }
 
     private function ensureSubsetOf(?array $values, array $array): array
     {
+        $array = array_keys($array);
         if ($values && array_diff($values, $array)) {
             $this->prevent_indexing = true;
         }
@@ -129,6 +138,7 @@ class RoundTrends extends Component implements HasForms
 
     private function ensureBelongsTo(?string $value, array $array): ?string
     {
+        $array = array_keys($array);
         if ($value && ! in_array($value, $array, true)) {
             $this->prevent_indexing = true;
         }
@@ -312,7 +322,7 @@ class RoundTrends extends Component implements HasForms
                     ->required()
                     ->reactive(),
                 Select::make('program')
-                    ->options(fn () => DB::table('institute_course_program')->where('institute_id', $this->institute)->where('course_id', $this->course)->pluck('program_id', 'program_id'))
+                    ->options(fn () => DB::table('institute_course_program')->where('institute_id', $this->institute)->where('course_id', $this->course)->pluck('program_name', 'program_id'))
                     ->label('Program')
                     ->searchable()
                     ->afterStateUpdated(function () {

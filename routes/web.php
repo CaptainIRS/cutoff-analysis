@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Branch;
+use App\Models\Course;
 use App\Models\Institute;
+use App\Models\Program;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -88,6 +90,24 @@ Route::prefix('/institutes')->group(function () {
     Route::get('/{institute}', function (Institute $institute) {
         return view('institute-details', ['institute' => $institute]);
     })->name('institute-details');
+
+    Route::get('/{institute}/cutoffs', function (Institute $institute) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('search-by-institute-proxy', ['rank' => $rank, 'institutes' => [$institute->id], 'hide_controls' => true]);
+    })->name('search-by-institute-proxy');
+
+    Route::get('/{institute}/trends', function (Institute $institute) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('institute-trends-proxy', ['rank' => $rank, 'institutes' => [$institute->id], 'hide_controls' => true]);
+    })->name('institute-trends-proxy');
+
+    Route::get('/{institute}/trends/{course}/{program}', function (Institute $institute, Course $course, Program $program) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('round-trends-proxy', ['rank' => $rank, 'institute' => $institute->id, 'course' => $course->id, 'program' => $program->id, 'hide_controls' => true]);
+    })->name('round-trends-proxy');
 });
 
 Route::prefix('/branches')->group(function () {
@@ -98,4 +118,12 @@ Route::prefix('/branches')->group(function () {
     Route::get('/{branch}', function (Branch $branch) {
         return view('branch-details', ['branch' => $branch]);
     })->name('branch-details');
+
+    Route::get('/{branch}/cutoffs/{rank}', function (Branch $branch, string $rank) {
+        return view('search-by-branch-proxy', ['rank' => $rank, 'branches' => [$branch->id], 'hide_controls' => true]);
+    })->where(['rank' => 'jee-main|jee-advanced'])->name('search-by-branch-proxy');
+
+    Route::get('/{branch}/trends/{rank}', function (Branch $branch, string $rank) {
+        return view('branch-trends-proxy', ['rank' => $rank, 'branches' => [$branch->id], 'hide_controls' => true]);
+    })->where(['rank' => 'jee-main|jee-advanced'])->name('branch-trends-proxy');
 });

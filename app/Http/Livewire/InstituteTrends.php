@@ -57,6 +57,10 @@ class InstituteTrends extends Component implements HasForms
 
     protected $listeners = ['updateChartData'];
 
+    public bool $hide_controls = false;
+
+    public string $canonical_url = '';
+
     protected $queryString = [
         'courses',
         'institutes',
@@ -90,13 +94,13 @@ class InstituteTrends extends Component implements HasForms
 
     public function mount(): void
     {
-        $courses = $this->ensureSubsetOf($this->courses, array_keys($this->all_courses));
-        $institutes = $this->ensureSubsetOf($this->institutes, array_keys($this->all_institutes));
+        $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
+        $institutes = $this->ensureSubsetOf($this->institutes, $this->all_institutes);
         $seat_type = $this->ensureBelongsTo($this->seat_type, $this->all_seat_types);
         $gender = $this->ensureBelongsTo($this->gender, $this->all_genders);
-        $institute_type = $this->ensureSubsetOf($this->institute_type, array_keys(Institute::INSTITUTE_TYPE_OPTIONS));
-        $round_display = $this->ensureBelongsTo($this->round_display, array_keys(Rank::ROUND_DISPLAY_OPTIONS));
-        $rank_type = $this->ensureBelongsTo($this->rank_type, array_keys(Rank::RANK_TYPE_OPTIONS));
+        $institute_type = $this->ensureSubsetOf($this->institute_type, Institute::INSTITUTE_TYPE_OPTIONS);
+        $round_display = $this->ensureBelongsTo($this->round_display, Rank::ROUND_DISPLAY_OPTIONS);
+        $rank_type = $this->ensureBelongsTo($this->rank_type, Rank::RANK_TYPE_OPTIONS);
         $home_state = $this->ensureBelongsTo($this->home_state, $this->all_states);
         $this->form->fill([
             'institute_type' => $institute_type,
@@ -109,12 +113,14 @@ class InstituteTrends extends Component implements HasForms
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'title' => $this->getTitle($institutes, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
+            'canonical_url' => route('institute-trends', ['rank' => $rank_type, 'institutes' => $institutes]),
         ]);
         $this->form->getState();
     }
 
     private function ensureSubsetOf(?array $values, array $array): array
     {
+        $array = array_keys($array);
         if ($values && array_diff($values, $array)) {
             $this->prevent_indexing = true;
         }
@@ -124,6 +130,7 @@ class InstituteTrends extends Component implements HasForms
 
     private function ensureBelongsTo(?string $value, array $array): ?string
     {
+        $array = array_keys($array);
         if ($value && ! in_array($value, $array, true)) {
             $this->prevent_indexing = true;
         }
@@ -251,7 +258,7 @@ class InstituteTrends extends Component implements HasForms
                 if (! isset($institute_data[$data->institute->alias])) {
                     $institute_data[$data->institute->alias] = [];
                 }
-                $program_label = $data->course->alias.' '.$data->program_id.' ('.$data->quota_id.')';
+                $program_label = $data->course->alias.' '.$data->program->name.' ('.$data->quota_id.')';
                 if (! isset($institute_data[$data->institute->alias][$program_label])) {
                     $institute_data[$data->institute->alias][$program_label] = $initial_institute_data;
                 }

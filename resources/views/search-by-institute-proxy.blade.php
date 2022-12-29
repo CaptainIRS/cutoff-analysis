@@ -1,3 +1,4 @@
+@props(['rank', 'institutes', 'hide_controls'])
 @extends('layouts.app')
 
 @section('meta')
@@ -8,11 +9,5 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4 print:hidden">View Institute-wise Cut-offs</h1>
-
-    <p class="text-lg m-4 print:hidden">
-        Filter by institute allows you to filter the cut-off data with the selected institutes and further narrow down with
-        your choice of programs.
-    </p>
-    <livewire:search-by-institute />
+    <livewire:search-by-institute-proxy :rank_type="$rank" :institutes="$institutes" :hide_controls="$hide_controls" />
 @endsection

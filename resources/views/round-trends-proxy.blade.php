@@ -1,3 +1,4 @@
+@props(['rank', 'institute', 'course', 'program', 'hide_controls'])
 @extends('layouts.app')
 
 @section('meta')
@@ -8,11 +9,6 @@
 @endsection
 
 @section('content')
-    <h1 class="text-3xl font-bold m-4 print:hidden">Analyse Round-wise Cut-off Trends</h1>
-
-    <p class="text-lg m-4 print:hidden">
-        Compare the cut-offs of a course in various rounds over 10 years in the JoSAA seat allocation process.
-        This helps understand the likely range of changes to the closing ranks throught the counselling process.
-    </p>
-    <livewire:round-trends />
+    <livewire:round-trends-proxy :rank_type="$rank" :institute="$institute" :course="$course" :program="$program"
+        :hide_controls="$hide_controls" />
 @endsection

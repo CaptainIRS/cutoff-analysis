@@ -132,6 +132,10 @@ window.addEventListener("load", () => {
             replaceMerge: ["xAxis", "yAxis", "series"],
         });
 
+        document.querySelector("#myChart canvas").innerHTML = document
+            .getElementById("myChart")
+            .getAttribute("aria-label");
+
         let metaDescription = "";
         if (dataObj.title) {
             document.title = dataObj.title;
