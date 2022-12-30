@@ -61,9 +61,11 @@ class BranchTrends extends Component implements HasForms
 
     private $all_genders;
 
-    public bool $prevent_indexing = false;
+    public bool $is_canonical = false;
 
     public bool $hide_controls = false;
+
+    public string $alternative_url = '';
 
     public string $canonical_url = '';
 
@@ -107,6 +109,12 @@ class BranchTrends extends Component implements HasForms
         $round_display = $this->ensureBelongsTo($this->round_display, Rank::ROUND_DISPLAY_OPTIONS);
         $rank_type = $this->ensureBelongsTo($this->rank_type, Rank::RANK_TYPE_OPTIONS);
         $home_state = $this->ensureBelongsTo($this->home_state, $this->all_states);
+        if (! $this->is_canonical && $branches && $rank_type && count($branches) === 1) {
+            $this->canonical_url = route('branch-trends-proxy', [
+                'branch' => $branches[0],
+                'rank' => $rank_type,
+            ]);
+        }
         $this->form->fill([
             'institute_type' => $institute_type,
             'courses' => $courses,
@@ -119,7 +127,7 @@ class BranchTrends extends Component implements HasForms
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'title' => $this->getTitle($branches, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
-            'canonical_url' => route('branch-trends', ['rank' => $rank_type, 'branches' => $branches]),
+            'alternative_url' => route('branch-trends', ['rank' => $rank_type, 'branches' => $branches]),
         ]);
         $this->form->getState();
     }
@@ -128,7 +136,7 @@ class BranchTrends extends Component implements HasForms
     {
         $array = array_keys($array);
         if ($values && array_diff($values, $array)) {
-            $this->prevent_indexing = true;
+            $this->is_canonical = true;
         }
 
         return array_diff($values ?? [], $array) ? [] : ($values ?? []);
@@ -138,7 +146,7 @@ class BranchTrends extends Component implements HasForms
     {
         $array = array_keys($array);
         if ($value && ! in_array($value, $array, true)) {
-            $this->prevent_indexing = true;
+            $this->is_canonical = true;
         }
 
         return array_search($value, $array) !== false ? $value : null;

@@ -17,3 +17,4 @@ yarn-error.log
 /storage/*.index
 _ide_helper.php
 /public/sitemap.xml
+.DS_Store

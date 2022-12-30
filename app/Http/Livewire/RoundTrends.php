@@ -57,13 +57,15 @@ class RoundTrends extends Component implements HasForms
 
     private $all_genders;
 
-    public bool $prevent_indexing = false;
+    public bool $is_canonical = false;
 
     public bool $show_form = true;
 
     protected $listeners = ['updateChartData'];
 
     public bool $hide_controls = false;
+
+    public string $alternative_url = '';
 
     public string $canonical_url = '';
 
@@ -109,6 +111,13 @@ class RoundTrends extends Component implements HasForms
         $round_display = $this->ensureBelongsTo($this->round_display, Rank::ROUND_DISPLAY_OPTIONS);
         $rank_type = $this->ensureBelongsTo($this->rank_type, Rank::RANK_TYPE_OPTIONS);
         $home_state = $this->ensureBelongsTo($this->home_state, $this->all_states);
+        if (! $this->is_canonical && $institute && $course && $program) {
+            $this->canonical_url = route('round-trends-proxy', [
+                'institute' => $institute,
+                'course' => $course,
+                'program' => $program,
+            ]);
+        }
         $this->form->fill([
             'institute_type' => $institute_type,
             'course' => $course,
@@ -121,7 +130,7 @@ class RoundTrends extends Component implements HasForms
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'title' => $this->getTitle($institute, $course, $program, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
-            'canonical_url' => route('round-trends', ['rank' => $rank_type, 'institute' => $institute, 'course' => $course, 'program' => $program]),
+            'alternative_url' => route('round-trends', ['rank' => $rank_type, 'institute' => $institute, 'course' => $course, 'program' => $program]),
         ]);
         $this->form->getState();
     }
@@ -130,7 +139,7 @@ class RoundTrends extends Component implements HasForms
     {
         $array = array_keys($array);
         if ($values && array_diff($values, $array)) {
-            $this->prevent_indexing = true;
+            $this->is_canonical = true;
         }
 
         return array_diff($values ?? [], $array) ? [] : ($values ?? []);
@@ -140,7 +149,7 @@ class RoundTrends extends Component implements HasForms
     {
         $array = array_keys($array);
         if ($value && ! in_array($value, $array, true)) {
-            $this->prevent_indexing = true;
+            $this->is_canonical = true;
         }
 
         return array_search($value, $array) !== false ? $value : null;

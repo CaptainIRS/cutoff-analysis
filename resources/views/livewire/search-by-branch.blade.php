@@ -10,6 +10,10 @@
     @else
         <meta name="robots" content="noindex">
     @endif
+
+    @if (!$is_canonical)
+        <link rel="canonical" href="{{ $canonical_url }}">
+    @endif
 @endpush
 
 <div class="h-full w-full">
@@ -19,7 +23,7 @@
     <div class="relative h-full w-full flex-1">
         @if ($hide_controls)
             <a class="absolute w-full h-full z-40 bg-gray-100/60 dark:bg-gray-800/60 cursor-pointer"
-                href="{{ $canonical_url }}" wire:loading.class="opacity-100">
+                href="{{ $alternative_url }}" wire:loading.class="opacity-100">
                 <div class="flex flex-col items-center justify-center h-full">
                     <div class="text-gray-500 dark:text-gray-400 text-xl font-bold">
                         {{ __('Click to customise...') }}

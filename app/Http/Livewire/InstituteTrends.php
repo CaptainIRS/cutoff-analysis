@@ -53,11 +53,13 @@ class InstituteTrends extends Component implements HasForms
 
     private $all_genders;
 
-    public bool $prevent_indexing = false;
+    public bool $is_canonical = false;
 
     protected $listeners = ['updateChartData'];
 
     public bool $hide_controls = false;
+
+    public string $alternative_url = '';
 
     public string $canonical_url = '';
 
@@ -102,6 +104,11 @@ class InstituteTrends extends Component implements HasForms
         $round_display = $this->ensureBelongsTo($this->round_display, Rank::ROUND_DISPLAY_OPTIONS);
         $rank_type = $this->ensureBelongsTo($this->rank_type, Rank::RANK_TYPE_OPTIONS);
         $home_state = $this->ensureBelongsTo($this->home_state, $this->all_states);
+        if (! $this->is_canonical && $institutes && count($institutes) === 1) {
+            $this->canonical_url = route('institute-trends-proxy', [
+                'institute' => $institutes[0],
+            ]);
+        }
         $this->form->fill([
             'institute_type' => $institute_type,
             'courses' => $courses,
@@ -113,7 +120,7 @@ class InstituteTrends extends Component implements HasForms
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
             'title' => $this->getTitle($institutes, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
-            'canonical_url' => route('institute-trends', ['rank' => $rank_type, 'institutes' => $institutes]),
+            'alternative_url' => route('institute-trends', ['rank' => $rank_type, 'institutes' => $institutes]),
         ]);
         $this->form->getState();
     }
@@ -122,7 +129,7 @@ class InstituteTrends extends Component implements HasForms
     {
         $array = array_keys($array);
         if ($values && array_diff($values, $array)) {
-            $this->prevent_indexing = true;
+            $this->is_canonical = true;
         }
 
         return array_diff($values ?? [], $array) ? [] : ($values ?? []);
@@ -132,7 +139,7 @@ class InstituteTrends extends Component implements HasForms
     {
         $array = array_keys($array);
         if ($value && ! in_array($value, $array, true)) {
-            $this->prevent_indexing = true;
+            $this->is_canonical = true;
         }
 
         return array_search($value, $array) !== false ? $value : null;
