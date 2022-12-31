@@ -127,3 +127,16 @@ Route::prefix('/branches')->group(function () {
         return view('branch-trends-proxy', ['rank' => $rank, 'branches' => [$branch->id], 'hide_controls' => true]);
     })->where(['rank' => 'jee-main|jee-advanced'])->name('branch-trends-proxy');
 });
+
+Route::get('/clear-cache', function () {
+    if (request()->query('appKey') && request()->query('appKey') === config('app.key')) {
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
+
+        return response('Cache cleared', 200);
+    }
+
+    return response('Invalid app key', 403);
+})->name('clear-cache');
