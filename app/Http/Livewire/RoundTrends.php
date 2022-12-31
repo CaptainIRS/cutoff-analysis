@@ -137,22 +137,28 @@ class RoundTrends extends Component implements HasForms
 
     private function ensureSubsetOf(?array $values, array $array): array
     {
-        $array = array_keys($array);
-        if ($values && array_diff($values, $array)) {
+        if ($values && ! array_diff($values, array_keys($array))) {
+            return $values ?? [];
+        } elseif ($values && ! array_diff($values, array_values($array))) {
+            return array_keys(array_intersect($array, $values));
+        } elseif ($values) {
             $this->is_canonical = true;
         }
 
-        return array_diff($values ?? [], $array) ? [] : ($values ?? []);
+        return [];
     }
 
     private function ensureBelongsTo(?string $value, array $array): ?string
     {
-        $array = array_keys($array);
-        if ($value && ! in_array($value, $array, true)) {
+        if ($value && in_array($value, array_keys($array), true)) {
+            return $value;
+        } elseif ($value && in_array($value, array_values($array), true)) {
+            return array_search($value, $array, true);
+        } elseif ($value) {
             $this->is_canonical = true;
         }
 
-        return array_search($value, $array) !== false ? $value : null;
+        return null;
     }
 
     private function getInstituteType(): array
