@@ -44,7 +44,8 @@
             @foreach ($courses as $course)
                 <div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg flex flex-col">
                     <div class="px-2 py-3 sm:px-4 flex-grow flex flex-col justify-between">
-                        <a href="{{ route('round-trends-proxy', ['institute' => $course->institute_id, 'course' => $course->course_id, 'program' => $course->program_id]) }}"
+                        <a rel="nofollow"
+                            href="{{ route('round-trends-proxy', ['institute' => $course->institute_id, 'course' => $course->course_id, 'program' => $course->program_id]) }}"
                             target="_blank" class="flex flex-col justify-between flex-grow">
                             <h3
                                 class="text-xl text-indigo-600 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100 leading-6 font-medium">
