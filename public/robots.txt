@@ -1,2 +1,5 @@
+User-agent: Semrush
+Disallow: /
+
 User-agent: *
 Disallow: /livewire
