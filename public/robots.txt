@@ -1,7 +1,2 @@
 User-agent: *
 Disallow: /livewire
-Disallow: /analyse-round-wise-cutoff-trends
-Disallow: /analyse-institute-cutoff-trends
-Disallow: /analyse-branch-cutoff-trends
-Disallow: /view-institute-cutoff-ranks
-Disallow: /view-branch-cutoff-ranks
