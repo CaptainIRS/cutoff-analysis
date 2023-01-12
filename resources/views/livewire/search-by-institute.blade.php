@@ -22,7 +22,7 @@
     @endif
     <div class="relative h-full w-full flex-1">
         @if ($hide_controls)
-            <a class="absolute w-full h-full z-40 bg-gray-100/60 dark:bg-gray-800/60 cursor-pointer"
+            <a rel="nofollow" class="absolute w-full h-full z-40 bg-gray-100/60 dark:bg-gray-800/60 cursor-pointer"
                 href="{{ $alternative_url }}" wire:loading.class="opacity-100">
                 <div class="flex flex-col items-center justify-center h-full">
                     <div class="text-gray-500 dark:text-gray-400 text-xl font-bold">
