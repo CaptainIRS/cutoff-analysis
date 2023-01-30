@@ -1,25 +1,27 @@
 @extends('layouts.app')
 
-@push('title', 'Home | JoSAA Analysis')
+@php
+    $appName = Config::get('app.name');
+@endphp
+
+@push('title', 'Home | ' . $appName)
 
 @section('meta')
     <meta name="description"
-        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
-    <meta name="keywords"
-        content="josaa, josaa analysis, josaa cut-offs, josaa closing rank, josaa counselling, josaa counselling analysis, josaa counselling tool, engineering, engineering aspirants, iits, nits, iiits">
+        content="{{ config('app.name') }} is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
 
-    <meta property="og:title" content="JoSAA Analysis">
+    <meta property="og:title" content="{{ config('app.name') }}">
     <meta property="og:description"
-        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
+        content="{{ config('app.name') }} is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="og:url" content="{{ route('home') }}">
     <meta property="og:type" content="website">
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Home - JoSAA Analysis">
+    <meta property="twitter:title" content="Home - {{ config('app.name') }}">
     <meta property="twitter:url" content="{{ route('home') }}">
     <meta property="twitter:site" content="@@JoSAA_Analysis">
     <meta property="twitter:creator" content="@@CaptainIRS">
     <meta property="twitter:description"
-        content="JoSAA Analysis is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
+        content="{{ config('app.name') }} is a tool that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="twitter:image" content="{{ asset('favicon.png') }}">
 @endsection
 
@@ -27,7 +29,7 @@
     <main class="mx-auto mt-5 max-w-7xl px-4 sm:mt-6 sm:px-6 md:mt-8 lg:mt-10 lg:px-8 xl:mt-14">
         <div class="sm:text-center lg:text-left">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
-                <span class="block xl:inline">JoSAA Analysis</span>
+                <span class="block xl:inline">{{ config('app.name') }}</span>
             </h1>
             <p
                 class="mt-3 text-base text-gray-500 dark:text-gray-300 sm:mx-auto sm:mt-5 sm:max-w-xl sm:text-lg md:mt-5 md:text-xl lg:mx-0">
@@ -76,7 +78,7 @@
                             View Branch-wise Cut-offs
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                            Filter by branch allows you to filter the cut-off data with the selected branches and further
+                            View the cut-off data with the selected branches and further
                             narrow down with your choice of institutes.
                         </p>
                     </div>
@@ -94,7 +96,7 @@
                             View Institute-wise Cut-offs
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
-                            Filter by institute allows you to filter the cut-off data with the selected institutes and
+                            View the cut-off data with the selected institutes and
                             further narrow down with your choice of programs.
                         </p>
                     </div>
@@ -118,7 +120,8 @@
                     </div>
                     <div class="border-t border-gray-200 dark:border-gray-700">
                         <div class="px-4 py-4 sm:px-6">
-                            <a href="{{ route('branch-trends') }}" class="text-indigo-600 hover:text-indigo-900">Get Started
+                            <a href="{{ route('branch-trends') }}" class="text-indigo-600 hover:text-indigo-900">Get
+                                Started
                                 &rarr;</a>
                         </div>
                     </div>

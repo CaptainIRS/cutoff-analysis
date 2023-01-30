@@ -1,38 +1,42 @@
 @extends('layouts.app')
 
-@push('title', 'Using the JoSAA Analysis tool | News &amp; Updates')
+@php
+    $appName = Config::get('app.name');
+@endphp
+
+@push('title', 'Using the ' . $appName . ' tool | News &amp; Updates')
 
 @section('meta')
     <link rel="amphtml" href="{{ route('news.amp.using-the-josaa-analysis-tool') }}">
     <meta name="description"
-        content="How to use JoSAA Analysis - a web application that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
+        content="How to use {{ config('app.name') }} - a web application that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta name="keywords"
         content="josaa, josaa analysis, josaa cut-offs, josaa closing rank, josaa counselling, josaa counselling analysis, josaa counselling tool, engineering, engineering aspirants, iits, nits, iiits">
 
-    <meta property="og:title" content="Using the JoSAA Analysis tool - JoSAA Analysis">
+    <meta property="og:title" content="Using the {{ config('app.name') }} tool - {{ config('app.name') }}">
     <meta property="og:description"
-        content="How to use JoSAA Analysis - a web application that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
+        content="How to use {{ config('app.name') }} - a web application that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="og:url" content="{{ route('home') }}">
     <meta property="og:type" content="website">
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Using the JoSAA Analysis tool - JoSAA Analysis">
+    <meta property="twitter:title" content="Using the {{ config('app.name') }} tool - {{ config('app.name') }}">
     <meta property="twitter:url" content="{{ route('home') }}">
     <meta property="twitter:site" content="@@JoSAA_Analysis">
     <meta property="twitter:creator" content="@@CaptainIRS">
     <meta property="twitter:description"
-        content="How to use JoSAA Analysis - a web application that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
+        content="How to use {{ config('app.name') }} - a web application that helps you decide your choices for JoSAA counselling based on 10 years of cut-off data.">
     <meta property="twitter:image" content="{{ asset('favicon.png') }}">
 @endsection
 
 @section('content')
     <article class="container">
-        <h1 class="text-3xl font-bold m-4">Using the JoSAA Analysis tool</h1>
+        <h1 class="text-3xl font-bold m-4">Using the {{ config('app.name') }} tool</h1>
         <h5 class="text-sm m-4">Published on 13th September 2022</h5>
 
         <source srcset="{{ asset('images/dark/josaa-analysis-institute-trends.png') }}"
             media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-institute-trends.png') }}"
-            alt="Screenshot of the institute trends feature of the JoSAA Analysis tool">
+            alt="Screenshot of the institute trends feature of the {{ config('app.name') }} tool">
 
         <p class="text-md m-4">
             The JoSAA counselling process is a very important part of the engineering admission process. It is the time when
@@ -46,12 +50,14 @@
             During the counselling process, students have to select and arrange their choices for the colleges and branches
             they want to go to. This requires a lot of research and analysis of the previous year cut-offs, so that they
             can make an informed decision. The official data provided by JoSAA is not very easy to understand and requires
-            a lot of time to analyse as it is not presented in a very user-friendly manner. This is where the JoSAA Analysis
+            a lot of time to analyse as it is not presented in a very user-friendly manner. This is where the
+            {{ config('app.name') }}
             tool comes in.
         </p>
 
         <p class="text-md m-4">
-            The JoSAA Analysis tool is a web application that helps you decide your choices for JoSAA counselling based on
+            The {{ config('app.name') }} tool is a web application that helps you decide your choices for JoSAA counselling
+            based on
             10 years of cut-off data. It is a very simple and easy to use tool, which can be used by anyone. It is
             completely free and open source, and you can find the source code on <a
                 href="https://github.com/CaptainIRS/josaa-analysis" target="_blank">GitHub</a>.
@@ -68,19 +74,19 @@
 
         <p class="text-md m-4">
             Get started by visiting the <a class="text-indigo-600 hover:text-indigo-900" href="{{ route('home') }}"
-                target="_blank">JoSAA Analysis tool</a>.
+                target="_blank">{{ config('app.name') }} tool</a>.
         </p>
 
 
         <p class="text-md m-4">
-            Here are the features of the JoSAA Analysis tool and how to use them:
+            Here are the features of the {{ config('app.name') }} tool and how to use them:
         </p>
 
         <h3 class="text-xl font-bold m-4">View Institute-wise Cut-offs</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-filter-by-institute.png') }}"
             media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-filter-by-institute.png') }}"
-            alt="Screenshot of the filter by institute feature of the JoSAA Analysis tool">
+            alt="Screenshot of the filter by institute feature of the {{ config('app.name') }} tool">
         <p class="text-md m-4">
             This feature allows you to filter the past cut-offs by institute. Select one or many institutes using the
             dropdown menu and then further narrow down the data using the program data. Users can also specify the minimum
@@ -100,7 +106,7 @@
         <source srcset="{{ asset('images/dark/josaa-analysis-filter-by-program.png') }}"
             media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-filter-by-program.png') }}"
-            alt="Screenshot of the filter by program feature of the JoSAA Analysis tool">
+            alt="Screenshot of the filter by program feature of the {{ config('app.name') }} tool">
         <p class="text-md m-4">
             This feature allows you to filter the past cut-offs by branch. Select one or many branches using the dropdown
             menu and then further narrow down the data using the institute data. The branches available in the dropdown are
@@ -120,7 +126,7 @@
         <h3 class="text-xl font-bold m-4">Analyse Branch-wise Cut-off Trends</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-branch-trends.png') }}" media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-branch-trends.png') }}"
-            alt="Screenshot of the branch trends feature of the JoSAA Analysis tool">
+            alt="Screenshot of the branch trends feature of the {{ config('app.name') }} tool">
         <p class="text-md m-4">
             This feature allows you to visualise the trends of cut-offs of various institutes offering courses in a
             particular branch of engineering over the years. This gives an idea about the popularity and perception of
@@ -142,7 +148,7 @@
         <source srcset="{{ asset('images/dark/josaa-analysis-institute-trends.png') }}"
             media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-institute-trends.png') }}"
-            alt="Screenshot of the institute trends feature of the JoSAA Analysis tool">
+            alt="Screenshot of the institute trends feature of the {{ config('app.name') }} tool">
         <p class="text-md m-4">
             This feature allows you to visualise the trends of cut-offs of various branches offered by an institute over the
             years. This gives an idea about the popularity and perception of various branches offered by an institute among
@@ -163,7 +169,7 @@
         <h3 class="text-xl font-bold m-4">Analyse Round-wise Cut-off Trends</h3>
         <source srcset="{{ asset('images/dark/josaa-analysis-round-trends.png') }}" media="(prefers-color-scheme: dark)">
         <img class="lg:max-w-3xl m-auto" src="{{ asset('images/light/josaa-analysis-round-trends.png') }}"
-            alt="Screenshot of the round trends feature of the JoSAA Analysis tool">
+            alt="Screenshot of the round trends feature of the {{ config('app.name') }} tool">
         <p class="text-md m-4">
             This feature allows you to see the trends of cut-offs of a program in an institute throughout the rounds of the
             counselling process. This is useful when you want to see the likelihood of changes in the cut-offs of a program

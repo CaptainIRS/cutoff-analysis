@@ -1,6 +1,6 @@
-# JoSAA Analysis
+# Cutoff Analysis
 
-This repository contains the code for the JoSAA Analysis site. The site is written in PHP using the [Laravel framework](https://laravel.com/) and utilizes the [FilamentPHP](https://filamentphp.com) library for the forms and tables.
+This repository contains the code for the Cutoff Analysis site. The site is written in PHP using the [Laravel framework](https://laravel.com/) and utilizes the [FilamentPHP](https://filamentphp.com) library for the forms and tables.
 
 | <picture><source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/9nf4zKG.png"><img src="https://i.imgur.com/CIZAufq.png"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/Wjitc9i.png"><img src="https://i.imgur.com/8iep0Rr.png"></picture> |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------: |

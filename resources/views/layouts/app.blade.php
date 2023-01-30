@@ -441,7 +441,8 @@ $watch('darkMode', value => {
                     <br>
                     Share via<span id="#share" class="pl-1"></span>
                     <script>
-                        const content = 'Check out the JoSAA Analysis tool: ' + document.querySelector('meta[name="description"]')
+                        const content = 'Check out the {{ config('app.name') }} tool: ' + document.querySelector(
+                                'meta[name="description"]')
                             .getAttribute('content');
                         document.getElementById('#share').innerHTML = '<a href="https://www.facebook.com/sharer/sharer.php?u=' +
                             encodeURIComponent(document.URL) +

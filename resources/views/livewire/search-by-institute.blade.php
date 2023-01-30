@@ -66,7 +66,7 @@
             "@context": "https://schema.org",
             "@type": "Table",
             "name": "{{ $title }}" ||
-                "View Institute-wise Cut-off Ranks in JoSAA Counselling | JoSAA Analysis",
+                "View Institute-wise Cut-off Ranks in JoSAA Counselling | {{ config('app.name') }}",
             "cssSelector": ".filament-tables-table",
         });
         document.head.appendChild(script);
