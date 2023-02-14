@@ -10,7 +10,7 @@
         "filament/tables": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "hammerstone/fast-paginate": "^0.1.10",
-        "laravel/framework": "^9.19",
+        "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.0",
         "laravel/scout": "^9.4",
         "laravel/tinker": "^2.7",
