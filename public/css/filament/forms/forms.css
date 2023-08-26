@@ -2699,7 +2699,16 @@ select:not(.choices) {
 }
 .choices__list--dropdown .choices__item--selectable.is-highlighted,
 .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
-    background-color: rgba(var(--gray-500), 0.1);
+    --tw-bg-opacity: 1;
+    background-color: rgba(var(--gray-50), var(--tw-bg-opacity));
+}
+:is(.dark .choices__list--dropdown .choices__item--selectable.is-highlighted),
+:is(
+        .dark
+            .choices__list[aria-expanded]
+            .choices__item--selectable.is-highlighted
+    ) {
+    background-color: hsla(0, 0%, 100%, 0.05);
 }
 .choices__item {
     cursor: default;
