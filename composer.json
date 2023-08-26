@@ -5,16 +5,16 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
-        "filament/forms": "^2.0",
-        "filament/tables": "^2.0",
+        "php": "^8.2.0",
+        "filament/forms": "^3.0-stable",
+        "filament/tables": "^3.0-stable",
         "guzzlehttp/guzzle": "^7.2",
         "hammerstone/fast-paginate": "^0.1.10",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^3.0",
+        "laravel/framework": "^10.0",
+        "laravel/sanctum": "^3.2",
         "laravel/scout": "^9.4",
         "laravel/tinker": "^2.7",
-        "livewire/livewire": "^2.10",
+        "livewire/livewire": "^3.0@beta",
         "spatie/laravel-sitemap": "^6.2",
         "teamtnt/laravel-scout-tntsearch-driver": "^12.1"
     },
@@ -24,10 +24,9 @@
         "laravel/pint": "^1.1",
         "laravel/sail": "^1.0.1",
         "laravel/telescope": "^4.9",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
         "psr-4": {

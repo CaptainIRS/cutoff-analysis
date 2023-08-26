@@ -390,16 +390,10 @@ $watch('darkMode', value => {
         </div>
     </nav>
 
-    @livewireStyles
-    @livewireScripts
-
-    <script>
-        Livewire.on('titleUpdated', (title) => {
-            if (title) {
-                document.title = title;
-            }
-        });
-    </script>
+    @filamentStyles
+    @livewireScriptConfig
+    @filamentScripts
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <div class="mt-[3.5rem]" x-cloak id="content" class="content flex flex-col">
         <div class="w-full m-auto flex-grow">
@@ -478,7 +472,6 @@ $watch('darkMode', value => {
     </div>
 </body>
 
-@vite(['resources/css/app.css', 'resources/js/app.js'])
 @stack('scripts')
 
 </html>

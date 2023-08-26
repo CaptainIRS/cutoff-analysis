@@ -65,28 +65,28 @@ class GenerateSitemap extends Command
                     'rank' => 'jee-advanced',
                     'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-29'))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
                 TagsUrl::create(route('branch-trends-proxy', [
                     'rank' => 'jee-advanced',
                     'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-29'))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
                 TagsUrl::create(route('search-by-branch-proxy', [
                     'rank' => 'jee-main',
                     'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-29'))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
             $sitemap->add(
                 TagsUrl::create(route('branch-trends-proxy', [
                     'rank' => 'jee-main',
                     'branch' => $branch->id,
                 ]))
-                ->setLastModificationDate(new Carbon('2022-12-29'))
+                    ->setLastModificationDate(new Carbon('2022-12-29'))
             );
         }
         $entries = DB::table('institute_course_program')->get();

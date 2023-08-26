@@ -8,21 +8,22 @@ export default defineConfig({
                 "resources/css/app.css",
                 "resources/js/app.js",
                 "resources/js/chart.js",
+                // "vendor/filament/forms/dist/index.css"
             ],
             refresh: [
                 ...refreshPaths,
-                "app/Http/Livewire/**",
+                "app/Livewire/**",
                 "app/Tables/Columns/**",
             ],
         }),
     ],
     build: {
         minify: "terser",
-        rollupOptions: {
-            manualChunks: {
-                alpinejs: ["alpinejs"],
-                "alpinejs-focus": ["@alpinejs/focus"],
-            },
-        },
+        // rollupOptions: {
+        //     manualChunks: {
+        //         alpinejs: ["alpinejs"],
+        //         "alpinejs-focus": ["@alpinejs/focus"],
+        //     },
+        // },
     },
 });

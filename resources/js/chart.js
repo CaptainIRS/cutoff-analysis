@@ -8,6 +8,7 @@ import {
     AriaComponent,
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
+import { Livewire } from "../../vendor/livewire/livewire/dist/livewire.esm";
 
 echarts.use([
     TooltipComponent,
@@ -19,6 +20,13 @@ echarts.use([
     AriaComponent,
 ]);
 
+const isDarkMode = () => {
+    return (
+        JSON.parse(localStorage.getItem("darkMode")) ??
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+    );
+};
+
 window.addEventListener("load", () => {
     var myChart = echarts.init(
         document.getElementById("myChart"),
@@ -27,9 +35,10 @@ window.addEventListener("load", () => {
     window.onresize = function () {
         myChart.resize();
     };
-    Livewire.on("chartDataUpdated", (dataObj) => {
+    Livewire.on("chartDataUpdated", (chartObj) => {
+        const chartData = chartObj.chartData;
         var series = [];
-        for (const data of dataObj.datasets ?? []) {
+        for (const data of chartData.datasets ?? []) {
             series.push({
                 name: `${data.label}`.replaceAll("&nbsp;", " "),
                 type: "line",
@@ -50,9 +59,13 @@ window.addEventListener("load", () => {
             aria: {
                 show: true,
             },
+            backgroundColor: isDarkMode() ? "#121212" : "#fff",
             tooltip: {
                 renderMode: "html",
-                extraCssText: "max-width: 200px; white-space: normal;",
+                extraCssText:
+                    "max-width: 200px; white-space: normal; background-color: " +
+                    (isDarkMode() ? "#121212" : "#fff") +
+                    ";",
                 position: function (pos, _params, _dom, _rect, size) {
                     var obj = {};
                     if (pos[0] < size.viewSize[0] / 2) {
@@ -98,7 +111,7 @@ window.addEventListener("load", () => {
                 bottom: 50,
             },
             xAxis: {
-                data: dataObj.labels ?? [],
+                data: chartData.labels ?? [],
                 splitLine: {
                     show: true,
                 },
@@ -137,9 +150,9 @@ window.addEventListener("load", () => {
             .getAttribute("aria-label");
 
         let metaDescription = "";
-        if (dataObj.title) {
-            document.title = dataObj.title;
-            metaDescription = `Analyse ${dataObj.title} in JoSAA Counselling using past 10 years data.`;
+        if (chartData.title) {
+            document.title = chartData.title;
+            metaDescription = `Analyse ${chartData.title} in JoSAA Counselling using past 10 years data.`;
         } else {
             metaDescription = `Analyse the trends of JoSAA cut-offs using past 10 years data.`;
         }
@@ -147,5 +160,5 @@ window.addEventListener("load", () => {
             .querySelector('meta[name="description"]')
             .setAttribute("content", metaDescription);
     });
-    Livewire.emit("updateChartData");
+    Livewire.dispatch("updateChartData");
 });
