@@ -9,7 +9,7 @@
         "filament/forms": "^3.0-stable",
         "filament/tables": "^3.0-stable",
         "guzzlehttp/guzzle": "^7.2",
-        "hammerstone/fast-paginate": "^0.1.10",
+        "hammerstone/fast-paginate": "^1.0.0",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/scout": "^9.4",
