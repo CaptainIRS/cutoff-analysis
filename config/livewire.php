@@ -155,4 +155,6 @@ return [
 
     'render_on_redirect' => false,
 
+    'inject_morph_markers' => false,
+
 ];
