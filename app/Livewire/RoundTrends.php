@@ -15,8 +15,8 @@ use Livewire\Component;
 
 class RoundTrends extends Component implements HasForms
 {
-    use InteractsWithForms;
     use CommonFields;
+    use InteractsWithForms;
 
     public ?string $course = null;
 

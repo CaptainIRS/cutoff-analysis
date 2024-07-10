@@ -1,5 +1,7 @@
 @push('title')
-    {{ $title }}
+    <title>
+        {{ $title }}
+    </title>
 @endpush
 
 @push('robots')

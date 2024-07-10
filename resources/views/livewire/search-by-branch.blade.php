@@ -1,6 +1,8 @@
 @push('title')
     @if ($title)
-        {{ $title }}
+        <title>
+            {{ $title }}
+        </title>
     @endif
 @endpush
 

@@ -25,9 +25,9 @@ use Livewire\Component;
 
 class SearchByBranch extends Component implements HasForms, HasTable
 {
+    use CommonFields;
     use InteractsWithForms;
     use InteractsWithTable;
-    use CommonFields;
 
     public array $courses = [];
 
@@ -135,11 +135,7 @@ class SearchByBranch extends Component implements HasForms, HasTable
 
         $this->filterYearRound($query);
 
-        if ($this->branches) {
-            $this->title = $this->getTitle($this->branches, $this->rank_type);
-        } else {
-            $this->title = '';
-        }
+        $this->title = $this->getTitle($this->branches, $this->rank_type);
 
         $this->dispatch('titleUpdated', title: $this->title);
 

@@ -25,7 +25,7 @@ $watch('darkMode', value => {
 
     <meta property="og:image" content="{{ asset('favicon.svg') }}">
 
-    <title>@stack('title')</title>
+    @stack('title')
 
     @yield('meta')
 
@@ -391,6 +391,7 @@ $watch('darkMode', value => {
     </nav>
 
     @filamentStyles
+    @livewireStyles
     @livewireScriptConfig
     @filamentScripts
     @vite(['resources/css/app.css', 'resources/js/app.js'])

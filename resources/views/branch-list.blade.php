@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@push('title', 'View All Branches in JoSAA Counselling')
+@push('title')
+    <title>
+        View All Branches in JoSAA Counselling
+    </title>
+@endpush
 
 @section('meta')
     <meta name="description" content="List of branches available in JoSAA counselling">

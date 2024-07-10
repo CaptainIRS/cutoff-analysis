@@ -4,7 +4,11 @@
     $appName = Config::get('app.name');
 @endphp
 
-@push('title', 'Home | ' . $appName)
+@push('title')
+    <title>
+        {{ 'Home | ' . $appName }}
+    </title>
+@endpush
 
 @section('meta')
     <meta name="description"

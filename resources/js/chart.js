@@ -30,7 +30,7 @@ const isDarkMode = () => {
 window.addEventListener("load", () => {
     var myChart = echarts.init(
         document.getElementById("myChart"),
-        localStorage.getItem("darkMode") === "true" ? "dark" : "light"
+        localStorage.getItem("darkMode") === "true" ? "dark" : "light",
     );
     window.onresize = function () {
         myChart.resize();

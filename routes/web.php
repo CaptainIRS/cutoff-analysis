@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded within the "web" middleware group which includes
+| sessions, cookie encryption, and more. Go build something great!
 |
 */
 
@@ -26,8 +26,8 @@ Route::get('/view-branch-cutoff-ranks', function () {
 })->name('search-by-branch');
 
 // NOTE: Deprecated route
-Route::get('/search-by-branch', function () {
-    return redirect()->route('search-by-branch', request()->all(), 301);
+Route::get('/search-by-branch', function (Request $request) {
+    return redirect()->route('search-by-branch', $request->all(), 301);
 });
 
 Route::get('/view-institute-cutoff-ranks', function () {
@@ -35,8 +35,8 @@ Route::get('/view-institute-cutoff-ranks', function () {
 })->name('search-by-institute');
 
 // NOTE: Deprecated route
-Route::get('/search-by-institute', function () {
-    return redirect()->route('search-by-institute', request()->all(), 301);
+Route::get('/search-by-institute', function (Request $request) {
+    return redirect()->route('search-by-institute', $request->all(), 301);
 });
 
 Route::get('/analyse-institute-cutoff-trends', function () {
@@ -44,8 +44,8 @@ Route::get('/analyse-institute-cutoff-trends', function () {
 })->name('institute-trends');
 
 // NOTE: Deprecated route
-Route::get('/institute-trends', function () {
-    return redirect()->route('institute-trends', request()->all(), 301);
+Route::get('/institute-trends', function (Request $request) {
+    return redirect()->route('institute-trends', $request->all(), 301);
 });
 
 Route::get('/analyse-round-wise-cutoff-trends', function () {
@@ -53,8 +53,8 @@ Route::get('/analyse-round-wise-cutoff-trends', function () {
 })->name('round-trends');
 
 // NOTE: Deprecated route
-Route::get('/round-trends', function () {
-    return redirect()->route('round-trends', request()->all(), 301);
+Route::get('/round-trends', function (Request $request) {
+    return redirect()->route('round-trends', $request->all(), 301);
 });
 
 Route::get('/analyse-branch-cutoff-trends', function () {
@@ -62,8 +62,8 @@ Route::get('/analyse-branch-cutoff-trends', function () {
 })->name('branch-trends');
 
 // NOTE: Deprecated route
-Route::get('/branch-trends', function () {
-    return redirect()->route('branch-trends', request()->all(), 301);
+Route::get('/branch-trends', function (Request $request) {
+    return redirect()->route('branch-trends', $request->all(), 301);
 });
 
 Route::prefix('/news')->group(function () {
@@ -128,8 +128,8 @@ Route::prefix('/branches')->group(function () {
     })->where(['rank' => 'jee-main|jee-advanced'])->name('branch-trends-proxy');
 });
 
-Route::get('/clear-cache', function () {
-    if (request()->query('appKey') && request()->query('appKey') === config('app.key')) {
+Route::get('/clear-cache', function (Request $request) {
+    if ($request->query('appKey') === config('app.key')) {
         Artisan::call('cache:clear');
         Artisan::call('config:clear');
         Artisan::call('view:clear');

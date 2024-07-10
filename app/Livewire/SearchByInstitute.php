@@ -24,9 +24,9 @@ use Livewire\Component;
 
 class SearchByInstitute extends Component implements HasForms, HasTable
 {
+    use CommonFields;
     use InteractsWithForms;
     use InteractsWithTable;
-    use CommonFields;
 
     public array $courses = [];
 

@@ -18,8 +18,8 @@ use Livewire\Component;
 
 class BranchTrends extends Component implements HasForms
 {
-    use InteractsWithForms;
     use CommonFields;
+    use InteractsWithForms;
 
     public array $courses = [];
 

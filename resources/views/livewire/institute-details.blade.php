@@ -1,5 +1,7 @@
 @push('title')
-    {!! $institute['alias'] !!} Cut-offs
+    <title>
+        {!! $institute['alias'] !!} Cut-offs
+    </title>
 @endpush
 
 @push('robots')

@@ -4,7 +4,11 @@
     $appName = Config::get('app.name');
 @endphp
 
-@push('title', 'Using the ' . $appName . ' tool | News &amp; Updates')
+@push('title')
+    <title>
+        {{ 'Using the ' . $appName . ' tool | News &amp; Updates' }}
+    </title>
+@endpush
 
 @section('meta')
     <link rel="amphtml" href="{{ route('news.amp.using-the-josaa-analysis-tool') }}">

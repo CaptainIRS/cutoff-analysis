@@ -16,8 +16,8 @@ use Livewire\Component;
 
 class InstituteTrends extends Component implements HasForms
 {
-    use InteractsWithForms;
     use CommonFields;
+    use InteractsWithForms;
 
     public array $courses = [];
 

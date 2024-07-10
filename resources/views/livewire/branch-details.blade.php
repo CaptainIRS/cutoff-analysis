@@ -1,5 +1,7 @@
 @push('title')
-    {{ $branch['name'] }} Cut-offs in IITs, NITs, IIITs and GFTIs
+    <title>
+        {{ $branch['name'] }} Cut-offs in IITs, NITs, IIITs and GFTIs
+    </title>
 @endpush
 
 @push('robots')

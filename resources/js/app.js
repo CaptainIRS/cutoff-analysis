@@ -10,8 +10,8 @@ Alpine.plugin(SelectFormComponentAlpinePlugin);
 
 Livewire.start();
 
-Livewire.on("titleUpdated", (title) => {
-    if (title) {
-        document.title = title;
+Livewire.on("titleUpdated", (data) => {
+    if (data && data.title) {
+        document.title = data.title;
     }
 });

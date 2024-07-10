@@ -2,22 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-.filament-tables-container {
+.fi-ta-ctn {
     overflow: hidden;
 }
 
-.filament-tables-container > :nth-child(2) {
+.fi-ta-ctn > :nth-child(2) {
     display: block;
-    max-height: 60vh;
+    max-height: 70vh;
     overflow-y: auto;
 }
 
-.table-wrapper {
-    height: 65vh;
+th {
+    position: sticky;
+    top: 0;
 }
 
 .table-wrapper > * {
-    transition: visibility 0s ease, opacity 1s ease;
+    transition:
+        visibility 0s ease,
+        opacity 1s ease;
 }
 
 .filament-tables-header-cell {
@@ -57,6 +60,10 @@ thead {
     position: sticky;
     top: 0;
     z-index: 1;
+}
+
+.dark thead {
+    background-color: black;
 }
 
 td {
@@ -112,14 +119,6 @@ td {
 
 .dark .choices__list--multiple .choices__item {
     background-color: black;
-}
-
-/* .dark a .filament-tables-text-column {
-    color: rgb(165 180 252);
-} */
-
-.dark .filament-tables-pagination-container {
-    --tw-ring-color: rgb(165 180 252);
 }
 
 @media print {
