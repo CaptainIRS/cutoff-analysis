@@ -3,7 +3,7 @@
 $watch('darkMode', value => {
     localStorage.setItem('darkMode', JSON.stringify(value));
     window.location.reload();
-})" class="h-full"
+})"
     :style="{ colorScheme: darkMode && 'dark' }">
 
 <head>
@@ -462,8 +462,7 @@ $watch('darkMode', value => {
     </div>
 
     <div x-cloak x-show="scrollBackTop" class="print:hidden">
-        <button @click="document.getElementById('content').scrollTo({top: 0, behavior: 'smooth'})"
-            aria-label="Back to top"
+        <button @click="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to top"
             class="fixed bottom-0 right-0 -translate-x-1/2 p-2 m-5 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none z-50">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
