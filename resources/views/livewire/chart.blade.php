@@ -17,7 +17,22 @@
 @endpush
 
 <div class="relative flex flex-col-reverse">
-    <main id="chartContainer" class="block">
+    <main id="chartContainer" class="block relative">
+        <div class="lds-spinner overlay-centered z-50 opacity-0 transition-opacity duration-500"
+            wire:loading.class="opacity-100">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
         <h2 class="text-xl font-bold m-4 text-center">{{ $title }}</h2>
         <div wire:ignore id="legend"></div>
         <div wire:ignore id="myChart"></div>
@@ -37,21 +52,6 @@
         <div class="p-4">
             {{ $this->form }}
         </div>
-    </div>
-    <div class="lds-spinner lds-spinner-bottom opacity-0 transition-opacity duration-500"
-        wire:loading.class="opacity-100">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
     </div>
     @vite('resources/js/chart.js')
 

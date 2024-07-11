@@ -97,11 +97,17 @@ window.addEventListener("load", () => {
                 show: true,
                 type: "scroll",
                 orient: "horizontal",
-                height: 100,
+                height: 50,
                 top: 0,
                 textStyle: {
                     width: 200,
                     overflow: "break",
+                    fontSize: 10,
+                },
+                pageIconColor: isDarkMode() ? "#fff" : "#000",
+                pageIconInactiveColor: isDarkMode() ? "#666" : "#ddd",
+                pageTextStyle: {
+                    color: isDarkMode() ? "#fff" : "#000",
                 },
             },
             grid: {

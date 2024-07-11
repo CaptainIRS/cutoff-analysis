@@ -104,11 +104,6 @@ td {
     position: absolute;
 }
 
-.lds-spinner-bottom {
-    bottom: 40px;
-    left: 0;
-}
-
 .overlay-visible {
     opacity: 1;
 }
