@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.dark {
+    background-color: #121212;
+}
+
 .fi-ta-ctn {
     overflow: hidden;
 }
@@ -162,7 +166,7 @@ td {
 .fi-ta-cell,
 .fi-ta-header-cell {
     padding-inline: 0.75rem !important;
-    padding-block: 0.25rem !important;
+    padding-block: 0.5rem !important;
 }
 
 .fi-ta-text {
@@ -174,10 +178,6 @@ td {
     text-wrap: balance;
     text-align: left;
 }
-
-/* tr > td:nth-child(1) .fi-ta-text-item-label {
-    min-width: 100px;
-} */
 
 tr > td:nth-child(2) .fi-ta-text-item-label {
     min-width: 80px;
