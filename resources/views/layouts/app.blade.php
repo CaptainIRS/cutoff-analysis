@@ -33,21 +33,6 @@ $watch('darkMode', value => {
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
-
-    <script>
-        let isDarkMode = JSON.parse(localStorage.getItem('darkMode')) ?? window.matchMedia('(prefers-color-scheme: dark)')
-            .matches;
-
-        localStorage.setItem('darkMode', isDarkMode);
-        document.documentElement.style.setProperty('--overlay-bg', isDarkMode ? 'black' : 'white');
-        document.documentElement.style.setProperty('--color-scheme', isDarkMode ? 'dark' : 'light');
-
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            localStorage.setItem('darkMode', e.matches);
-            window.location.reload();
-        })
-    </script>
-
     <style>
         html {
             font-size: 0.85em;
@@ -192,6 +177,22 @@ $watch('darkMode', value => {
             transition-delay: 1s;
         }
     </style>
+
+
+
+    <script>
+        let isDarkMode = JSON.parse(localStorage.getItem('darkMode')) ?? window.matchMedia('(prefers-color-scheme: dark)')
+            .matches;
+
+        localStorage.setItem('darkMode', isDarkMode);
+        document.documentElement.style.setProperty('--overlay-bg', isDarkMode ? 'black' : 'white');
+        document.documentElement.style.setProperty('--color-scheme', isDarkMode ? 'dark' : 'light');
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            localStorage.setItem('darkMode', e.matches);
+            window.location.reload();
+        })
+    </script>
 </head>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('app.ga4_tag') }}"></script>
