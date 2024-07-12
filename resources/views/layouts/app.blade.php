@@ -248,7 +248,8 @@ $watch('darkMode', value => {
     <nav x-show="showNav" x-transition.opacity x-cloak class="fixed flex flex-col w-full z-50 top-0 print:hidden"
         @keydown.escape="isOpen = false">
 
-        <div class="flex flex-grow-0 w-full items-center justify-between bg-gray-200 dark:bg-gray-800 shadow-md h-14">
+        <div
+            class="flex flex-grow-0 w-full xl:px-[10%] items-center justify-between bg-gray-200 dark:bg-gray-800 shadow-md h-14">
 
             <div class="flex items-center text-white w-full">
                 <a class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-200 no-underline hover:text-gray-500 hover:text-underline px-2 w-full"
@@ -397,7 +398,7 @@ $watch('darkMode', value => {
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <div class="mt-[3.5rem]" x-cloak id="content" class="content flex flex-col">
-        <div class="w-full m-auto flex-grow">
+        <div class="w-full xl:w-4/5 m-auto flex-grow">
             <div class="w-full flex-1">
                 @yield('content')
             </div>
@@ -405,7 +406,8 @@ $watch('darkMode', value => {
 
         @if (!request()->routeIs('home'))
             <hr class="border-gray-200 dark:border-gray-600 mt-2 text-lg">
-            <div class="footer p-4 print:hidden flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
+            <div
+                class="footer p-4 xl:px-[10%] print:hidden flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
                 <div>
                     <span class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-8 text-blue-600 dark:text-indigo-300">
                         <a class="hover:text-blue-700 dark:hover:text-indigo-200" href="{{ route('home') }}">Home</a>

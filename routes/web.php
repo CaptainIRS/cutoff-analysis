@@ -130,6 +130,38 @@ Route::prefix('/branches')->group(function () {
     })->where(['rank' => 'jee-main|jee-advanced'])->name('branch-trends-proxy');
 });
 
+Route::prefix('/view')->group(function () {
+    Route::get('/{institute}/{course}/{program}/cutoffs', function (Institute $institute, Course $course, Program $program) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('view-program-cutoffs', ['rank' => $rank, 'institutes' => [$institute->id], 'courses' => [$course->id], 'programs' => [$program->id], 'hide_controls' => true, 'sort_column' => 'year']);
+    })->name('view-program-cutoffs');
+
+    Route::get('/{institute}/{course}/{program}/year-wise-trends', function (Institute $institute, Course $course, Program $program) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('view-program-yearwise-trends', ['rank' => $rank, 'institutes' => [$institute->id], 'courses' => [$course->id], 'programs' => [$program->id], 'hide_controls' => true, 'sort_column' => 'year']);
+    })->name('view-program-yearwise-trends');
+
+    Route::get('/{institute}/{course}/{program}/round-wise-trends', function (Institute $institute, Course $course, Program $program) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('round-trends-proxy', ['rank' => $rank, 'institute' => $institute->id, 'course' => $course->id, 'program' => $program->id, 'hide_controls' => true]);
+    })->name('view-program-roundwise-trends');
+
+    Route::get('/{institute}/{course}/cutoffs', function (Institute $institute, Course $course) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('view-program-cutoffs', ['rank' => $rank, 'institutes' => [$institute->id], 'courses' => [$course->id], 'programs' => [], 'hide_controls' => true, 'sort_column' => 'year']);
+    })->name('view-program-cutoffs');
+
+    Route::get('/{institute}/cutoffs', function (Institute $institute) {
+        $rank = $institute->type === 'iit' ? 'jee-advanced' : 'jee-main';
+
+        return view('view-program-cutoffs', ['rank' => $rank, 'institutes' => [$institute->id], 'courses' => [], 'programs' => [], 'hide_controls' => true, 'sort_column' => 'year']);
+    })->name('view-program-cutoffs');
+});
+
 Route::get('/clear-cache', function (Request $request) {
     if ($request->query('appKey') === config('app.key')) {
         Artisan::call('cache:clear');

@@ -158,3 +158,59 @@ td {
 @page {
     size: auto;
 }
+
+.fi-ta-cell,
+.fi-ta-header-cell {
+    padding-inline: 0.75rem !important;
+    padding-block: 0.25rem !important;
+}
+
+.fi-ta-text {
+    padding: 0;
+}
+
+.fi-ta-text-item-label,
+.fi-ta-header-cell-label {
+    text-wrap: balance;
+    text-align: left;
+}
+
+/* tr > td:nth-child(1) .fi-ta-text-item-label {
+    min-width: 100px;
+} */
+
+tr > td:nth-child(2) .fi-ta-text-item-label {
+    min-width: 80px;
+}
+
+tr > td:nth-child(3) .fi-ta-text-item-label {
+    min-width: 200px;
+    text-wrap: pretty !important;
+}
+
+tr > td:nth-child(4) .fi-ta-text-item-label {
+    width: 25px;
+}
+
+tr > td:nth-child(5) .fi-ta-text-item-label,
+tr > th:nth-child(5) .fi-ta-header-cell-label {
+    width: 35px;
+}
+
+tr > td:nth-child(6) .fi-ta-text-item-label,
+tr > th:nth-child(6) .fi-ta-header-cell-label {
+    width: 35px;
+}
+
+tr > td:nth-child(7) .fi-ta-text-item-label,
+tr > th:nth-child(7) .fi-ta-header-cell-label {
+    width: 35px;
+}
+
+.fi-ta-header-cell {
+    vertical-align: bottom;
+}
+
+.fi-ta-header-cell > button {
+    align-items: flex-end;
+}

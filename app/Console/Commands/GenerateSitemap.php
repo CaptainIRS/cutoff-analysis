@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use App\Models\Branch;
 use App\Models\Institute;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url as TagsUrl;
 

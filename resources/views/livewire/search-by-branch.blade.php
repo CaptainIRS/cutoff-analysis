@@ -20,7 +20,7 @@
 
 <div class="h-full w-full">
     @if ($hide_controls)
-        <h1 class="text-xl font-bold m-4 text-center">{{ $title }}</h2>
+        <h1 class="text-xl font-bold m-4 text-center">{{ $title }}</h1>
     @endif
     <div class="relative h-full w-full flex-1">
         @if ($hide_controls)

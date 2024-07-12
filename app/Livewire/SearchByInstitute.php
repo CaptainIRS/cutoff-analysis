@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Course;
 use App\Models\Institute;
+use App\Models\Program;
 use App\Models\Rank;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
@@ -59,8 +61,15 @@ class SearchByInstitute extends Component implements HasForms, HasTable
         $this->initialiseCache();
     }
 
-    private function getTitle(?array $institutes, ?string $rank_type): string
+    private function getTitle(?array $institutes, ?array $programs, ?array $courses, ?string $rank_type): string
     {
+        if (count($institutes) === 1 && count($programs) === 1 && count($courses) === 1) {
+            $institute = Institute::find($institutes[0]);
+            $program = Program::find($programs[0]);
+            $course = Course::find($courses[0]);
+
+            return str_replace('&nbsp;', ' ', $institute->alias).' '.$course->alias.' '.$program->name.' Cut-off Ranks';
+        }
         $institutes = $institutes ? Institute::whereIn('id', $institutes)->pluck('alias')->toArray() : [];
         $institute_names = array_map(fn ($institute_alias) => str_replace('&nbsp;', ' ', $institute_alias), $institutes);
 
@@ -97,8 +106,8 @@ class SearchByInstitute extends Component implements HasForms, HasTable
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) ? ($home_state ?? session('home_state')) : null,
             'minimum_rank' => $this->minimum_rank ?? session('minimum_rank'),
             'maximum_rank' => $this->maximum_rank ?? session('maximum_rank'),
-            'title' => $this->getTitle($institutes, $rank_type),
-            'alternative_url' => route('search-by-institute', ['rank' => $rank_type, 'institutes' => $institutes]),
+            'title' => $this->getTitle($institutes, $programs, $courses, $rank_type),
+            'alternative_url' => route('search-by-institute', ['rank' => $rank_type, 'institutes' => $institutes, 'courses' => $courses, 'programs' => $programs]),
         ]);
         $this->form->getState();
     }
@@ -129,7 +138,7 @@ class SearchByInstitute extends Component implements HasForms, HasTable
         $this->filterYearRound($query);
 
         if ($this->institutes) {
-            $this->title = $this->getTitle($this->institutes, $this->rank_type);
+            $this->title = $this->getTitle($this->institutes, $this->programs, $this->courses, $this->rank_type);
         } else {
             $this->title = '';
         }
@@ -320,7 +329,7 @@ class SearchByInstitute extends Component implements HasForms, HasTable
             TextColumn::make('closing_rank')
                 ->label('Closing Rank')
                 ->sortable(),
-        ])
+        ])->paginationPageOptions([25, 50, 100])
             ->query(function () {
                 if ($this->seat_type
                 && $this->gender

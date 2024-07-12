@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Course;
 use App\Models\Institute;
+use App\Models\Program;
 use App\Models\Rank;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
@@ -23,6 +25,8 @@ class InstituteTrends extends Component implements HasForms
 
     public array $institutes = [];
 
+    public array $programs = [];
+
     public array $initial_chart_data = [];
 
     protected $listeners = ['updateChartData'];
@@ -30,6 +34,7 @@ class InstituteTrends extends Component implements HasForms
     protected $queryString = [
         'courses',
         'institutes',
+        'programs',
         'institute_type' => ['as' => 'institute-type'],
         'round_display' => ['as' => 'round-display', 'except' => 'last'],
         'seat_type' => ['as' => 'seat-type', 'except' => 'OPEN'],
@@ -43,8 +48,16 @@ class InstituteTrends extends Component implements HasForms
         $this->initialiseCache();
     }
 
-    private function getTitle(?array $institutes, ?string $rank_type): string
+    private function getTitle(?array $institutes, ?array $programs, ?array $courses, ?string $rank_type): string
     {
+        if (count($institutes) === 1 && count($programs) === 1 && count($courses) === 1) {
+            $institute = Institute::find($institutes[0]);
+            $program = Program::find($programs[0]);
+            $course = Course::find($courses[0]);
+
+            return str_replace('&nbsp;', ' ', $institute->alias).' '.$course->alias.' '.$program->name.' Cut-off Trends';
+        }
+
         $institute_names = array_map(fn ($id) => str_replace('&nbsp;', ' ', $this->all_institutes[$id]), $institutes ?? []);
 
         return $institute_names
@@ -58,6 +71,7 @@ class InstituteTrends extends Component implements HasForms
     {
         $courses = $this->ensureSubsetOf($this->courses, $this->all_courses);
         $institutes = $this->ensureSubsetOf($this->institutes, $this->all_institutes);
+        $programs = $this->ensureSubsetOf($this->programs, $this->all_programs);
         $seat_type = $this->ensureBelongsTo($this->seat_type, $this->all_seat_types);
         $gender = $this->ensureBelongsTo($this->gender, $this->all_genders);
         $institute_type = $this->ensureSubsetOf($this->institute_type, Institute::INSTITUTE_TYPE_OPTIONS);
@@ -72,13 +86,14 @@ class InstituteTrends extends Component implements HasForms
         $this->form->fill([
             'institute_type' => $institute_type,
             'courses' => $courses,
+            'programs' => $programs,
             'institutes' => $institutes,
             'seat_type' => $seat_type ?? session('seat_type', 'OPEN'),
             'gender' => $gender ?? session('gender', 'Gender-Neutral'),
             'round_display' => $round_display ?? session('round_display', Rank::ROUND_DISPLAY_LAST),
             'rank_type' => $rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED),
             'home_state' => ($rank_type ?? session('rank_type', Rank::RANK_TYPE_ADVANCED)) === Rank::RANK_TYPE_MAIN ? ($home_state ?? session('home_state')) : null,
-            'title' => $this->getTitle($institutes, $rank_type),
+            'title' => $this->getTitle($institutes, $programs, $courses, $rank_type),
             'initial_chart_data' => $this->getUpdatedChartData(),
             'alternative_url' => route('institute-trends', ['rank' => $rank_type, 'institutes' => $institutes]),
         ]);
@@ -102,6 +117,9 @@ class InstituteTrends extends Component implements HasForms
                 ->where('gender_id', $this->gender);
             if ($this->courses) {
                 $query->whereIn('course_id', $this->courses);
+            }
+            if ($this->programs) {
+                $query->whereIn('program_id', $this->programs);
             }
 
             $year_round = $this->filterYearRound($query);
@@ -137,7 +155,7 @@ class InstituteTrends extends Component implements HasForms
                 $labels[$key] = str_replace('_', "\nRound ", $label);
             }
             $institute_ids = Institute::whereIn('alias', array_keys($institute_data))->pluck('id')->toArray();
-            $this->title = $this->getTitle($institute_ids, $this->rank_type);
+            $this->title = $this->getTitle($institute_ids, $this->programs, $this->courses, $this->rank_type);
             $data = [
                 'labels' => $labels,
                 'datasets' => $datasets,
@@ -166,6 +184,7 @@ class InstituteTrends extends Component implements HasForms
                     ->columns(['default' => 2])
                     ->options(Rank::RANK_TYPE_OPTIONS)
                     ->afterStateUpdated(function () {
+                        $this->programs = [];
                         $this->courses = [];
                         $this->institutes = [];
                         if ($this->rank_type === Rank::RANK_TYPE_ADVANCED) {
@@ -195,6 +214,7 @@ class InstituteTrends extends Component implements HasForms
                     ->options(Institute::INSTITUTE_TYPE_OPTIONS)
                     ->columns(['default' => 3])
                     ->afterStateUpdated(function () {
+                        $this->programs = [];
                         $this->courses = [];
                         $this->institutes = [];
                         $this->dispatch('updateChartData');
@@ -202,7 +222,7 @@ class InstituteTrends extends Component implements HasForms
                     ->hidden(fn () => $this->rank_type !== Rank::RANK_TYPE_MAIN)
                     ->reactive(),
             ]),
-            Grid::make(['default' => 1, 'md' => 2])->schema([
+            Grid::make(['default' => 1, 'md' => 3])->schema([
                 Select::make('institutes')
                     ->multiple()
                     ->allowHtml()
@@ -211,6 +231,7 @@ class InstituteTrends extends Component implements HasForms
                     ->label('Institute')
                     ->afterStateUpdated(function () {
                         $this->courses = [];
+                        $this->programs = [];
                         $this->dispatch('updateChartData');
                     })
                     ->required()
@@ -222,9 +243,21 @@ class InstituteTrends extends Component implements HasForms
                     ->label('Course')
                     ->searchable()
                     ->afterStateUpdated(function () {
+                        $this->programs = [];
                         $this->dispatch('updateChartData');
                     })
                     ->hidden(! $this->institutes)
+                    ->reactive(),
+                Select::make('programs')
+                    ->multiple()
+                    ->allowHtml()
+                    ->options(fn () => DB::table('institute_course_program')->whereIn('institute_id', $this->institutes)->whereIn('course_id', $this->courses)->get()->pluck('program_name', 'program_id'))
+                    ->label('Program')
+                    ->searchable()
+                    ->afterStateUpdated(function () {
+                        $this->dispatch('updateChartData');
+                    })
+                    ->hidden(! $this->institutes || ! $this->courses)
                     ->reactive(),
             ]),
             Grid::make(['default' => 1, 'sm' => 3])->schema([
