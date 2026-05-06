@@ -7,7 +7,7 @@
     "require": {
         "php": "^8.3.0",
         "filament/forms": "^3.2",
-        "filament/tables": "^3.2",
+        "filament/tables": "^5.0",
         "guzzlehttp/guzzle": "^7.2",
         "hammerstone/fast-paginate": "^1.1.1",
         "laravel/framework": "^11.0",
