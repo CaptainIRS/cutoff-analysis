@@ -35,6 +35,6 @@
         ]
     },
     "dependencies": {
-        "echarts": "^5.5"
+        "echarts": "^6.0.0"
     }
 }
